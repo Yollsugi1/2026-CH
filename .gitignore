@@ -19,5 +19,34 @@
 
 # 시스템 파일 제외
 .DS_Store
+
 # 하위 git 저장소 제외
 claude-team-zonex/zonex-landing/
+
+# ===== 대표 전용 (Private repo로 이관) =====
+# 경영/재무
+claude-cowork-business/
+# 법률 문서
+claude-cowork-doc/
+# 영업/세일즈
+claude-cowork-sales/
+# 국순당 견적
+claude-code-ch/
+# 클라이언트 (비용 청구 포함)
+claude-client/
+# 한상필 대표 자료
+한상필 대표/
+# 개인 민감 파일
+사업자등록증_크리에이터후드.pdf
+SESSION_BACKUP_CEO_Staff_Hub_DB통합_260223.md
+SESSION_BACKUP_CEO_Staff_Hub_구축_260223.md
+session-backup_SKILL.md
+우석_개선_노트_260224.md
+크리에이터후드_2026_프로젝트별_플랜_내부용.md
+Kocca Business 2026 v1.1.pdf
+★(공고문) 2026년도 중앙부처 및 지자체 창업지원사업 통합공고문(제2025-648호, 2025.12.19.).pdf
+세부 지원 대상 및 내용 (1).pdf
+세부 지원 대상 및 내용.pdf
+포트폴리오_크리에이터후드(2026).pdf
+# 테스트 폴더
+test-260108/
