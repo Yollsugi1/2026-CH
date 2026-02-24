@@ -1,0 +1,23 @@
+# 전체 무시 후 문서 파일만 허용 (화이트리스트 방식)
+*
+
+# 디렉토리 탐색 허용
+!*/
+
+# 문서 파일 허용
+!*.pdf
+!*.md
+!*.txt
+!*.docx
+!*.xlsx
+!*.csv
+!*.skill
+!*.plugin
+
+# .gitignore 자체 포함
+!.gitignore
+
+# 시스템 파일 제외
+.DS_Store
+# 하위 git 저장소 제외
+claude-team-zonex/zonex-landing/
