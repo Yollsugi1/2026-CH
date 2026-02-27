@@ -34,7 +34,7 @@ claude-cowork-sales/
 claude-code-ch/
 # 클라이언트 (비용 청구 포함)
 claude-client/
-# 한상필 대표 자료
+# 대표 전용 자료
 한상필 대표/
 # 개인 민감 파일
 사업자등록증_크리에이터후드.pdf
@@ -59,3 +59,4 @@ claude-cowork-contents/SESSION_BACKUP_마스터플랜_260219.md
 claude-cowork-contents/투데이_브리핑_260223.md
 claude-cowork-contents/위클리_브리핑_2026_W9_0223.md
 claude-cowork-contents/위클리_브리핑_2026_W9_0223_v2.md
+claude-cowork-contents/오늘_브리핑_260223_통합테스트.md
