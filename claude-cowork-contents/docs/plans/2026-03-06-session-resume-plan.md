@@ -1,0 +1,212 @@
+# session-resume 스킬 구현 플랜
+
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+
+**Goal:** 세션 컨텍스트를 저장하고 복구하는 `session-resume` 스킬을 SKILL.md 파일로 작성한다.
+
+**Architecture:** 단일 SKILL.md 파일에 Save / Resume 두 모드를 정의. Save 모드는 현재 세션을 분석해 `session-resumes/RESUME_YYMMDD_HHMM.md`로 저장. Resume 모드는 저장된 목록을 나열하고 선택된 세션 컨텍스트를 복구한다.
+
+**Tech Stack:** Markdown (SKILL.md 포맷), Claude Code skill 컨벤션
+
+---
+
+### Task 1: 디렉토리 및 파일 생성
+
+**Files:**
+- Create: `skills-export/session-resume/SKILL.md`
+- Create: `session-resumes/.gitkeep`
+
+**Step 1: 디렉토리 생성**
+
+```bash
+mkdir -p skills-export/session-resume
+mkdir -p session-resumes
+touch session-resumes/.gitkeep
+```
+
+**Step 2: SKILL.md 작성**
+
+`skills-export/session-resume/SKILL.md` 파일을 아래 내용으로 생성:
+
+```markdown
+# session-resume 스킬
+
+## 개요
+
+세션 컨텍스트를 저장하고 복구하는 스킬. Save / Resume 두 가지 모드로 동작한다.
+계정 전환, 세션 종료, 일반 재개 등 모든 상황에서 작업 흐름을 이어갈 수 있게 한다.
+
+## 트리거
+
+### Save 모드
+MUST BE USED when:
+- "세션 저장", "여기서 끊을게", "계정 전환할게", "오늘 여기까지"
+- `/session-save`
+
+USE PROACTIVELY when:
+- 사용자가 작업을 마무리하려는 신호를 보낼 때
+- "다음에 이어서 하자", "오늘은 여기까지" 등의 표현
+
+### Resume 모드
+MUST BE USED when:
+- `/resume`
+- "이어서 해줘", "어디까지 했지", "컨텍스트 복구해줘", "지난번에 뭐 하고 있었지"
+
+---
+
+## Save 모드 워크플로우
+
+### Step 1: 세션 분석
+현재 대화를 분석하여 다음 항목을 파악한다:
+- 진행 중인 태스크와 단계
+- 완료된 작업 / 진행 중 / 미완료·블로킹
+- 언급된 주요 파일 경로
+- 이번 세션에서 확정된 결정 사항
+- 대화의 핵심 흐름 요약
+- 다음에 해야 할 스텝
+
+### Step 2: 타임스탬프 파일 생성
+파일명 형식: `session-resumes/RESUME_YYMMDD_HHMM.md`
+예: `session-resumes/RESUME_260306_1430.md`
+
+파일 구조:
+```
+# 컨텍스트 핸드오프 — YYYY-MM-DD HH:MM
+
+## 현재 작업
+[진행 중인 태스크 — 어느 단계까지 왔는지 구체적으로]
+
+## 작업 상태
+- ✅ [완료된 것]
+- 🔄 [진행 중인 것]
+- ⏸ [미완료 / 블로킹 이슈]
+
+## 주요 파일 / 경로
+- [관련 파일 목록]
+
+## 이번 세션 결정 사항
+- [확정된 방향/결정들]
+
+## 대화 흐름 요약
+[주요 논의 맥락 — 왜 이 방향으로 결정했는지 포함]
+
+## 다음 스텝
+1. [당장 해야 할 것 — 구체적으로]
+2. [그 다음]
+3. [이후]
+```
+
+### Step 3: 저장 완료 알림
+```
+세션을 저장했습니다.
+파일: session-resumes/RESUME_260306_1430.md
+
+다음 세션에서 /resume 로 이어받으세요.
+```
+
+---
+
+## Resume 모드 워크플로우
+
+### Step 1: 저장된 세션 목록 조회
+`session-resumes/` 디렉토리의 RESUME_*.md 파일을 최신순으로 나열.
+각 파일의 "현재 작업" 항목 첫 줄을 읽어 요약으로 표시.
+
+출력 형식:
+```
+저장된 세션 목록:
+
+1. 2026-03-06 14:30 — session-resume 스킬 디자인 작업
+2. 2026-03-05 18:20 — short-caption 스킬 제작
+3. 2026-03-04 11:00 — CEO Staff 시스템 구축
+
+몇 번 세션을 불러올까요? (최신: 1번)
+```
+
+### Step 2: 사용자 선택 대기
+번호 입력을 기다린다. 입력 없이 엔터 또는 "최신"이라고 하면 1번 선택.
+
+### Step 3: 컨텍스트 브리핑
+선택된 RESUME 파일을 읽어 구조화된 브리핑 제시:
+
+```
+[YYYY-MM-DD HH:MM 세션 복구]
+
+마지막으로 [현재 작업] 작업을 하고 있었습니다.
+
+상태:
+✅ [완료된 것]
+🔄 [진행 중]
+⏸ [미완료/블로킹]
+
+핵심 결정 사항:
+[결정 사항 요약]
+
+다음 스텝:
+1. [첫 번째 할 일]
+2. [두 번째]
+
+바로 시작할까요?
+```
+
+---
+
+## 산출물 저장
+
+- **저장 위치**: `session-resumes/RESUME_YYMMDD_HHMM.md`
+- **누적 저장**: 덮어쓰지 않고 타임스탬프별로 보관
+- **Git 추적**: session-resumes/ 폴더는 Git에 포함 → 계정 전환 후에도 접근 가능
+```
+
+**Step 3: 파일 확인**
+
+```bash
+cat skills-export/session-resume/SKILL.md
+```
+
+기대값: 위 내용이 그대로 출력됨
+
+**Step 4: 커밋**
+
+```bash
+git add skills-export/session-resume/SKILL.md session-resumes/.gitkeep docs/plans/2026-03-06-session-resume-design.md docs/plans/2026-03-06-session-resume-plan.md
+git commit -m "feat: session-resume 스킬 추가 (Save/Resume 모드)"
+```
+
+---
+
+### Task 2: .gitignore 확인
+
+**Files:**
+- Check: `.gitignore`
+
+**Step 1: .gitignore에 session-resumes 포함 여부 확인**
+
+```bash
+cat .gitignore 2>/dev/null | grep session-resumes
+```
+
+기대값: 아무것도 출력되지 않음 (추적 대상이어야 하므로 gitignore에 없어야 함)
+
+session-resumes가 gitignore에 있다면 제거한다.
+
+---
+
+### Task 3: 스킬 패키지 빌드 (선택)
+
+기존 `.skill` 패키지 파일(바이너리)이 필요한 경우 플러그인 빌드 도구로 패키징.
+우선은 SKILL.md 형태로 설치하거나 수동으로 `~/.claude/skills/session-resume/SKILL.md`에 복사하는 방식으로 사용 가능.
+
+```bash
+# 로컬 설치 (수동)
+mkdir -p ~/.claude/skills/session-resume
+cp skills-export/session-resume/SKILL.md ~/.claude/skills/session-resume/SKILL.md
+```
+
+---
+
+## 검증 방법
+
+1. 새 세션에서 "오늘 여기까지"라고 입력 → `session-resumes/RESUME_*.md` 파일 생성 확인
+2. 다음 세션에서 `/resume` 입력 → 목록 나열 및 선택 흐름 확인
+3. 선택 후 브리핑 내용이 저장된 파일 내용과 일치하는지 확인
