@@ -87,3 +87,27 @@
 - 최신 대시보드: `claude-cowork-contents/CEO_대시보드_콘텐츠_현황_260222.md`
 - Quick Commands 지원: `오늘 뭐해?`, `이번 주`, `미팅 준비`, `콘텐츠 현황`, `국순당 체크`, `재무 체크` 등
 - 자세한 라우팅 매트릭스와 sub-agent 목록은 Hub SKILL.md 참조
+
+---
+
+## 디바이스 운용 규칙
+
+- **주 작업 기기**: MacBook (사무실) — 대부분의 작업이 여기서 이루어짐
+- **보조 기기**: Mac mini (사무실 외) — MacBook 작업을 이어받는 경우가 대부분
+- **Mac mini에서 세션 시작 시**: 반드시 `git pull`로 최신 상태를 받아온 뒤 작업 시작
+- **세션 종료 시 (어느 기기든)**: 현재 상태 업데이트 → `git add -A && git commit -m "wip: ..." && git push`
+
+## 현재 상태 (세션 끝날 때 업데이트 후 push)
+
+- **마지막 작업**: 2026-03-07 (MacBook)
+- **완료한 것**:
+  - MacBook ↔ Mac mini Git 동기화 구조 구축
+  - `2026 CH` 폴더를 Git 저장소로 전환 (GitHub: Yollsugi1/2026-CH)
+  - 서브폴더별 CLAUDE.md 구조 세팅 (claude-cowork-contents, claude-team-zonex, 국순당)
+- **진행 중**: Mac mini 첫 동기화 완료 중
+- **다음 할 것**:
+  - 4개 시리즈 티저 촬영 준비
+  - Hoodies 브랜드 스폰서십 소개서 제작
+- **미결 사항**: 웹매거진 개발 벤더 선정, 인턴 채용
+
+> 업데이트 형식: YYYY-MM-DD HH:MM (MacBook / Mac mini)

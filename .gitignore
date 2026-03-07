@@ -23,6 +23,13 @@
 # 기기별 로컬 설정
 .claude/settings.local.json
 
+# 대용량 디자인 파일
+*.ai
+*.key
+*.sketch
+*.fig
+*.afdesign
+
 # 하위 git 저장소 제외
 claude-team-zonex/zonex-landing/
 plugins-for-claude-natives/
