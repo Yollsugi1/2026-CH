@@ -20,8 +20,15 @@
 # 시스템 파일 제외
 .DS_Store
 
+# 기기별 로컬 설정
+.claude/settings.local.json
+
 # 하위 git 저장소 제외
 claude-team-zonex/zonex-landing/
+plugins-for-claude-natives/
+
+# gov 관련 문서 (민감 PDF 포함)
+claude-cowork-gov/
 
 # ===== 대표 전용 (Private repo로 이관) =====
 # 경영/재무
