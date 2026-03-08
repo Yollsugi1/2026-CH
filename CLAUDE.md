@@ -67,6 +67,16 @@
 ### 워크 디렉토리별 역할
 각 `claude-*` 디렉토리는 특정 업무 영역의 Claude 작업 공간이다. 디렉토리 안에서 작업할 때 해당 영역의 맥락을 우선한다.
 
+### 세션 종료 시 git 동기화 (필수)
+세션이 끝나거나 사용자가 마무리 신호를 보내면 **항상** 아래 순서로 실행:
+```
+git add -A
+git commit --no-verify -m "..."
+git push --no-verify origin main
+```
+- Mac mini ↔ MacBook 동기화 목적
+- main 브랜치 직접 커밋/push 시 `--no-verify` 필요
+
 ### 주의사항
 - PDF 파일이 많음 — 소개서, 포트폴리오, 제안서 등 참고용
 - `.skill`, `.plugin` 파일은 Claude 커스텀 스킬/플러그인 정의 파일
