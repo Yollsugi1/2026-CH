@@ -17,6 +17,9 @@
 # .gitignore 자체 포함
 !.gitignore
 
+# node_modules 제외
+node_modules/
+
 # 시스템 파일 제외
 .DS_Store
 
