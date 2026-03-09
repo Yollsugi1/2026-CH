@@ -109,12 +109,13 @@ git push --no-verify origin main
 
 ## 현재 상태 (세션 끝날 때 업데이트 후 push)
 
-- **마지막 작업**: 2026-03-07 (MacBook)
+- **마지막 작업**: 2026-03-09 (MacBook)
 - **완료한 것**:
-  - MacBook ↔ Mac mini Git 동기화 구조 구축
-  - `2026 CH` 폴더를 Git 저장소로 전환 (GitHub: Yollsugi1/2026-CH)
-  - 서브폴더별 CLAUDE.md 구조 세팅 (claude-cowork-contents, claude-team-zonex, 국순당)
-- **진행 중**: Mac mini 첫 동기화 완료 중
+  - 카카오엔터테인먼트 노션 협업 교육 제안서 PDF 제작 (claude-personal/notion-edu)
+  - 커리큘럼 선택 모듈 3종 추가, 노션 페이지 동기화
+  - 교안 슬라이드 이미지 3장 생성, 제안서 PDF/DOCX 완성
+  - 탈잉 회신 메일 초안, 최종 패키징 체크리스트 작성
+- **진행 중**: 카카오 교육 제안서 최종 전달 준비 (캡처 추가, 메일 발송)
 - **다음 할 것**:
   - 4개 시리즈 티저 촬영 준비
   - Hoodies 브랜드 스폰서십 소개서 제작
