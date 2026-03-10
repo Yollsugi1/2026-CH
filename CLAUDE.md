@@ -109,16 +109,19 @@ git push --no-verify origin main
 
 ## 현재 상태 (세션 끝날 때 업데이트 후 push)
 
-- **마지막 작업**: 2026-03-09 (MacBook)
+- **마지막 작업**: 2026-03-10 (MacBook)
 - **완료한 것**:
-  - 카카오엔터테인먼트 노션 협업 교육 제안서 PDF 제작 (claude-personal/notion-edu)
-  - 커리큘럼 선택 모듈 3종 추가, 노션 페이지 동기화
-  - 교안 슬라이드 이미지 3장 생성, 제안서 PDF/DOCX 완성
-  - 탈잉 회신 메일 초안, 최종 패키징 체크리스트 작성
-- **진행 중**: 카카오 교육 제안서 최종 전달 준비 (캡처 추가, 메일 발송)
+  - CH MAG 웹매거진 (claude-magazine/) 스타일링 전면 수정 — Tailwind CSS v4 스캐닝 이슈 해결
+  - 헤더 네비게이션 리뉴얼: 전체 10개 시리즈 표시, 2-tier 레이아웃 (로고바 + 시리즈 네비)
+  - 시리즈별 레이아웃 3종 구현 (YouTube 16:9, Reels 9:16, Carousel 1:1)
+  - SeriesConfig에 embedSource 필드 추가 (youtube/instagram/editorial)
+  - CMS 전략 수립: Notion을 "큐레이션 허브"로 활용 (팀이 임베드할 콘텐츠 등록)
+- **진행 중**: 웹매거진 Notion CMS 연동 고도화
 - **다음 할 것**:
+  - Notion DB에 테스트 포스트 등록 후 프론트엔드 연동 검증
+  - Instagram/YouTube 임베드 컴포넌트 완성
   - 4개 시리즈 티저 촬영 준비
   - Hoodies 브랜드 스폰서십 소개서 제작
-- **미결 사항**: 웹매거진 개발 벤더 선정, 인턴 채용
+- **미결 사항**: 인턴 채용
 
 > 업데이트 형식: YYYY-MM-DD HH:MM (MacBook / Mac mini)
