@@ -37,6 +37,9 @@ node_modules/
 claude-team-zonex/zonex-landing/
 plugins-for-claude-natives/
 
+# SDK/바이너리 폴더
+google-cloud-sdk/
+
 # gov 관련 문서 (민감 PDF 포함)
 claude-cowork-gov/
 
