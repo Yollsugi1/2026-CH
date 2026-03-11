@@ -109,18 +109,17 @@ git push --no-verify origin main
 
 ## 현재 상태 (세션 끝날 때 업데이트 후 push)
 
-- **마지막 작업**: 2026-03-10 (MacBook)
+- **마지막 작업**: 2026-03-11 (MacBook)
 - **완료한 것**:
-  - CH MAG 웹매거진 (claude-magazine/) 스타일링 전면 수정 — Tailwind CSS v4 스캐닝 이슈 해결
-  - 헤더 네비게이션 리뉴얼: 전체 10개 시리즈 표시, 2-tier 레이아웃 (로고바 + 시리즈 네비)
-  - 시리즈별 레이아웃 3종 구현 (YouTube 16:9, Reels 9:16, Carousel 1:1)
-  - SeriesConfig에 embedSource 필드 추가 (youtube/instagram/editorial)
-  - CMS 전략 수립: Notion을 "큐레이션 허브"로 활용 (팀이 임베드할 콘텐츠 등록)
-- **진행 중**: 웹매거진 Notion CMS 연동 고도화
+  - Zone X 방향성 전면 재검토 팀 공유 문서 작성 (md + Notion)
+  - Zone X 상성 시스템 Section 3 설계 진행 (피트니스 유형 3종 + 상성 매트릭스 + 드라마 시나리오)
+  - Mac mini → MacBook git sync 완료
+- **진행 중**: Zone X Section 3 상성 시스템 마무리 (유형 공개 방식, Type X 처우)
 - **다음 할 것**:
-  - Notion DB에 테스트 포스트 등록 후 프론트엔드 연동 검증
-  - Instagram/YouTube 임베드 컴포넌트 완성
-  - 4개 시리즈 티저 촬영 준비
+  - Zone X Section 4: 인원 클래스 구조 (1인/2인/4인전)
+  - Zone X Section 5: 리그 구조 (랭킹, 시즌 플로우, 타이틀전)
+  - Zone X Section 6: 콘텐츠 설계
+  - 웹매거진 Notion CMS 연동 고도화
   - Hoodies 브랜드 스폰서십 소개서 제작
 - **미결 사항**: 인턴 채용
 
