@@ -13,6 +13,7 @@
 !*.csv
 !*.skill
 !*.plugin
+!*.html
 
 # .gitignore 자체 포함
 !.gitignore

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>DORM.MAG 프로필 로고 — 버전 비교 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #111;
+    color: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 48px;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.03em;
+  }
+  .page-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+  }
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ff6b35;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 40px;
+    margin-bottom: 16px;
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ff6b35;
+    letter-spacing: 0.04em;
+  }
+  .card-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.4;
+    text-align: center;
+    max-width: 200px;
+  }
+
+  .logo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .logo-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ========================================
+     B2 계열 — 오렌지 배경 + 다크 D
+     ======================================== */
+
+  /* B2a — 원본 */
+  .logo-b2a .logo-inner {
+    background: #ff6b35;
+  }
+  .logo-b2a .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: #0a0a0a;
+    margin-left: 8px;
+  }
+
+  /* B2b — 오렌지 배경 + 화이트 D */
+  .logo-b2b .logo-inner {
+    background: #ff6b35;
+  }
+  .logo-b2b .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: #fff;
+    margin-left: 8px;
+  }
+
+  /* B2c — 오렌지 그라디언트 배경 */
+  .logo-b2c .logo-inner {
+    background: linear-gradient(135deg, #ff6b35 0%, #e04e1a 100%);
+  }
+  .logo-b2c .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: #0a0a0a;
+    margin-left: 8px;
+  }
+
+  /* B2d — 오렌지 배경 + D. (닷 포함) */
+  .logo-b2d .logo-inner {
+    background: #ff6b35;
+    flex-direction: column;
+    gap: 0;
+  }
+  .logo-b2d .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 0.85;
+    color: #0a0a0a;
+  }
+  .logo-b2d .dot-mark {
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    line-height: 0.3;
+    color: #0a0a0a;
+    margin-top: -8px;
+  }
+
+  /* B2e — 오렌지 배경 + Outfit 폰트 */
+  .logo-b2e .logo-inner {
+    background: #ff6b35;
+  }
+  .logo-b2e .letter {
+    font-family: 'Outfit', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: #0a0a0a;
+    margin-left: 4px;
+  }
+
+  /* ========================================
+     B3 계열 — 아웃라인 D
+     ======================================== */
+
+  /* B3a — 원본 오렌지 아웃라인 */
+  .logo-b3a .logo-inner {
+    background: #0a0a0a;
+  }
+  .logo-b3a .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 3px #ff6b35;
+    margin-left: 8px;
+  }
+
+  /* B3b — 더블 아웃라인 (오렌지 + 고스트 화이트) */
+  .logo-b3b .logo-inner {
+    background: #0a0a0a;
+    position: relative;
+  }
+  .logo-b3b .letter-back {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.08);
+    margin-left: 8px;
+    position: absolute;
+    transform: translate(5px, 5px);
+  }
+  .logo-b3b .letter-front {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 3px #ff6b35;
+    margin-left: 8px;
+    position: relative;
+  }
+
+  /* B3c — 화이트 아웃라인 + 오렌지 배경 */
+  .logo-b3c .logo-inner {
+    background: #ff6b35;
+  }
+  .logo-b3c .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 3px #fff;
+    margin-left: 8px;
+  }
+
+  /* B3d — 두꺼운 아웃라인 */
+  .logo-b3d .logo-inner {
+    background: #0a0a0a;
+  }
+  .logo-b3d .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 6px #ff6b35;
+    margin-left: 8px;
+  }
+
+  /* ========================================
+     B4 계열 — D + 닷 모티프
+     ======================================== */
+
+  /* B4a — 원본 */
+  .logo-b4a .logo-inner {
+    background: #0a0a0a;
+    position: relative;
+  }
+  .logo-b4a .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: #fff;
+    margin-left: 4px;
+  }
+  .logo-b4a .orange-dot {
+    position: absolute;
+    bottom: 38px;
+    right: 52px;
+    width: 18px;
+    height: 18px;
+    background: #ff6b35;
+    border-radius: 50%;
+  }
+
+  /* B4b — 큰 닷 (D 안에 걸치게) */
+  .logo-b4b .logo-inner {
+    background: #0a0a0a;
+    position: relative;
+  }
+  .logo-b4b .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: #fff;
+    margin-left: 4px;
+    position: relative;
+    z-index: 1;
+  }
+  .logo-b4b .orange-dot {
+    position: absolute;
+    bottom: 28px;
+    right: 40px;
+    width: 36px;
+    height: 36px;
+    background: #ff6b35;
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  /* B4c — 닷이 D 우측 하단 마침표처럼 */
+  .logo-b4c .logo-inner {
+    background: #0a0a0a;
+    position: relative;
+  }
+  .logo-b4c .combo {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .logo-b4c .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 0.8;
+    color: #fff;
+  }
+  .logo-b4c .dot-period {
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    line-height: 0.8;
+    color: #ff6b35;
+  }
+
+  /* B4d — 오렌지 배경 + 다크 D + 화이트 닷 */
+  .logo-b4d .logo-inner {
+    background: #ff6b35;
+    position: relative;
+  }
+  .logo-b4d .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: #0a0a0a;
+    margin-left: 4px;
+  }
+  .logo-b4d .white-dot {
+    position: absolute;
+    bottom: 38px;
+    right: 52px;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+  }
+
+  /* B4e — 아웃라인 D + 오렌지 닷 */
+  .logo-b4e .logo-inner {
+    background: #0a0a0a;
+    position: relative;
+  }
+  .logo-b4e .letter {
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 3px rgba(255,255,255,0.7);
+    margin-left: 4px;
+  }
+  .logo-b4e .orange-dot {
+    position: absolute;
+    bottom: 38px;
+    right: 52px;
+    width: 20px;
+    height: 20px;
+    background: #ff6b35;
+    border-radius: 50%;
+  }
+
+  /* ========================================
+     C2 계열 — 기숙사 창문
+     ======================================== */
+
+  /* C2a — 개선: 4x3 창문 + D 형태 불켜짐 */
+  .logo-c2a .logo-inner {
+    background: #0a0a0a;
+    flex-direction: column;
+    gap: 6px;
+    padding: 38px 40px;
+  }
+  .logo-c2a .row {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+  }
+  .logo-c2a .cell {
+    flex: 1;
+    height: 22px;
+    border-radius: 2px;
+  }
+  .logo-c2a .on { background: #ff6b35; }
+  .logo-c2a .warm { background: #ffb088; }
+  .logo-c2a .dim { background: rgba(255,255,255,0.04); }
+  .logo-c2a .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #fff;
+    margin-top: 8px;
+  }
+
+  /* C2b — 3x3 + 하나만 불 켜짐 */
+  .logo-c2b .logo-inner {
+    background: #0a0a0a;
+    flex-direction: column;
+    gap: 5px;
+    padding: 36px 44px;
+  }
+  .logo-c2b .row {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+  }
+  .logo-c2b .cell {
+    flex: 1;
+    aspect-ratio: 1;
+    border-radius: 2px;
+  }
+  .logo-c2b .on {
+    background: #ff6b35;
+    box-shadow: 0 0 12px rgba(255,107,53,0.4);
+  }
+  .logo-c2b .dim { background: rgba(255,255,255,0.05); }
+  .logo-c2b .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #fff;
+    margin-top: 10px;
+  }
+
+  /* C2c — 창문 + 오렌지 배경 */
+  .logo-c2c .logo-inner {
+    background: #ff6b35;
+    flex-direction: column;
+    gap: 5px;
+    padding: 36px 44px;
+  }
+  .logo-c2c .row {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+  }
+  .logo-c2c .cell {
+    flex: 1;
+    aspect-ratio: 1;
+    border-radius: 2px;
+  }
+  .logo-c2c .on { background: #fff; }
+  .logo-c2c .dim { background: rgba(0,0,0,0.15); }
+  .logo-c2c .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #0a0a0a;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>DORM.MAG 프로필 로고 — v2</h1>
+<p class="page-sub">200px 프리뷰 (실제 720×720 출력) · B2/B3/B4 변형 + C2 개선</p>
+
+<!-- ===== B2 계열 ===== -->
+<div class="section-label">B2 — 오렌지 배경 + D</div>
+<div class="grid">
+
+  <div class="card">
+    <span class="card-label">B2a</span>
+    <div class="logo logo-b2a">
+      <div class="logo-inner"><div class="letter">D</div></div>
+    </div>
+    <p class="card-desc">원본. 오렌지 + 다크 D.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B2b</span>
+    <div class="logo logo-b2b">
+      <div class="logo-inner"><div class="letter">D</div></div>
+    </div>
+    <p class="card-desc">오렌지 + 화이트 D. 더 밝은 느낌.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B2c</span>
+    <div class="logo logo-b2c">
+      <div class="logo-inner"><div class="letter">D</div></div>
+    </div>
+    <p class="card-desc">그라디언트 오렌지. 깊이감.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B2d</span>
+    <div class="logo logo-b2d">
+      <div class="logo-inner">
+        <div class="letter">D</div>
+        <div class="dot-mark">.</div>
+      </div>
+    </div>
+    <p class="card-desc">오렌지 배경 + D. (닷 포함)</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B2e</span>
+    <div class="logo logo-b2e">
+      <div class="logo-inner"><div class="letter">D</div></div>
+    </div>
+    <p class="card-desc">Outfit 폰트. 라운드 느낌.</p>
+  </div>
+
+</div>
+
+<!-- ===== B3 계열 ===== -->
+<div class="section-label">B3 — 아웃라인 D</div>
+<div class="grid">
+
+  <div class="card">
+    <span class="card-label">B3a</span>
+    <div class="logo logo-b3a">
+      <div class="logo-inner"><div class="letter">D</div></div>
+    </div>
+    <p class="card-desc">원본. 다크 + 오렌지 아웃라인.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B3b</span>
+    <div class="logo logo-b3b">
+      <div class="logo-inner">
+        <div class="letter-back">D</div>
+        <div class="letter-front">D</div>
+      </div>
+    </div>
+    <p class="card-desc">더블 레이어. 쉐도우 + 오렌지.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B3c</span>
+    <div class="logo logo-b3c">
+      <div class="logo-inner"><div class="letter">D</div></div>
+    </div>
+    <p class="card-desc">오렌지 배경 + 화이트 아웃라인.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B3d</span>
+    <div class="logo logo-b3d">
+      <div class="logo-inner"><div class="letter">D</div></div>
+    </div>
+    <p class="card-desc">두꺼운 아웃라인. 더 강렬.</p>
+  </div>
+
+</div>
+
+<!-- ===== B4 계열 ===== -->
+<div class="section-label">B4 — D + 닷 모티프</div>
+<div class="grid">
+
+  <div class="card">
+    <span class="card-label">B4a</span>
+    <div class="logo logo-b4a">
+      <div class="logo-inner">
+        <div class="letter">D</div>
+        <div class="orange-dot"></div>
+      </div>
+    </div>
+    <p class="card-desc">원본. 화이트 D + 오렌지 닷.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B4b</span>
+    <div class="logo logo-b4b">
+      <div class="logo-inner">
+        <div class="letter">D</div>
+        <div class="orange-dot"></div>
+      </div>
+    </div>
+    <p class="card-desc">큰 닷. D에 걸치는 느낌.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B4c</span>
+    <div class="logo logo-b4c">
+      <div class="logo-inner">
+        <div class="combo">
+          <span class="letter">D</span><span class="dot-period">.</span>
+        </div>
+      </div>
+    </div>
+    <p class="card-desc">D. 타이포그래피. 마침표 느낌.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B4d</span>
+    <div class="logo logo-b4d">
+      <div class="logo-inner">
+        <div class="letter">D</div>
+        <div class="white-dot"></div>
+      </div>
+    </div>
+    <p class="card-desc">오렌지 배경 + 다크 D + 화이트 닷.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">B4e</span>
+    <div class="logo logo-b4e">
+      <div class="logo-inner">
+        <div class="letter">D</div>
+        <div class="orange-dot"></div>
+      </div>
+    </div>
+    <p class="card-desc">아웃라인 D + 오렌지 닷. 하이브리드.</p>
+  </div>
+
+</div>
+
+<!-- ===== C2 계열 ===== -->
+<div class="section-label">C2 — 기숙사 창문</div>
+<div class="grid">
+
+  <div class="card">
+    <span class="card-label">C2a</span>
+    <div class="logo logo-c2a">
+      <div class="logo-inner">
+        <div class="row"><div class="cell on"></div><div class="cell dim"></div><div class="cell warm"></div><div class="cell dim"></div></div>
+        <div class="row"><div class="cell dim"></div><div class="cell on"></div><div class="cell dim"></div><div class="cell dim"></div></div>
+        <div class="row"><div class="cell dim"></div><div class="cell dim"></div><div class="cell dim"></div><div class="cell on"></div></div>
+        <div class="label">DORM</div>
+      </div>
+    </div>
+    <p class="card-desc">4x3 창문. 여기저기 불 켜진 기숙사.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">C2b</span>
+    <div class="logo logo-c2b">
+      <div class="logo-inner">
+        <div class="row"><div class="cell dim"></div><div class="cell dim"></div><div class="cell dim"></div></div>
+        <div class="row"><div class="cell dim"></div><div class="cell on"></div><div class="cell dim"></div></div>
+        <div class="row"><div class="cell dim"></div><div class="cell dim"></div><div class="cell dim"></div></div>
+        <div class="label">DORM</div>
+      </div>
+    </div>
+    <p class="card-desc">가운데 하나만 불 켜짐. "우리 방" 느낌.</p>
+  </div>
+
+  <div class="card">
+    <span class="card-label">C2c</span>
+    <div class="logo logo-c2c">
+      <div class="logo-inner">
+        <div class="row"><div class="cell dim"></div><div class="cell on"></div><div class="cell dim"></div></div>
+        <div class="row"><div class="cell on"></div><div class="cell dim"></div><div class="cell on"></div></div>
+        <div class="row"><div class="cell dim"></div><div class="cell on"></div><div class="cell dim"></div></div>
+        <div class="label">DORM</div>
+      </div>
+    </div>
+    <p class="card-desc">오렌지 배경 버전. 밝은 창문들.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -114,18 +114,22 @@ git push --no-verify origin main
 
 ## 현재 상태 (세션 끝날 때 업데이트 후 push)
 
-- **마지막 작업**: 2026-03-11 (MacBook)
+- **마지막 작업**: 2026-03-13 (MacBook)
 - **완료한 것**:
-  - Zone X 방향성 전면 재검토 팀 공유 문서 작성 (md + Notion)
-  - Zone X 상성 시스템 Section 3 설계 진행 (피트니스 유형 3종 + 상성 매트릭스 + 드라마 시나리오)
-  - Mac mini → MacBook git sync 완료
-- **진행 중**: Zone X Section 3 상성 시스템 마무리 (유형 공개 방식, Type X 처우)
+  - Zone X 컴바인 (Season 0) 전체 기획 완료 — `claude-zonex/ZoneX_컴바인_기획_260312.md`
+    - 6가지 능력 체계 v2 확정 (Hexagon: ENGINE/GRIT/FORCE/BLAST/REFLEX/CONTROL)
+    - 컴바인 시리즈 "The Proving Ground" 11부작 엔터테인먼트 구조
+    - 빌드업 숏폼 시리즈 (4~5월) 에피소드 설계
+    - 액션플랜 병렬 타임라인 (Track A/B/C) 수립
+  - 액션플랜 시각화 HTML 생성 — `claude-team-zonex/ZoneX_액션플랜_타임라인.html`
+  - .gitignore에 `!*.html` 추가 (시각화 도구용)
+- **진행 중**: Phase C (리그 설계) 대기 — Section 3 상성 시스템부터 이어감
 - **다음 할 것**:
-  - Zone X Section 4: 인원 클래스 구조 (1인/2인/4인전)
-  - Zone X Section 5: 리그 구조 (랭킹, 시즌 플로우, 타이틀전)
-  - Zone X Section 6: 콘텐츠 설계
+  - Zone X Phase C: 상성 시스템 → 매치 구분 기준 → 리그 구조 → 콘텐츠 설계
+  - Zone X 측정 종목 최종 확정 + 스코어링 시스템 (0~100 점수 변환)
+  - 빌드업 EP1 파일럿 스크립트 (세한/수민 촬영 가이드)
   - 웹매거진 Notion CMS 연동 고도화
   - Hoodies 브랜드 스폰서십 소개서 제작
-- **미결 사항**: 인턴 채용
+- **미결 사항**: 인턴 채용, 컴바인 촬영 장소 물색
 
 > 업데이트 형식: YYYY-MM-DD HH:MM (MacBook / Mac mini)

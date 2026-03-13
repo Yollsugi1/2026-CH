@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DORM — 시리즈 썸네일 디자인 컨셉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@300;400;700;900&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0C0C0C;
+  --paper: #F5F0E8;
+  --cream: #EDE3CB;
+  --arc-red: #C52A1A;
+  --pov-black: #050508;
+  --pov-yellow: #F5E100;
+  --rep-blue: #0031C4;
+  --serif: 'Noto Serif KR', serif;
+  --sans: 'Noto Sans KR', sans-serif;
+  --mono: 'Space Mono', monospace;
+  --black-han: 'Black Han Sans', sans-serif;
+  --bebas: 'Bebas Neue', sans-serif;
+  /* 1080×1440 → display at 360×480 (÷3) */
+  --w: 360px;
+  --h: 480px;
+}
+
+body {
+  background: #0C0C0C;
+  color: #F5F0E8;
+  font-family: var(--sans);
+  min-height: 100vh;
+  padding: 64px 48px 96px;
+}
+
+/* ── PAGE HEADER ────────────────────── */
+.page-header {
+  margin-bottom: 72px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.page-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.28);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.page-title {
+  font-family: var(--bebas);
+  font-size: 88px;
+  line-height: 0.9;
+  letter-spacing: 0.04em;
+  color: #F5F0E8;
+}
+.page-title .dim { color: rgba(255,255,255,0.22); }
+.page-desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.12em;
+  margin-top: 16px;
+  line-height: 1.8;
+}
+
+/* ── GRID ───────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, var(--w));
+  gap: 48px;
+  justify-content: center;
+}
+
+.col { display: flex; flex-direction: column; gap: 22px; }
+
+/* thumbnail wrapper — 1080×1440 = 3:4 */
+.thumb {
+  width: var(--w);   /* 360px = 1080÷3 */
+  height: var(--h);  /* 480px = 1440÷3 */
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════
+   SERIES 1: FAN ARCHIVE
+   메타포: 도서관 아카이브 카드
+   레이아웃: 상단 1/3 filing 메타 | 하단 2/3 메인 타이틀
+═══════════════════════════════════════ */
+.s1 {
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+}
+
+/* paper grain overlay */
+.s1::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+/* ─── 헤더 바 ─── */
+.s1-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px 12px;
+  border-bottom: 1.5px solid rgba(0,0,0,0.18);
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.dorm-badge {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--bebas);
+  font-size: 14px;
+  letter-spacing: 0.24em;
+  padding: 4px 10px 2px;
+}
+
+.arc-series {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--arc-red);
+  font-weight: 700;
+}
+
+.arc-num {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  color: rgba(0,0,0,0.28);
+}
+
+/* ─── 파일링 메타 구역 (상단 1/3) ─── */
+.s1-meta {
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.arc-stamp {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  border: 2.5px solid var(--arc-red);
+  color: var(--arc-red);
+  font-family: var(--bebas);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  padding: 5px 9px 3px;
+  opacity: 0.6;
+  transform: rotate(-10deg);
+  line-height: 1.3;
+  text-align: center;
+}
+
+.arc-volnum {
+  font-family: var(--bebas);
+  font-size: 72px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: rgba(0,0,0,0.06);
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.arc-filed {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  color: rgba(0,0,0,0.32);
+  text-transform: uppercase;
+  line-height: 1.8;
+}
+
+/* ─── 메인 타이틀 구역 (하단 2/3) ─── */
+.s1-body {
+  flex: 1;
+  padding: 24px 22px 20px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.arc-title {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 40px;
+  line-height: 1.3;
+  color: #1A1512;
+  word-break: keep-all;
+}
+
+.arc-divider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.arc-rule {
+  width: 32px;
+  height: 2.5px;
+  background: var(--arc-red);
+}
+
+.arc-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(0,0,0,0.36);
+  letter-spacing: 0.14em;
+  line-height: 1.9;
+  text-transform: uppercase;
+}
+
+/* ─── 하단 푸터 ─── */
+.s1-foot {
+  padding: 10px 20px;
+  border-top: 1px dashed rgba(0,0,0,0.13);
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.foot-txt {
+  font-family: var(--mono);
+  font-size: 7.5px;
+  color: rgba(0,0,0,0.24);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════
+   SERIES 2: FAN'S POV
+   메타포: 스포츠 생중계 화면
+   레이아웃: 상단 스코어보드 | 중앙 타이틀 | 하단 데이터바
+═══════════════════════════════════════ */
+.s2 {
+  background: var(--pov-black);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(245,225,0,0.1);
+}
+
+/* scanlines */
+.s2::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px, transparent 2px,
+    rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 뷰파인더 코너 */
+.corner {
+  position: absolute;
+  width: 16px; height: 16px;
+  border-color: var(--pov-yellow);
+  border-style: solid; border-width: 0;
+  z-index: 3;
+}
+.c-tl { top: 12px; left: 12px; border-top-width: 2px; border-left-width: 2px; }
+.c-tr { top: 12px; right: 12px; border-top-width: 2px; border-right-width: 2px; }
+.c-bl { bottom: 12px; left: 12px; border-bottom-width: 2px; border-left-width: 2px; }
+.c-br { bottom: 12px; right: 12px; border-bottom-width: 2px; border-right-width: 2px; }
+
+/* ─── 시리즈 헤더 ─── */
+.s2-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 18px;
+  flex-shrink: 0;
+  position: relative; z-index: 4;
+}
+
+.pov-series-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  color: var(--pov-yellow);
+  text-transform: uppercase;
+}
+
+.pov-badge-group { display: flex; align-items: center; gap: 10px; }
+
+.pov-dorm-badge {
+  border: 1px solid var(--pov-yellow);
+  color: var(--pov-yellow);
+  font-family: var(--bebas);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  padding: 3px 8px 1px;
+  background: rgba(245,225,0,0.06);
+}
+
+.live-wrap {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--mono);
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.2em; color: #FF3333;
+}
+.live-dot {
+  width: 6px; height: 6px;
+  background: #FF3333; border-radius: 50%;
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 48%,52%{opacity:0} }
+
+/* ─── 스코어보드 위젯 ─── */
+.pov-scoreboard {
+  margin: 0 18px 0;
+  border: 1px solid rgba(245,225,0,0.2);
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  position: relative; z-index: 4;
+}
+
+.pov-team {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.pov-team-name {
+  font-family: var(--mono);
+  font-size: 8px; letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.45); text-transform: uppercase;
+}
+.pov-team-score {
+  font-family: var(--bebas);
+  font-size: 26px; letter-spacing: 0.06em;
+  color: #FFFFFF; line-height: 1;
+}
+.pov-team.right { text-align: right; }
+.pov-team.right .pov-team-score { color: rgba(255,255,255,0.35); }
+
+.pov-score-center {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.pov-inning {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: 0.14em;
+  color: var(--pov-yellow); font-weight: 700;
+}
+.pov-score-sep {
+  font-family: var(--bebas);
+  font-size: 24px; color: rgba(245,225,0,0.4);
+  line-height: 1;
+}
+
+/* ─── 메인 타이틀 ─── */
+.s2-body {
+  flex: 1;
+  padding: 20px 20px 16px;
+  position: relative; z-index: 4;
+  display: flex; flex-direction: column; justify-content: center;
+}
+
+.pov-context {
+  font-family: var(--mono);
+  font-size: 8.5px; letter-spacing: 0.2em;
+  color: rgba(245,225,0,0.5);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+
+.pov-title {
+  font-family: var(--black-han);
+  font-size: 54px; line-height: 1.18;
+  color: #FFFFFF; word-break: keep-all;
+}
+.pov-accent { color: var(--pov-yellow); }
+
+/* ─── 하단 데이터바 ─── */
+.pov-databar {
+  margin: 0 18px 14px;
+  border-top: 1px solid rgba(245,225,0,0.18);
+  padding-top: 12px;
+  display: flex; gap: 20px;
+  flex-shrink: 0; position: relative; z-index: 4;
+}
+.pov-datum { display: flex; flex-direction: column; gap: 3px; }
+.pov-dlabel {
+  font-family: var(--mono);
+  font-size: 7px; letter-spacing: 0.22em;
+  color: rgba(245,225,0,0.42); text-transform: uppercase;
+}
+.pov-dval { font-family: var(--mono); font-size: 10.5px; color: rgba(255,255,255,0.76); }
+
+/* ═══════════════════════════════════════
+   SERIES 3: 팬 소비 리포트
+   메타포: 직관 후 영수증
+   레이아웃: 영수증 카드 중앙 float
+═══════════════════════════════════════ */
+.s3 {
+  background: #EEEEE9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+}
+
+.receipt {
+  background: #FFFFFF;
+  width: 100%;
+  padding: 18px 20px 16px;
+  position: relative;
+  font-family: var(--mono);
+  box-shadow: 0 3px 16px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.07);
+  border-top: 3px solid var(--ink);
+}
+
+/* zigzag 하단 절취선 */
+.receipt::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; left: 0; right: 0; height: 10px;
+  background: repeating-linear-gradient(
+    90deg,
+    #EEEEE9 0, #EEEEE9 6px,
+    transparent 6px, transparent 12px
+  );
+}
+
+.rec-stamp {
+  position: absolute; top: 14px; right: 12px;
+  border: 2.5px solid var(--rep-blue);
+  color: var(--rep-blue);
+  font-family: var(--bebas); font-size: 10px;
+  letter-spacing: 0.22em; padding: 4px 7px;
+  opacity: 0.48; transform: rotate(13deg);
+  text-align: center; line-height: 1.3;
+}
+
+.rec-header {
+  text-align: center;
+  margin-bottom: 12px; padding-bottom: 10px;
+  border-bottom: 1.5px solid rgba(0,0,0,0.1);
+}
+.rec-store { font-family: var(--bebas); font-size: 11px; letter-spacing: 0.3em; color: rgba(0,0,0,0.3); }
+.rec-title { font-family: var(--bebas); font-size: 21px; letter-spacing: 0.2em; color: #1A1A1A; }
+.rec-subtitle { font-size: 7.5px; letter-spacing: 0.16em; color: rgba(0,0,0,0.28); margin-top: 3px; text-transform: uppercase; }
+
+.rec-datetime {
+  display: flex; justify-content: space-between;
+  font-size: 8px; color: rgba(0,0,0,0.3);
+  letter-spacing: 0.1em; margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+}
+
+.rec-item {
+  display: flex; align-items: baseline;
+  font-size: 10px; color: #1A1A1A; line-height: 2.0;
+}
+.ri-name { white-space: nowrap; }
+.ri-dots {
+  flex: 1; min-width: 0; overflow: hidden;
+  margin: 0 3px; font-size: 9.5px;
+  color: rgba(0,0,0,0.16); letter-spacing: 0.04em;
+}
+.ri-price { white-space: nowrap; text-align: right; }
+
+.rec-total-wrap {
+  border-top: 2px solid rgba(0,0,0,0.82);
+  margin-top: 7px; padding-top: 8px;
+}
+.rec-total {
+  display: flex; justify-content: space-between;
+  font-size: 13px; font-weight: 700; color: #1A1A1A;
+}
+.rec-note {
+  font-size: 7.5px; color: var(--rep-blue);
+  letter-spacing: 0.12em; margin-top: 4px; text-transform: uppercase;
+}
+.rec-payment {
+  display: flex; justify-content: space-between;
+  font-size: 8px; color: rgba(0,0,0,0.38);
+  margin-top: 8px; padding-top: 7px;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+  letter-spacing: 0.08em;
+}
+
+.rec-footer {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+  text-align: center;
+}
+.barcode {
+  display: flex; justify-content: center; align-items: flex-end;
+  gap: 2px; margin-bottom: 6px;
+}
+.bar { background: #1A1A1A; }
+.rec-footertxt {
+  font-size: 7px; color: rgba(0,0,0,0.2);
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+
+/* ── SERIES META (below thumbnail) ─────── */
+.series-meta { display: flex; flex-direction: column; gap: 10px; }
+.meta-top { display: flex; align-items: center; gap: 10px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.meta-title { font-family: var(--bebas); font-size: 22px; letter-spacing: 0.08em; }
+.meta-ko { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 300; }
+.notes { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+.note { display: flex; gap: 8px; align-items: baseline; }
+.nk {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.2);
+  min-width: 44px; flex-shrink: 0;
+}
+.nv { font-size: 10.5px; color: rgba(255,255,255,0.5); font-weight: 300; line-height: 1.5; }
+
+/* ── SECTION DIVIDER ──────────────────── */
+.divider {
+  display: flex; align-items: center; gap: 16px;
+  margin: 72px 0 32px;
+}
+.divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+.div-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.22em; color: rgba(255,255,255,0.2); text-transform: uppercase;
+}
+
+/* ── PALETTE ──────────────────────────── */
+.palette { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 72px; }
+.swatch { display: flex; flex-direction: column; gap: 7px; align-items: center; }
+.sw-color { width: 52px; height: 52px; border-radius: 3px; }
+.sw-name {
+  font-family: var(--mono); font-size: 8.5px;
+  color: rgba(255,255,255,0.3); letter-spacing: 0.1em;
+  text-align: center; line-height: 1.6;
+}
+
+/* ── BRIEF ────────────────────────────── */
+.brief-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 20px; max-width: 920px;
+}
+.brief-card { border: 1px solid rgba(255,255,255,0.06); padding: 22px 24px; }
+.bc-title {
+  font-family: var(--bebas); font-size: 14px; letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.4); margin-bottom: 14px; text-transform: uppercase;
+}
+.bc-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.bc-list li {
+  font-size: 11.5px; color: rgba(255,255,255,0.55);
+  padding-left: 18px; position: relative;
+  line-height: 1.55; font-weight: 300;
+}
+.bc-list li::before { content: '—'; position: absolute; left: 0; color: rgba(255,255,255,0.16); }
+
+/* ── PAGE FOOTER ──────────────────────── */
+.page-foot {
+  margin-top: 80px; padding-top: 28px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-family: var(--mono); font-size: 9px;
+  color: rgba(255,255,255,0.12); letter-spacing: 0.12em;
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="page-eyebrow">DORM × CREATORHOOD — Design Brief 01 · 우석 작업 참고용</div>
+  <div class="page-title">DORM<br><span class="dim">시리즈 썸네일</span><br>디자인 컨셉</div>
+  <div class="page-desc">
+    FAN ARCHIVE · FAN'S POV · 팬 소비 리포트 — 3종 시리즈 표지 디자인 방향<br>
+    실제 사이즈: 1080×1440px (Instagram 세로형, 3:4) — 화면 표시: 360×480px (÷3 scale)<br>
+    각 시리즈는 고유한 컨테이너 메타포 · DORM 배지 + 시리즈 컬러로 통일성 유지 · Figma 마스터 컴포넌트 제작 권장
+  </div>
+</header>
+
+<div class="grid">
+
+  <!-- ══════════════════════ 1. FAN ARCHIVE ══════════════════════ -->
+  <div class="col">
+    <div class="thumb s1">
+
+      <!-- 상단 바 -->
+      <div class="s1-topbar">
+        <div class="dorm-badge">DORM</div>
+        <span class="arc-series">Fan Archive</span>
+        <span class="arc-num">#001</span>
+      </div>
+
+      <!-- 파일링 메타 구역 — 상단 1/3 -->
+      <div class="s1-meta">
+        <div class="arc-stamp">ARCH<br>IVED</div>
+        <div class="arc-volnum">001</div>
+        <div class="arc-filed">
+          FILED · 2026.03<br>
+          CATEGORY: KBO · 팬 인터뷰
+        </div>
+      </div>
+
+      <!-- 메인 타이틀 구역 — 하단 2/3 -->
+      <div class="s1-body">
+        <div class="arc-title">
+          이 사람은<br>몇 년째 같은<br>유니폼만 산다
+        </div>
+        <div class="arc-divider-group">
+          <div class="arc-rule"></div>
+          <div class="arc-sub">
+            FAN JOURNALISM<br>
+            스포츠에 잠들어 있던 이야기
+          </div>
+        </div>
+      </div>
+
+      <!-- 하단 푸터 -->
+      <div class="s1-foot">
+        <span class="foot-txt">DORMANT STORIES</span>
+        <span class="foot-txt">CH MAG</span>
+      </div>
+
+    </div><!-- .s1 -->
+
+    <div class="series-meta">
+      <div class="meta-top">
+        <div class="dot" style="background:#C52A1A;"></div>
+        <div>
+          <div class="meta-title">Fan Archive</div>
+          <div class="meta-ko">팬 아카이브 · 스포츠 팬 인터뷰 시리즈</div>
+        </div>
+      </div>
+      <div class="notes">
+        <div class="note"><span class="nk">배경</span><span class="nv">#EDE3CB — 낡은 크림, 노이즈 텍스처 레이어</span></div>
+        <div class="note"><span class="nk">포인트</span><span class="nv">#C52A1A — 아카이브 빨강 (스탬프·레이블·수평선)</span></div>
+        <div class="note"><span class="nk">타이포</span><span class="nv">Noto Serif KR 900 — 두꺼운 세리프, 기록물 느낌</span></div>
+        <div class="note"><span class="nk">컨셉</span><span class="nv">도서관 아카이브 카드 / 옛날 신문 스크랩 / 기록지</span></div>
+        <div class="note"><span class="nk">레이아웃</span><span class="nv">상단 1/3 파일링 메타 + 하단 2/3 메인 타이틀 — 세로 분할 구조</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ 2. FAN'S POV ══════════════════════ -->
+  <div class="col">
+    <div class="thumb s2">
+      <div class="corner c-tl"></div>
+      <div class="corner c-tr"></div>
+      <div class="corner c-bl"></div>
+      <div class="corner c-br"></div>
+
+      <!-- 상단 바 -->
+      <div class="s2-topbar">
+        <span class="pov-series-label">Fan's POV</span>
+        <div class="pov-badge-group">
+          <div class="pov-dorm-badge">DORM</div>
+          <div class="live-wrap"><div class="live-dot"></div>LIVE</div>
+        </div>
+      </div>
+
+      <!-- 스코어보드 위젯 -->
+      <div class="pov-scoreboard">
+        <div class="pov-team">
+          <span class="pov-team-name">LG TWINS</span>
+          <span class="pov-team-score">3</span>
+        </div>
+        <div class="pov-score-center">
+          <span class="pov-inning">7회 말</span>
+          <span class="pov-score-sep">:</span>
+        </div>
+        <div class="pov-team right">
+          <span class="pov-team-name">KT WIZ</span>
+          <span class="pov-team-score">2</span>
+        </div>
+      </div>
+
+      <!-- 메인 타이틀 -->
+      <div class="s2-body">
+        <div class="pov-context">2026.03.08 · KBO · 감정 기록</div>
+        <div class="pov-title">
+          이적기사<br><span class="pov-accent">뜨는 날의</span><br>감정
+        </div>
+      </div>
+
+      <!-- 하단 데이터바 -->
+      <div class="pov-databar">
+        <div class="pov-datum">
+          <span class="pov-dlabel">팀</span>
+          <span class="pov-dval">LG TWINS</span>
+        </div>
+        <div class="pov-datum">
+          <span class="pov-dlabel">감정</span>
+          <span class="pov-dval">배신감 + 기대</span>
+        </div>
+        <div class="pov-datum">
+          <span class="pov-dlabel">에디터</span>
+          <span class="pov-dval">FAN #023</span>
+        </div>
+      </div>
+
+    </div><!-- .s2 -->
+
+    <div class="series-meta">
+      <div class="meta-top">
+        <div class="dot" style="background:#F5E100;"></div>
+        <div>
+          <div class="meta-title">Fan's POV</div>
+          <div class="meta-ko">팬 시점 감정 기록 · 경기 현장 릴스 시리즈</div>
+        </div>
+      </div>
+      <div class="notes">
+        <div class="note"><span class="nk">배경</span><span class="nv">#050508 — 방송 스크린 블랙</span></div>
+        <div class="note"><span class="nk">포인트</span><span class="nv">#F5E100 — 뷰파인더 옐로우 (브래킷·레이블·악센트)</span></div>
+        <div class="note"><span class="nk">타이포</span><span class="nv">Black Han Sans — 강한 고딕, 스포츠 중계 오버레이</span></div>
+        <div class="note"><span class="nk">컨셉</span><span class="nv">카메라 뷰파인더 / 스포츠 중계 그래픽 UI</span></div>
+        <div class="note"><span class="nk">레이아웃</span><span class="nv">상단 스코어보드 위젯 + 중앙 타이틀 + 하단 데이터바 — 방송 화면 3단 구조</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ 3. 팬 소비 리포트 ══════════════════════ -->
+  <div class="col">
+    <div class="thumb s3">
+      <div class="receipt">
+        <div class="rec-stamp">FAN<br>DATA</div>
+
+        <div class="rec-header">
+          <div class="rec-store">DORM · FAN ARCHIVE</div>
+          <div class="rec-title">팬 소비 리포트</div>
+          <div class="rec-subtitle">FAN SPENDING ANALYSIS · EP.001</div>
+        </div>
+
+        <div class="rec-datetime">
+          <span>2026.03.08 (일) 19:42</span>
+          <span>직관 귀가 후</span>
+        </div>
+
+        <div class="rec-item">
+          <span class="ri-name">직관 티켓</span>
+          <span class="ri-dots">.................................</span>
+          <span class="ri-price">55,000</span>
+        </div>
+        <div class="rec-item">
+          <span class="ri-name">공식 굿즈 (유니폼)</span>
+          <span class="ri-dots">..................</span>
+          <span class="ri-price">89,000</span>
+        </div>
+        <div class="rec-item">
+          <span class="ri-name">응원 도시락</span>
+          <span class="ri-dots">.............................</span>
+          <span class="ri-price">15,000</span>
+        </div>
+        <div class="rec-item">
+          <span class="ri-name">야구 파마</span>
+          <span class="ri-dots">...............................</span>
+          <span class="ri-price">42,000</span>
+        </div>
+        <div class="rec-item">
+          <span class="ri-name">승리 기념 치킨</span>
+          <span class="ri-dots">...........................</span>
+          <span class="ri-price">22,000</span>
+        </div>
+
+        <div class="rec-total-wrap">
+          <div class="rec-total">
+            <span>오늘의 합계</span>
+            <span>223,000원</span>
+          </div>
+          <div class="rec-note">팬이라면 이해할 겁니다</div>
+        </div>
+
+        <div class="rec-payment">
+          <span>결제 수단: 신용카드</span>
+          <span>**** **** **** 2026</span>
+        </div>
+
+        <div class="rec-footer">
+          <div class="barcode">
+            <div class="bar" style="width:2px;height:20px;"></div>
+            <div class="bar" style="width:1px;height:20px;"></div>
+            <div class="bar" style="width:3px;height:20px;"></div>
+            <div class="bar" style="width:1px;height:16px;"></div>
+            <div class="bar" style="width:2px;height:20px;"></div>
+            <div class="bar" style="width:1px;height:20px;"></div>
+            <div class="bar" style="width:1px;height:14px;"></div>
+            <div class="bar" style="width:3px;height:20px;"></div>
+            <div class="bar" style="width:1px;height:20px;"></div>
+            <div class="bar" style="width:2px;height:16px;"></div>
+            <div class="bar" style="width:1px;height:20px;"></div>
+            <div class="bar" style="width:3px;height:20px;"></div>
+            <div class="bar" style="width:2px;height:14px;"></div>
+            <div class="bar" style="width:1px;height:20px;"></div>
+            <div class="bar" style="width:1px;height:20px;"></div>
+            <div class="bar" style="width:2px;height:16px;"></div>
+            <div class="bar" style="width:3px;height:20px;"></div>
+            <div class="bar" style="width:1px;height:20px;"></div>
+            <div class="bar" style="width:2px;height:14px;"></div>
+            <div class="bar" style="width:1px;height:20px;"></div>
+            <div class="bar" style="width:3px;height:20px;"></div>
+          </div>
+          <div class="rec-footertxt">CH DORM · 팬 대변인 채널 · BY CREATORHOOD</div>
+        </div>
+      </div>
+    </div><!-- .s3 -->
+
+    <div class="series-meta">
+      <div class="meta-top">
+        <div class="dot" style="background:#0031C4;"></div>
+        <div>
+          <div class="meta-title">팬 소비 리포트</div>
+          <div class="meta-ko">스포츠 취향 분석실 · 팬 소비 데이터 시리즈</div>
+        </div>
+      </div>
+      <div class="notes">
+        <div class="note"><span class="nk">배경</span><span class="nv">#EEEEE9 — 열지 페이퍼 그레이 (영수증 카드 float)</span></div>
+        <div class="note"><span class="nk">포인트</span><span class="nv">#0031C4 — 데이터 블루 (스탬프·결제 노트·총액 강조)</span></div>
+        <div class="note"><span class="nk">타이포</span><span class="nv">Space Mono — 도트 매트릭스 영수증 폰트</span></div>
+        <div class="note"><span class="nk">컨셉</span><span class="nv">직관 후 실제 소비 영수증 / 팬 지출 데이터 리포트</span></div>
+        <div class="note"><span class="nk">레이아웃</span><span class="nv">영수증 카드가 배경 위에 float — 물리적 영수증 질감</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .grid -->
+
+<!-- ── PALETTE ─────────────────────────── -->
+<div class="divider"><span class="div-label">컬러 팔레트</span></div>
+<div class="palette">
+  <div class="swatch">
+    <div class="sw-color" style="background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);"></div>
+    <div class="sw-name">#0C0C0C<br>DORM BLACK<br>공통 배지</div>
+  </div>
+  <div class="swatch">
+    <div class="sw-color" style="background:#F5F0E8;"></div>
+    <div class="sw-name">#F5F0E8<br>DORM CREAM<br>공통 반전텍스트</div>
+  </div>
+  <div class="swatch" style="margin-right:16px;">
+    <div class="sw-color" style="background:#EDE3CB;"></div>
+    <div class="sw-name">#EDE3CB<br>ARCHIVE BG<br>Fan Archive 배경</div>
+  </div>
+  <div class="swatch">
+    <div class="sw-color" style="background:#C52A1A;"></div>
+    <div class="sw-name">#C52A1A<br>ARCHIVE RED<br>Fan Archive 포인트</div>
+  </div>
+  <div class="swatch">
+    <div class="sw-color" style="background:#050508;border:1px solid rgba(255,255,255,0.1);"></div>
+    <div class="sw-name">#050508<br>POV BLACK<br>Fan's POV 배경</div>
+  </div>
+  <div class="swatch">
+    <div class="sw-color" style="background:#F5E100;"></div>
+    <div class="sw-name">#F5E100<br>POV YELLOW<br>Fan's POV 포인트</div>
+  </div>
+  <div class="swatch">
+    <div class="sw-color" style="background:#EEEEE9;border:1px solid rgba(0,0,0,0.1);"></div>
+    <div class="sw-name">#EEEEE9<br>RECEIPT PAPER<br>팬소비리포트 배경</div>
+  </div>
+  <div class="swatch">
+    <div class="sw-color" style="background:#0031C4;"></div>
+    <div class="sw-name">#0031C4<br>REPORT BLUE<br>팬소비리포트 포인트</div>
+  </div>
+</div>
+
+<!-- ── BRIEF FOR 우석 ────────────────────── -->
+<div class="divider"><span class="div-label">우석 Figma 작업 브리프</span></div>
+<div class="brief-grid">
+  <div class="brief-card">
+    <div class="bc-title">공통 규칙</div>
+    <ul class="bc-list">
+      <li>실제 사이즈: 1080×1440px (Instagram 세로형 3:4) — 정방형 아님</li>
+      <li>"DORM" 배지 — 흑백 박스 타입, 모든 썸네일 헤더 왼쪽 상단 고정</li>
+      <li>시리즈별 포인트 컬러 1개 + 흑백 베이스 — 색상 혼용 없음</li>
+      <li>타이틀 텍스트만 교체하는 Figma 마스터 컴포넌트로 제작</li>
+      <li>에디터 소재 확정 → 타이틀 입력 → 자동 썸네일 완성 구조 목표</li>
+    </ul>
+  </div>
+  <div class="brief-card">
+    <div class="bc-title">Fan Archive — 세부</div>
+    <ul class="bc-list">
+      <li>크림 배경 + Figma 노이즈 레이어 (opacity 6~8%)</li>
+      <li>상단 1/3: 큰 회색 "001" (opacity 6%) + 파일링 메타데이터</li>
+      <li>"ARCHIVED" 빨간 스탬프 — -10도 회전, opacity 60%, 3px 외곽선</li>
+      <li>Noto Serif KR Black 타이틀 — 40pt, 최대 4줄, keep-all</li>
+      <li>빨간 수평선 (32×2.5px) + 서브텍스트 구분</li>
+    </ul>
+  </div>
+  <div class="brief-card">
+    <div class="bc-title">Fan's POV — 세부</div>
+    <ul class="bc-list">
+      <li>뷰파인더 브래킷 — 노란색 2px, 4모서리 내측 12px, 길이 16px</li>
+      <li>스코어보드 위젯 — 노란 테두리, 팀명/점수/회 표시, 상단 고정</li>
+      <li>LIVE 적색 점 — 정지 버전 + GIF 깜빡임 버전 2종</li>
+      <li>Black Han Sans 타이틀 — 54pt, 노란 악센트 라인 1줄</li>
+      <li>Scanline 오버레이 — 수평선 반복, opacity 7%, 최상단 레이어</li>
+    </ul>
+  </div>
+  <div class="brief-card">
+    <div class="bc-title">팬 소비 리포트 — 세부</div>
+    <ul class="bc-list">
+      <li>배경: 열지 그레이(#EEEEE9) 위에 흰 영수증 카드 float</li>
+      <li>영수증 상단 3px 검정 솔리드 + 하단 zigzag 절취선 SVG</li>
+      <li>품목 5행: Space Mono, 이름 + 점선 + 금액 레이아웃</li>
+      <li>합계 + 결제수단 행 + 바코드 + 채널명 순서</li>
+      <li>"FAN DATA" 파란 스탬프 — +13도 회전, opacity 48%</li>
+    </ul>
+  </div>
+</div>
+
+<div class="page-foot">
+  DORM DESIGN BRIEF 01 · 2026.03.08 · 1080×1440px (3:4) · GENERATED BY CLAUDE CODE × CREATORHOOD · 우석 작업 참고용
+</div>
+
+</body>
+</html>

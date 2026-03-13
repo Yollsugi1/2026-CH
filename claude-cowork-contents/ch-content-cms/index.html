@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH MAG Content Management System</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ch: { bg: '#0F172A', card: '#1E293B', accent: '#3B82F6', border: '#334155' }
+      }
+    }
+  }
+}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+body { font-family: 'Inter', sans-serif; margin: 0; background: #0F172A; color: #E2E8F0; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useMemo, useCallback } = React;
+
+// ============ DATA ============
+const TYPES = {
+  carousel:{ name:'캐러셀', color:'#3B82F6', short:'C', format:'숏폼' },
+  bwasseo:{ name:'봤어', color:'#8B5CF6', short:'B', format:'숏폼' },
+  snack:{ name:'스낵', color:'#10B981', short:'S', format:'숏폼' },
+  pitstop:{ name:'Pit Stop', color:'#F59E0B', short:'PS', format:'숏폼' },
+  mukbang:{ name:'폭력적인식단', color:'#EF4444', short:'폭', format:'숏폼' },
+  playbook:{ name:'Playbook', color:'#06B6D4', short:'PB', format:'롱폼' },
+  vlog:{ name:'팀 브이로그', color:'#EC4899', short:'VL', format:'롱폼' },
+  hoodies:{ name:'후디스', color:'#F97316', short:'HD', format:'롱폼' },
+};
+
+const TEAM = {
+  suhyun:{ name:'수현', role:'기획/총괄', cap:40, color:'#3B82F6' },
+  wooseok:{ name:'우석', role:'디자인/인스타', cap:40, color:'#10B981' },
+  jiwoon:{ name:'지운', role:'촬영/편집', cap:40, color:'#F59E0B' },
+  imyong:{ name:'임용', role:'글쓰기/기획보조', cap:40, color:'#8B5CF6' },
+};
+
+const PIPELINES = {
+  carousel:['소재발굴','글쓰기','디자인','업로드'],
+  bwasseo:['스크립트','녹음','편집','썸네일','업로드'],
+  snack:['촬영','편집','업로드'],
+  pitstop:['기획','촬영','편집','업로드'],
+  mukbang:['기획','촬영','편집','업로드'],
+  playbook:['리서치','기획','촬영','편집','피드백','수정','업로드'],
+  vlog:['기획','촬영','편집','피드백','수정','업로드'],
+  hoodies:['섭외','기획','촬영','편집','피드백','수정','업로드'],
+};
+
+const RES = {
+  carousel:{ suhyun:2, imyong:2, wooseok:3 },
+  bwasseo:{ suhyun:0.5, imyong:2, jiwoon:4, wooseok:1 },
+  snack:{ suhyun:1, wooseok:1, jiwoon:1 },
+  pitstop:{ suhyun:2, jiwoon:12 },
+  mukbang:{ suhyun:2, jiwoon:12 },
+  playbook:{ suhyun:4, imyong:4, jiwoon:16 },
+  vlog:{ suhyun:4, jiwoon:24 },
+  hoodies:{ suhyun:6, jiwoon:24 },
+};
+
+const initUploads = () => [
+  {id:'u001',date:'2026-03-02',type:'carousel',title:'캐러셀 #1',status:'scheduled'},
+  {id:'u002',date:'2026-03-02',type:'snack',title:'스낵 #1',status:'scheduled'},
+  {id:'u003',date:'2026-03-03',type:'bwasseo',title:'봤어 #1',status:'scheduled'},
+  {id:'u004',date:'2026-03-03',type:'snack',title:'스낵 #2',status:'scheduled'},
+  {id:'u005',date:'2026-03-03',type:'pitstop',title:'Pit Stop W1-1',status:'scheduled'},
+  {id:'u006',date:'2026-03-04',type:'carousel',title:'캐러셀 #2',status:'scheduled'},
+  {id:'u007',date:'2026-03-04',type:'snack',title:'스낵 #3',status:'scheduled'},
+  {id:'u008',date:'2026-03-05',type:'carousel',title:'캐러셀 #3',status:'scheduled'},
+  {id:'u009',date:'2026-03-05',type:'snack',title:'스낵 #4',status:'scheduled'},
+  {id:'u010',date:'2026-03-05',type:'pitstop',title:'Pit Stop W1-2',status:'scheduled'},
+  {id:'u011',date:'2026-03-06',type:'bwasseo',title:'봤어 #2',status:'scheduled'},
+  {id:'u012',date:'2026-03-06',type:'snack',title:'스낵 #5',status:'scheduled'},
+  {id:'u013',date:'2026-03-06',type:'mukbang',title:'폭력적인식단 W1',status:'scheduled'},
+  {id:'u014',date:'2026-03-09',type:'carousel',title:'캐러셀 #4',status:'scheduled'},
+  {id:'u015',date:'2026-03-09',type:'snack',title:'스낵 #6',status:'scheduled'},
+  {id:'u016',date:'2026-03-10',type:'bwasseo',title:'봤어 #3',status:'scheduled'},
+  {id:'u017',date:'2026-03-10',type:'snack',title:'스낵 #7',status:'scheduled'},
+  {id:'u018',date:'2026-03-10',type:'mukbang',title:'폭력적인식단 W2-1',status:'scheduled'},
+  {id:'u019',date:'2026-03-11',type:'bwasseo',title:'봤어 #4',status:'scheduled'},
+  {id:'u020',date:'2026-03-11',type:'snack',title:'스낵 #8',status:'scheduled'},
+  {id:'u021',date:'2026-03-12',type:'carousel',title:'캐러셀 #5',status:'scheduled'},
+  {id:'u022',date:'2026-03-12',type:'snack',title:'스낵 #9',status:'scheduled'},
+  {id:'u023',date:'2026-03-12',type:'playbook',title:'Playbook W2',status:'scheduled'},
+  {id:'u024',date:'2026-03-12',type:'vlog',title:'팀 브이로그 W2',status:'scheduled'},
+  {id:'u025',date:'2026-03-13',type:'bwasseo',title:'봤어 #5',status:'scheduled'},
+  {id:'u026',date:'2026-03-13',type:'snack',title:'스낵 #10',status:'scheduled'},
+  {id:'u027',date:'2026-03-13',type:'mukbang',title:'폭력적인식단 W2-2',status:'scheduled'},
+  {id:'u028',date:'2026-03-14',type:'carousel',title:'캐러셀 #6',status:'scheduled'},
+  {id:'u029',date:'2026-03-16',type:'carousel',title:'캐러셀 #7',status:'scheduled'},
+  {id:'u030',date:'2026-03-16',type:'snack',title:'스낵 #11',status:'scheduled'},
+  {id:'u031',date:'2026-03-17',type:'bwasseo',title:'봤어 #6',status:'scheduled'},
+  {id:'u032',date:'2026-03-17',type:'snack',title:'스낵 #12',status:'scheduled'},
+  {id:'u033',date:'2026-03-17',type:'pitstop',title:'Pit Stop W3-1',status:'scheduled'},
+  {id:'u034',date:'2026-03-18',type:'carousel',title:'캐러셀 #8',status:'scheduled'},
+  {id:'u035',date:'2026-03-18',type:'snack',title:'스낵 #13',status:'scheduled'},
+  {id:'u036',date:'2026-03-18',type:'hoodies',title:'후디스 EP1 (안성희)',status:'scheduled'},
+  {id:'u037',date:'2026-03-19',type:'carousel',title:'캐러셀 #9',status:'scheduled'},
+  {id:'u038',date:'2026-03-19',type:'snack',title:'스낵 #14',status:'scheduled'},
+  {id:'u039',date:'2026-03-19',type:'pitstop',title:'Pit Stop W3-2',status:'scheduled'},
+  {id:'u040',date:'2026-03-19',type:'playbook',title:'Playbook W3',status:'scheduled'},
+  {id:'u041',date:'2026-03-20',type:'bwasseo',title:'봤어 #7',status:'scheduled'},
+  {id:'u042',date:'2026-03-20',type:'snack',title:'스낵 #15',status:'scheduled'},
+  {id:'u043',date:'2026-03-21',type:'carousel',title:'캐러셀 #10',status:'scheduled'},
+  {id:'u044',date:'2026-03-23',type:'carousel',title:'캐러셀 #11',status:'scheduled'},
+  {id:'u045',date:'2026-03-23',type:'snack',title:'스낵 #16',status:'scheduled'},
+  {id:'u046',date:'2026-03-24',type:'bwasseo',title:'봤어 #8',status:'scheduled'},
+  {id:'u047',date:'2026-03-24',type:'snack',title:'스낵 #17',status:'scheduled'},
+  {id:'u048',date:'2026-03-24',type:'mukbang',title:'폭력적인식단 W4-1',status:'scheduled'},
+  {id:'u049',date:'2026-03-25',type:'bwasseo',title:'봤어 #9',status:'scheduled'},
+  {id:'u050',date:'2026-03-25',type:'snack',title:'스낵 #18',status:'scheduled'},
+  {id:'u051',date:'2026-03-26',type:'carousel',title:'캐러셀 #12',status:'scheduled'},
+  {id:'u052',date:'2026-03-26',type:'snack',title:'스낵 #19',status:'scheduled'},
+  {id:'u053',date:'2026-03-26',type:'playbook',title:'Playbook W4',status:'scheduled'},
+  {id:'u054',date:'2026-03-26',type:'vlog',title:'팀 브이로그 W4',status:'scheduled'},
+  {id:'u055',date:'2026-03-26',type:'mukbang',title:'폭력적인식단 W4-2',status:'scheduled'},
+  {id:'u056',date:'2026-03-27',type:'bwasseo',title:'봤어 #10',status:'scheduled'},
+  {id:'u057',date:'2026-03-27',type:'snack',title:'스낵 #20',status:'scheduled'},
+];
+
+// ============ COMPONENTS ============
+
+const Badge = ({type, small}) => {
+  const t = TYPES[type];
+  if(!t) return null;
+  return (
+    <span style={{background:t.color+'22', color:t.color, border:`1px solid ${t.color}44`}}
+      className={`inline-flex items-center rounded-full font-medium ${small?'text-[10px] px-1.5 py-0':'text-xs px-2 py-0.5'}`}>
+      {small ? t.short : t.name}
+    </span>
+  );
+};
+
+const StatusDot = ({status}) => {
+  const colors = { scheduled:'#64748B', in_progress:'#F59E0B', done:'#10B981', delayed:'#EF4444' };
+  const labels = { scheduled:'대기', in_progress:'진행중', done:'완료', delayed:'지연' };
+  return (
+    <span className="inline-flex items-center gap-1 text-xs">
+      <span className="w-2 h-2 rounded-full" style={{background:colors[status]||'#64748B'}}/>
+      {labels[status]||status}
+    </span>
+  );
+};
+
+// ---- CALENDAR VIEW ----
+const CalendarView = ({uploads, onStatusChange}) => {
+  const [selectedDay, setSelectedDay] = useState(null);
+
+  const calDays = useMemo(() => {
+    // March 2026: starts on Sunday
+    const days = [];
+    // Fill empty cells for Mon-Sat before March 1 (Sun)
+    // March 1 is Sunday, so Mon(0)..Sat(5) = 6 empty, then Sun(6)=March 1
+    for(let i=0; i<6; i++) days.push(null); // Mon-Sat empty
+    for(let d=1; d<=31; d++) days.push(d);
+    // pad to complete last row
+    while(days.length % 7 !== 0) days.push(null);
+    return days;
+  }, []);
+
+  const uploadsByDate = useMemo(() => {
+    const m = {};
+    uploads.forEach(u => {
+      const d = parseInt(u.date.split('-')[2]);
+      if(!m[d]) m[d] = [];
+      m[d].push(u);
+    });
+    return m;
+  }, [uploads]);
+
+  const dayOfWeek = ['월','화','수','목','금','토','일'];
+  const weeks = [];
+  for(let i=0; i<calDays.length; i+=7) weeks.push(calDays.slice(i,i+7));
+  const weekNum = (idx) => {
+    if(idx===0) return 'W1';
+    if(idx===1) return 'W2';
+    if(idx===2) return 'W3';
+    if(idx===3) return 'W4';
+    return 'W5';
+  };
+
+  const selectedUploads = selectedDay ? (uploadsByDate[selectedDay]||[]) : [];
+
+  return (
+    <div className="space-y-4">
+      {/* Legend */}
+      <div className="flex flex-wrap gap-2 mb-2">
+        {Object.entries(TYPES).map(([k,v]) => (
+          <span key={k} className="flex items-center gap-1 text-xs text-slate-400">
+            <span className="w-3 h-3 rounded" style={{background:v.color}}/>
+            {v.name}
+          </span>
+        ))}
+      </div>
+
+      {/* Calendar Grid */}
+      <div className="bg-ch-card rounded-xl border border-ch-border overflow-hidden">
+        <div className="grid grid-cols-8 text-center text-xs font-medium text-slate-400 border-b border-ch-border">
+          <div className="p-2"></div>
+          {dayOfWeek.map(d => <div key={d} className="p-2">{d}</div>)}
+        </div>
+        {weeks.map((week, wi) => (
+          <div key={wi} className="grid grid-cols-8 border-b border-ch-border last:border-b-0">
+            <div className="p-2 text-xs font-bold text-slate-500 flex items-start justify-center pt-3">{weekNum(wi)}</div>
+            {week.map((day, di) => {
+              const items = day ? (uploadsByDate[day]||[]) : [];
+              const isToday = false; // would be dynamic in real app
+              const isSelected = day === selectedDay;
+              const isWeekend = di >= 5;
+              return (
+                <div key={di}
+                  onClick={() => day && setSelectedDay(day === selectedDay ? null : day)}
+                  className={`min-h-[80px] p-1 border-r border-ch-border last:border-r-0 cursor-pointer transition-all
+                    ${!day ? 'bg-slate-900/30' : isSelected ? 'bg-blue-900/30 ring-1 ring-blue-500/50' : 'hover:bg-slate-700/30'}
+                    ${isWeekend && day ? 'bg-slate-800/30' : ''}`}>
+                  {day && (
+                    <>
+                      <div className={`text-xs font-medium mb-1 ${isWeekend?'text-slate-500':'text-slate-300'}`}>
+                        {day}
+                      </div>
+                      <div className="flex flex-wrap gap-0.5">
+                        {items.filter(i=>i.type!=='snack').map(item => (
+                          <span key={item.id} className="block w-full text-[9px] px-1 py-0.5 rounded mb-0.5 truncate"
+                            style={{background:TYPES[item.type]?.color+'33', color:TYPES[item.type]?.color,
+                            borderLeft:`2px solid ${TYPES[item.type]?.color}`,
+                            textDecoration: item.status==='done'?'line-through':'none',
+                            opacity: item.status==='done'?0.6:1}}>
+                            {TYPES[item.type]?.short} {item.title.includes('EP')||item.title.includes('W')?item.title.split(' ').slice(1).join(' '):''}
+                          </span>
+                        ))}
+                        {items.some(i=>i.type==='snack') && (
+                          <span className="block w-full text-[9px] px-1 py-0.5 rounded truncate"
+                            style={{background:'#10B98133', color:'#10B981', borderLeft:'2px solid #10B981'}}>
+                            S
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* Detail Panel */}
+      {selectedDay && (
+        <div className="bg-ch-card rounded-xl border border-ch-border p-4">
+          <h3 className="text-sm font-semibold mb-3 text-white">3월 {selectedDay}일 업로드 ({selectedUploads.length}건)</h3>
+          <div className="space-y-2">
+            {selectedUploads.map(u => (
+              <div key={u.id} className="flex items-center justify-between bg-slate-800/50 rounded-lg px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <Badge type={u.type} />
+                  <span className="text-sm text-slate-200">{u.title}</span>
+                </div>
+                <select value={u.status} onChange={e => onStatusChange(u.id, e.target.value)}
+                  className="text-xs bg-slate-700 border border-slate-600 rounded px-2 py-1 text-slate-200">
+                  <option value="scheduled">대기</option>
+                  <option value="in_progress">진행중</option>
+                  <option value="done">완료</option>
+                  <option value="delayed">지연</option>
+                </select>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Weekly Summary */}
+      <div className="bg-ch-card rounded-xl border border-ch-border p-4">
+        <h3 className="text-sm font-semibold mb-3 text-white">주간 업로드 요약</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="text-slate-400 border-b border-ch-border">
+                <th className="text-left p-2">콘텐츠</th>
+                <th className="p-2">W1</th><th className="p-2">W2</th><th className="p-2">W3</th><th className="p-2">W4</th>
+                <th className="p-2 font-bold">합계</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(TYPES).map(([k,v]) => {
+                const wc = [1,2,3,4].map(w => uploads.filter(u=>u.type===k && u.date>='2026-03-'+String((w-1)*7+1).padStart(2,'0') && u.date<='2026-03-'+String(w*7+1).padStart(2,'0')).length);
+                // Simpler: use week property or calculate from date
+                const counts = [0,0,0,0];
+                uploads.filter(u=>u.type===k).forEach(u => {
+                  const d = parseInt(u.date.split('-')[2]);
+                  if(d<=8) counts[0]++;
+                  else if(d<=15) counts[1]++;
+                  else if(d<=22) counts[2]++;
+                  else counts[3]++;
+                });
+                const total = counts.reduce((a,b)=>a+b,0);
+                if(total===0) return null;
+                return (
+                  <tr key={k} className="border-b border-slate-800">
+                    <td className="p-2 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded" style={{background:v.color}}/> {v.name}
+                    </td>
+                    {counts.map((c,i) => <td key={i} className="text-center p-2 text-slate-300">{c||'-'}</td>)}
+                    <td className="text-center p-2 font-bold text-white">{total}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ---- SERIES VIEW ----
+const SeriesView = ({uploads}) => {
+  const seriesData = useMemo(() => {
+    return Object.entries(TYPES).filter(([k])=>k!=='snack').map(([key, info]) => {
+      const items = uploads.filter(u=>u.type===key);
+      const done = items.filter(u=>u.status==='done').length;
+      const inProg = items.filter(u=>u.status==='in_progress').length;
+      const pipeline = PIPELINES[key]||[];
+      const nextUpload = items.find(u=>u.status==='scheduled');
+      // Resource per episode
+      const res = RES[key]||{};
+      const totalH = Object.values(res).reduce((a,b)=>a+b,0);
+      return { key, info, items, done, inProg, total:items.length, pipeline, nextUpload, res, totalH };
+    });
+  }, [uploads]);
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {seriesData.map(s => (
+        <div key={s.key} className="bg-ch-card rounded-xl border border-ch-border p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded" style={{background:s.info.color}}/>
+              <h3 className="font-semibold text-white">{s.info.name}</h3>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-400">{s.info.format}</span>
+            </div>
+            <span className="text-xs text-slate-400">{s.total}편</span>
+          </div>
+
+          {/* Progress */}
+          <div className="mb-3">
+            <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <span>진행률</span>
+              <span>{s.done}/{s.total}</span>
+            </div>
+            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+              <div className="h-full rounded-full transition-all"
+                style={{width:`${(s.done/Math.max(s.total,1))*100}%`, background:s.info.color}}/>
+            </div>
+          </div>
+
+          {/* Pipeline */}
+          <div className="mb-3">
+            <div className="text-xs text-slate-400 mb-1">제작 파이프라인</div>
+            <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+              {s.pipeline.map((step,i) => (
+                <React.Fragment key={i}>
+                  <span className="text-[10px] px-2 py-1 rounded bg-slate-700 text-slate-300 whitespace-nowrap">{step}</span>
+                  {i < s.pipeline.length-1 && <span className="text-slate-600 text-xs flex items-center">&rarr;</span>}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
+          {/* Resources */}
+          <div className="mb-3">
+            <div className="text-xs text-slate-400 mb-1">편당 리소스 ({s.totalH}h)</div>
+            <div className="flex gap-1 flex-wrap">
+              {Object.entries(s.res).map(([person, hours]) => (
+                <span key={person} className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+                  {TEAM[person]?.name} {hours}h
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Next Upload */}
+          {s.nextUpload && (
+            <div className="text-xs text-slate-400 border-t border-slate-700 pt-2 mt-2">
+              다음 업로드: <span className="text-white">{s.nextUpload.date.slice(5)} ({s.nextUpload.title})</span>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ---- RESOURCE VIEW ----
+const ResourceView = ({uploads}) => {
+  const weeklyData = useMemo(() => {
+    const weeks = [{label:'W1 (3/2~8)',min:2,max:8},{label:'W2 (3/9~15)',min:9,max:15},
+      {label:'W3 (3/16~22)',min:16,max:22},{label:'W4 (3/23~29)',min:23,max:29}];
+
+    return weeks.map(w => {
+      const weekUploads = uploads.filter(u => {
+        const d = parseInt(u.date.split('-')[2]);
+        return d >= w.min && d <= w.max;
+      });
+
+      const hours = {};
+      Object.keys(TEAM).forEach(p => hours[p] = 0);
+
+      // Calculate hours per content type
+      const breakdown = {};
+      Object.keys(TEAM).forEach(p => breakdown[p] = {});
+
+      weekUploads.forEach(u => {
+        const r = RES[u.type]||{};
+        Object.entries(r).forEach(([person, h]) => {
+          if(hours[person] !== undefined) {
+            hours[person] += h;
+            if(!breakdown[person][u.type]) breakdown[person][u.type] = 0;
+            breakdown[person][u.type] += h;
+          }
+        });
+      });
+
+      return { ...w, hours, breakdown };
+    });
+  }, [uploads]);
+
+  const maxHours = Math.max(...weeklyData.flatMap(w => Object.values(w.hours)), 40);
+
+  return (
+    <div className="space-y-6">
+      {/* Overview Cards */}
+      <div className="grid grid-cols-4 gap-3">
+        {Object.entries(TEAM).map(([k,v]) => {
+          const avgH = weeklyData.reduce((s,w) => s + w.hours[k], 0) / 4;
+          const pct = Math.round((avgH / v.cap) * 100);
+          const isOver = pct > 100;
+          return (
+            <div key={k} className={`bg-ch-card rounded-xl border p-3 ${isOver?'border-red-500/50':'border-ch-border'}`}>
+              <div className="text-xs text-slate-400">{v.role}</div>
+              <div className="text-lg font-bold text-white">{v.name}</div>
+              <div className={`text-2xl font-bold mt-1 ${isOver?'text-red-400':pct>90?'text-yellow-400':'text-green-400'}`}>
+                {pct}%
+              </div>
+              <div className="text-xs text-slate-400">평균 {avgH.toFixed(0)}h / {v.cap}h</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Weekly Breakdown */}
+      {weeklyData.map((w,wi) => (
+        <div key={wi} className="bg-ch-card rounded-xl border border-ch-border p-4">
+          <h3 className="text-sm font-semibold text-white mb-3">{w.label}</h3>
+          <div className="space-y-3">
+            {Object.entries(TEAM).map(([k,v]) => {
+              const h = w.hours[k];
+              const pct = (h / maxHours) * 100;
+              const capPct = (v.cap / maxHours) * 100;
+              const isOver = h > v.cap;
+              return (
+                <div key={k}>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-slate-300 font-medium">{v.name}</span>
+                    <span className={isOver?'text-red-400 font-bold':'text-slate-400'}>
+                      {h}h / {v.cap}h {isOver && `(+${h-v.cap}h)`}
+                    </span>
+                  </div>
+                  <div className="relative h-5 bg-slate-700 rounded-full overflow-hidden">
+                    {/* Capacity marker */}
+                    <div className="absolute top-0 bottom-0 border-r-2 border-white/30 z-10"
+                      style={{left:`${capPct}%`}}/>
+                    {/* Stacked bar segments */}
+                    {(() => {
+                      let offset = 0;
+                      const segments = Object.entries(w.breakdown[k]||{}).map(([type, hrs]) => {
+                        const segPct = (hrs / maxHours) * 100;
+                        const seg = (
+                          <div key={type} className="absolute top-0 bottom-0 opacity-80"
+                            style={{left:`${offset}%`, width:`${segPct}%`, background:TYPES[type]?.color}}
+                            title={`${TYPES[type]?.name}: ${hrs}h`}/>
+                        );
+                        offset += segPct;
+                        return seg;
+                      });
+                      return segments;
+                    })()}
+                  </div>
+                  {/* Breakdown detail */}
+                  <div className="flex gap-2 mt-1 flex-wrap">
+                    {Object.entries(w.breakdown[k]||{}).map(([type,hrs]) => (
+                      <span key={type} className="text-[10px] text-slate-500">
+                        <span className="inline-block w-1.5 h-1.5 rounded" style={{background:TYPES[type]?.color}}/> {TYPES[type]?.short} {hrs}h
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      {/* Jiwoon Alert */}
+      {weeklyData.some(w => w.hours.jiwoon > 40) && (
+        <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-red-400 text-lg">⚠</span>
+            <h3 className="text-sm font-semibold text-red-300">지운 리소스 경고</h3>
+          </div>
+          <div className="text-xs text-red-200/80 space-y-1">
+            {weeklyData.filter(w=>w.hours.jiwoon>40).map((w,i) => (
+              <div key={i}>{w.label}: {w.hours.jiwoon}h ({Math.round((w.hours.jiwoon/40)*100)}%)</div>
+            ))}
+          </div>
+          <div className="text-xs text-slate-400 mt-2">
+            권장: 롱폼 편집 스태킹 분산 / 외부 편집자 투입 검토 / 팀 브이로그 우선순위 조정
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ---- UPLOAD MANAGER ----
+const UploadManager = ({uploads, onStatusChange}) => {
+  const [filter, setFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [weekFilter, setWeekFilter] = useState('all');
+
+  const filtered = useMemo(() => {
+    return uploads.filter(u => {
+      if(filter !== 'all' && u.type !== filter) return false;
+      if(statusFilter !== 'all' && u.status !== statusFilter) return false;
+      if(weekFilter !== 'all') {
+        const d = parseInt(u.date.split('-')[2]);
+        const w = d<=8?'1':d<=15?'2':d<=22?'3':'4';
+        if(w !== weekFilter) return false;
+      }
+      return true;
+    });
+  }, [uploads, filter, statusFilter, weekFilter]);
+
+  const stats = useMemo(() => ({
+    total: uploads.length,
+    done: uploads.filter(u=>u.status==='done').length,
+    inProg: uploads.filter(u=>u.status==='in_progress').length,
+    delayed: uploads.filter(u=>u.status==='delayed').length,
+  }), [uploads]);
+
+  return (
+    <div className="space-y-4">
+      {/* Stats */}
+      <div className="grid grid-cols-4 gap-3">
+        <div className="bg-ch-card rounded-xl border border-ch-border p-3 text-center">
+          <div className="text-2xl font-bold text-white">{stats.total}</div>
+          <div className="text-xs text-slate-400">전체</div>
+        </div>
+        <div className="bg-ch-card rounded-xl border border-green-500/20 p-3 text-center">
+          <div className="text-2xl font-bold text-green-400">{stats.done}</div>
+          <div className="text-xs text-slate-400">완료</div>
+        </div>
+        <div className="bg-ch-card rounded-xl border border-yellow-500/20 p-3 text-center">
+          <div className="text-2xl font-bold text-yellow-400">{stats.inProg}</div>
+          <div className="text-xs text-slate-400">진행중</div>
+        </div>
+        <div className="bg-ch-card rounded-xl border border-red-500/20 p-3 text-center">
+          <div className="text-2xl font-bold text-red-400">{stats.delayed}</div>
+          <div className="text-xs text-slate-400">지연</div>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-2">
+        <select value={filter} onChange={e=>setFilter(e.target.value)}
+          className="text-xs bg-slate-700 border border-slate-600 rounded-lg px-3 py-1.5 text-slate-200">
+          <option value="all">전체 콘텐츠</option>
+          {Object.entries(TYPES).map(([k,v]) => <option key={k} value={k}>{v.name}</option>)}
+        </select>
+        <select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}
+          className="text-xs bg-slate-700 border border-slate-600 rounded-lg px-3 py-1.5 text-slate-200">
+          <option value="all">전체 상태</option>
+          <option value="scheduled">대기</option>
+          <option value="in_progress">진행중</option>
+          <option value="done">완료</option>
+          <option value="delayed">지연</option>
+        </select>
+        <select value={weekFilter} onChange={e=>setWeekFilter(e.target.value)}
+          className="text-xs bg-slate-700 border border-slate-600 rounded-lg px-3 py-1.5 text-slate-200">
+          <option value="all">전체 주차</option>
+          <option value="1">W1 (3/2~8)</option>
+          <option value="2">W2 (3/9~15)</option>
+          <option value="3">W3 (3/16~22)</option>
+          <option value="4">W4 (3/23~29)</option>
+        </select>
+        <span className="text-xs text-slate-400 flex items-center ml-auto">{filtered.length}건</span>
+      </div>
+
+      {/* Table */}
+      <div className="bg-ch-card rounded-xl border border-ch-border overflow-hidden">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-xs text-slate-400 border-b border-ch-border bg-slate-800/50">
+              <th className="text-left p-3">날짜</th>
+              <th className="text-left p-3">콘텐츠</th>
+              <th className="text-left p-3">제목</th>
+              <th className="text-left p-3">포맷</th>
+              <th className="text-left p-3">상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map(u => (
+              <tr key={u.id} className="border-b border-slate-800 hover:bg-slate-700/20 transition-colors">
+                <td className="p-3 text-xs text-slate-300 whitespace-nowrap">{u.date.slice(5)}</td>
+                <td className="p-3"><Badge type={u.type}/></td>
+                <td className="p-3 text-slate-200">{u.title}</td>
+                <td className="p-3 text-xs text-slate-400">{TYPES[u.type]?.format}</td>
+                <td className="p-3">
+                  <select value={u.status} onChange={e => onStatusChange(u.id, e.target.value)}
+                    className="text-xs bg-slate-700 border border-slate-600 rounded px-2 py-1 text-slate-200 w-20">
+                    <option value="scheduled">대기</option>
+                    <option value="in_progress">진행중</option>
+                    <option value="done">완료</option>
+                    <option value="delayed">지연</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// ============ APP ============
+const App = () => {
+  const [tab, setTab] = useState('calendar');
+  const [uploads, setUploads] = useState(initUploads);
+
+  const handleStatusChange = useCallback((id, newStatus) => {
+    setUploads(prev => prev.map(u => u.id === id ? {...u, status: newStatus} : u));
+  }, []);
+
+  const tabs = [
+    { id:'calendar', label:'캘린더', icon:'📅' },
+    { id:'series', label:'시리즈 현황', icon:'📊' },
+    { id:'resource', label:'리소스', icon:'👥' },
+    { id:'uploads', label:'업로드 관리', icon:'📋' },
+  ];
+
+  const totalDone = uploads.filter(u=>u.status==='done').length;
+  const totalPct = Math.round((totalDone/uploads.length)*100);
+
+  return (
+    <div className="min-h-screen bg-ch-bg">
+      {/* Header */}
+      <header className="bg-ch-card border-b border-ch-border sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="text-xl font-bold text-white">CH</div>
+              <div>
+                <div className="text-sm font-semibold text-white">Content Management System</div>
+                <div className="text-xs text-slate-400">2026년 3월 | {uploads.length}편 | 완료 {totalDone}편 ({totalPct}%)</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={() => {
+                const data = JSON.stringify(uploads, null, 2);
+                const blob = new Blob([data], {type:'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'ch-schedule-backup.json';
+                a.click(); URL.revokeObjectURL(url);
+              }} className="text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-1.5 rounded-lg transition-colors">
+                데이터 백업
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Tab Bar */}
+      <nav className="bg-ch-card/50 border-b border-ch-border">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex gap-1">
+            {tabs.map(t => (
+              <button key={t.id} onClick={() => setTab(t.id)}
+                className={`px-4 py-2.5 text-sm font-medium transition-colors relative
+                  ${tab===t.id ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}>
+                <span className="mr-1.5">{t.icon}</span>{t.label}
+                {tab===t.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"/>}
+              </button>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      {/* Content */}
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {tab === 'calendar' && <CalendarView uploads={uploads} onStatusChange={handleStatusChange}/>}
+        {tab === 'series' && <SeriesView uploads={uploads}/>}
+        {tab === 'resource' && <ResourceView uploads={uploads}/>}
+        {tab === 'uploads' && <UploadManager uploads={uploads} onStatusChange={handleStatusChange}/>}
+      </main>
+
+      {/* Footer */}
+      <footer className="text-center text-xs text-slate-600 py-4 border-t border-ch-border">
+        CH MAG CMS v1.0 | Creatorhood
+      </footer>
+    </div>
+  );
+};
+
+ReactDOM.render(<App/>, document.getElementById('root'));
+</script>
+</body>
+</html>

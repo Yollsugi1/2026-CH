@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>DORM.MAG 모집 포스트 — 버전 비교</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #111;
+    color: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 48px;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.03em;
+  }
+  .page-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 40px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 360px);
+    grid-template-rows: repeat(2, 480px);
+    gap: 24px;
+    justify-content: center;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ff6b35;
+    letter-spacing: 0.04em;
+  }
+  .card-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.4;
+  }
+
+  /* 포스트 프레임 — 고정 360x480 (1080x1440 비율 정확히 3:4) */
+  .post {
+    width: 360px;
+    height: 480px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* 공통 텍스트 사이즈 (360px 기준 고정) */
+  .top-badge {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.4);
+  }
+  .dorm-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: #fff;
+  }
+  .dorm-title .accent { color: #ff6b35; }
+  .dorm-title .dim { color: rgba(255,255,255,0.3); }
+  .kr-title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #fff;
+    line-height: 1.1;
+  }
+  .one-liner {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: -0.01em;
+  }
+  .cta-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ff6b35;
+  }
+  .handle {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* ===== A — Bold Left ===== */
+  .post-a {
+    background: #0a0a0a;
+    padding: 40px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .post-a .top { display: flex; flex-direction: column; gap: 24px; }
+  .post-a .title-block { display: flex; flex-direction: column; gap: 8px; }
+  .post-a .dorm-title { font-size: 52px; white-space: nowrap; }
+  .post-a .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+
+  /* ===== B — Center Editorial ===== */
+  .post-b {
+    background: #0a0a0a;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+  }
+  .post-b .mid { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .post-b .divider { width: 32px; height: 1.5px; background: rgba(255,255,255,0.15); }
+  .post-b .bot { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+  /* ===== C — Stacked Bottom ===== */
+  .post-c {
+    background: #0a0a0a;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 20px;
+  }
+  .post-c .float-badge {
+    position: absolute;
+    top: 36px;
+    left: 32px;
+  }
+  .post-c .bg-year {
+    position: absolute;
+    top: 28px;
+    right: 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    letter-spacing: -0.04em;
+  }
+  .post-c .type-stack { display: flex; flex-direction: column; gap: 4px; }
+  .post-c .dorm-combined {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .post-c .dorm-combined .orange { color: #ff6b35; }
+  .post-c .dorm-combined .white { color: #fff; }
+  .post-c .kr-sub {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin-top: 4px;
+  }
+  .post-c .bottom-row { display: flex; justify-content: space-between; align-items: flex-end; }
+
+  /* ===== D — Color Split ===== */
+  .post-d {
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-d .top-half {
+    height: 50%;
+    background: #ff6b35;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .post-d .top-half .corner-badge {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.35);
+    letter-spacing: 0.02em;
+    align-self: flex-end;
+  }
+  .post-d .top-half .dorm-dark {
+    font-family: 'Inter', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    color: #0a0a0a;
+  }
+  .post-d .top-half .mag-small {
+    font-size: 36px;
+    font-weight: 700;
+  }
+  .post-d .bot-half {
+    height: 50%;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* ===== E — Layered ===== */
+  .post-e {
+    background: #0a0a0a;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+  .post-e .bg-ghost {
+    position: absolute;
+    top: 10%;
+    left: -8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 0.85;
+    color: rgba(255,255,255,0.025);
+    z-index: 0;
+  }
+  .post-e .content { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+  .post-e .top { display: flex; flex-direction: column; gap: 20px; }
+  .post-e .top .dorm-display {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: #ff6b35;
+    line-height: 1;
+  }
+  .post-e .bot { display: flex; justify-content: space-between; align-items: flex-end; }
+  .post-e .cta-btn {
+    padding: 8px 20px;
+    background: #ff6b35;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* ===== F — Marquee Minimal ===== */
+  .post-f {
+    background: #0a0a0a;
+    padding: 36px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
+    overflow: hidden;
+  }
+  .post-f .marquee-wrap {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .post-f .marquee-track {
+    display: flex;
+    gap: 40px;
+    animation: marquee 6s linear infinite;
+    width: max-content;
+  }
+  .post-f .marquee-item {
+    font-family: 'Inter', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    color: #fff;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .post-f .marquee-item .dot { color: #ff6b35; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-50% - 20px)); }
+  }
+  .post-f .hr { width: 28px; height: 1.5px; background: rgba(255,255,255,0.12); }
+  .post-f .kr-big {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+  .post-f .f-content { padding: 0 32px; }
+  .post-f .cta-outline {
+    padding: 8px 20px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+  }
+</style>
+</head>
+<body>
+
+<h1>DORM.MAG 모집 포스트 — 버전 비교</h1>
+<p class="page-sub">360×480px 프리뷰 (실제 1080×1440 비율) · Inter + Noto Sans KR</p>
+
+<div class="grid">
+
+  <!-- A -->
+  <div class="card">
+    <span class="card-label">A — Bold Left</span>
+    <div class="post post-a">
+      <div class="top">
+        <div class="top-badge">크리에이터후드 대학생 에디터 대외활동 신규모집</div>
+        <div class="title-block">
+          <div class="dorm-title"><span class="accent">DORM</span><span class="dim">.MAG</span></div>
+          <div class="kr-title">입주자 모집</div>
+        </div>
+        <div class="one-liner">스포츠 라이프스타일 매거진 크리에이터후드의<br>신규 매거진을 만들어갈 20대 에디터를 모집합니다.</div>
+      </div>
+      <div class="bottom">
+        <div class="cta-text">프로필 링크에서 지원 →</div>
+        <div class="handle">@creatorhood.mag</div>
+      </div>
+    </div>
+    <p class="card-desc">좌측 정렬. 큰 타이틀이 시선 잡고, 아래로 자연스럽게 읽힘.</p>
+  </div>
+
+  <!-- B -->
+  <div class="card">
+    <span class="card-label">B — Center Editorial</span>
+    <div class="post post-b">
+      <div class="top-badge">크리에이터후드 대학생 에디터 대외활동 신규모집</div>
+      <div class="mid">
+        <div class="dorm-title">DORM<span class="accent">.</span><span class="dim">MAG</span></div>
+        <div class="divider"></div>
+        <div class="kr-title">입주자 모집</div>
+        <div class="one-liner">스포츠 라이프스타일 매거진 크리에이터후드의<br>신규 매거진을 만들어갈 20대 에디터를 모집합니다.</div>
+      </div>
+      <div class="bot">
+        <div class="cta-text">프로필 링크에서 지원 →</div>
+        <div class="handle">@creatorhood.mag</div>
+      </div>
+    </div>
+    <p class="card-desc">중앙 정렬. 매거진 에디토리얼 무드. 깔끔하고 정돈된 인상.</p>
+  </div>
+
+  <!-- C -->
+  <div class="card">
+    <span class="card-label">C — Stacked Bottom</span>
+    <div class="post post-c">
+      <div class="float-badge top-badge">크리에이터후드 대학생 에디터 대외활동 신규모집</div>
+      <div class="bg-year">2026</div>
+      <div class="type-stack">
+        <div class="dorm-combined"><span class="orange">DORM</span><span class="white">.MAG</span></div>
+        <div class="kr-sub">입주자 모집</div>
+      </div>
+      <div class="one-liner">스포츠 라이프스타일 매거진 크리에이터후드의<br>신규 매거진을 만들어갈 20대 에디터를 모집합니다.</div>
+      <div class="bottom-row">
+        <div class="cta-text">프로필 링크에서 지원 →</div>
+        <div class="handle">@creatorhood.mag</div>
+      </div>
+    </div>
+    <p class="card-desc">하단 정렬 + 배경 2026. 타이포 분리로 다이나믹한 느낌.</p>
+  </div>
+
+  <!-- D -->
+  <div class="card">
+    <span class="card-label">D — Color Split</span>
+    <div class="post post-d">
+      <div class="top-half">
+        <div class="corner-badge">크리에이터후드 대학생 에디터 대외활동 신규모집</div>
+        <div class="dorm-dark">DORM<span class="mag-small">.MAG</span></div>
+      </div>
+      <div class="bot-half">
+        <div class="kr-title">입주자 모집</div>
+        <div class="one-liner">스포츠 라이프스타일 매거진 크리에이터후드의<br>신규 매거진을 만들어갈 20대 에디터를 모집합니다.</div>
+        <div class="bottom" style="display:flex;justify-content:space-between;align-items:flex-end;">
+          <div class="cta-text">프로필 링크에서 지원 →</div>
+          <div class="handle">@creatorhood.mag</div>
+        </div>
+      </div>
+    </div>
+    <p class="card-desc">상단 오렌지 / 하단 다크. 강렬한 첫인상, DORM.MAG 각인.</p>
+  </div>
+
+  <!-- E -->
+  <div class="card">
+    <span class="card-label">E — Layered</span>
+    <div class="post post-e">
+      <div class="bg-ghost">DORM</div>
+      <div class="content">
+        <div class="top">
+          <div class="top-badge">크리에이터후드 대학생 에디터 대외활동 신규모집</div>
+          <div>
+            <div class="dorm-display" style="font-family:'Inter',sans-serif;font-size:48px;font-weight:900;letter-spacing:-0.04em;color:#ff6b35;line-height:1;">DORM.MAG</div>
+            <div class="kr-title" style="margin-top:8px;">입주자 모집</div>
+          </div>
+          <div class="one-liner">스포츠 라이프스타일 매거진 크리에이터후드의<br>신규 매거진을 만들어갈 20대 에디터를 모집합니다.</div>
+        </div>
+        <div class="bot">
+          <div class="cta-btn" style="padding:8px 20px;background:#ff6b35;border-radius:100px;font-size:12px;font-weight:700;color:#fff;">지원하기 →</div>
+          <div class="handle">@creatorhood.mag</div>
+        </div>
+      </div>
+    </div>
+    <p class="card-desc">배경 고스트 타이포 + 전면 콘텐츠. 깊이감과 레이어드.</p>
+  </div>
+
+  <!-- F -->
+  <div class="card">
+    <span class="card-label">F — Ultra Minimal</span>
+    <div class="post post-f">
+      <div class="top-badge" style="padding:0 32px;">크리에이터후드 대학생 에디터 대외활동 신규모집</div>
+      <div class="marquee-wrap">
+        <div class="marquee-track">
+          <span class="marquee-item">DORM<span class="dot">.</span>MAG</span>
+          <span class="marquee-item">DORM<span class="dot">.</span>MAG</span>
+          <span class="marquee-item">DORM<span class="dot">.</span>MAG</span>
+          <span class="marquee-item">DORM<span class="dot">.</span>MAG</span>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="kr-big">입주자 모집</div>
+      <div class="f-content one-liner">스포츠 라이프스타일 매거진 크리에이터후드의<br>신규 매거진을 만들어갈 20대 에디터를 모집합니다.</div>
+      <div class="cta-outline">프로필 링크에서 지원 →</div>
+      <div class="handle">@creatorhood.mag</div>
+    </div>
+    <p class="card-desc">마키 애니메이션. DORM.MAG이 옆으로 계속 흐르는 다이나믹한 무드.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
