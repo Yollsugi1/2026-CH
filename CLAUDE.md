@@ -114,20 +114,26 @@ git push --no-verify origin main
 
 ## 현재 상태 (세션 끝날 때 업데이트 후 push)
 
-- **마지막 작업**: 2026-03-13 (MacBook)
+- **마지막 작업**: 2026-03-16 (MacBook)
 - **완료한 것**:
   - Zone X 컴바인 (Season 0) 전체 기획 완료 — `claude-zonex/ZoneX_컴바인_기획_260312.md`
     - 6가지 능력 체계 v2 확정 (Hexagon: ENGINE/GRIT/FORCE/BLAST/REFLEX/CONTROL)
     - 컴바인 시리즈 "The Proving Ground" 11부작 엔터테인먼트 구조
     - 빌드업 숏폼 시리즈 (4~5월) 에피소드 설계
     - 액션플랜 병렬 타임라인 (Track A/B/C) 수립
-  - 액션플랜 시각화 HTML 생성 — `claude-team-zonex/ZoneX_액션플랜_타임라인.html`
-  - .gitignore에 `!*.html` 추가 (시각화 도구용)
-- **진행 중**: Phase C (리그 설계) 대기 — Section 3 상성 시스템부터 이어감
+  - Zone X Phase C 리그 설계 완료 — `claude-zonex/ZoneX_방향성_재검토_및_게임포맷설계_260309.md` (Section 3-6 추가)
+    - Section 3: 상성 시스템 (CYA 3공격 유형별 동작 풀 18종 + 아키타입별 상성 매트릭스 + 5레이어 전략적 심도)
+    - Section 4: 매치 구분 기준 & 매치메이킹 (Open Division + 3원칙 매치메이킹 + 랭킹 시스템 + Duo/Squad 확장안)
+    - Section 5: 리그 구조 (격주 이벤트 × 6-7회/시즌 + 타이틀전 Escalating Stakes + 분할 업로드 전략)
+    - Section 6: 콘텐츠 설계 (이벤트당 7가지 콘텐츠 패키지 + 본 매치 영상 구조 + 5가지 바이럴 자산 + 커뮤니티 참여형)
+  - 프로덕션 미팅용 콘텐츠 소개서 — `claude-zonex/ZoneX_콘텐츠소개_프로덕션미팅용_260316.md`
+  - 액션플랜 시각화 HTML (v4 CRUD) — `claude-team-zonex/ZoneX_액션플랜_타임라인.html`
+- **진행 중**: Zone X 기획 1차 완료 — 세부 설계 과제 남음
 - **다음 할 것**:
-  - Zone X Phase C: 상성 시스템 → 매치 구분 기준 → 리그 구조 → 콘텐츠 설계
-  - Zone X 측정 종목 최종 확정 + 스코어링 시스템 (0~100 점수 변환)
+  - Zone X 스코어링 시스템 상세 설계 (0~100 점수 변환)
   - 빌드업 EP1 파일럿 스크립트 (세한/수민 촬영 가이드)
+  - Phase 1 시그니처 동작 + 공격 유형별 처방 기준 확정
+  - 챔피언십 Escalating Stakes 세부 룰
   - 웹매거진 Notion CMS 연동 고도화
   - Hoodies 브랜드 스폰서십 소개서 제작
 - **미결 사항**: 인턴 채용, 컴바인 촬영 장소 물색

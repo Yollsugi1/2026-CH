@@ -5,537 +5,232 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zone X — 액션플랜 타임라인</title>
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --surface-2: #1a1a24;
-    --border: #2a2a3a;
-    --text: #e8e8f0;
-    --text-dim: #8888a0;
-    --text-muted: #555568;
-    --accent: #7c5cfc;
-    --accent-dim: #5a3ed9;
-    --track-a: #7c5cfc;
-    --track-a-bg: rgba(124, 92, 252, 0.08);
-    --track-b: #ff6b4a;
-    --track-b-bg: rgba(255, 107, 74, 0.08);
-    --track-c: #22d1a0;
-    --track-c-bg: rgba(34, 209, 160, 0.08);
-    --milestone: #ffd166;
-    --current: #ff4488;
-    --done: #22d1a0;
-  }
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface-2: #1a1a24;
+  --surface-3: #20202e;
+  --border: #2a2a3a;
+  --border-light: #353548;
+  --text: #e8e8f0;
+  --text-dim: #8888a0;
+  --text-muted: #555568;
+  --accent: #7c5cfc;
+  --track-a: #7c5cfc;
+  --track-b: #ff6b4a;
+  --track-c: #22d1a0;
+  --milestone: #ffd166;
+  --current: #ff4488;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden;
+}
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Pretendard', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+/* ---- HEADER ---- */
+.header { padding:32px 40px 24px; border-bottom:1px solid var(--border); background:linear-gradient(180deg,rgba(124,92,252,0.05) 0%,transparent 100%); }
+.header h1 { font-size:24px; font-weight:700; letter-spacing:-0.5px; }
+.header h1 span { color:var(--accent); }
+.header .sub { color:var(--text-dim); font-size:13px; margin-top:4px; }
+.header .meta { display:flex; gap:20px; margin-top:12px; font-size:12px; color:var(--text-muted); flex-wrap:wrap; }
+.header .meta .now { color:var(--current); font-weight:600; }
 
-  /* Header */
-  .header {
-    padding: 40px 48px 32px;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(124,92,252,0.06) 0%, transparent 100%);
-  }
-  .header h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin-bottom: 8px;
-  }
-  .header h1 span { color: var(--accent); }
-  .header .subtitle {
-    color: var(--text-dim);
-    font-size: 14px;
-  }
-  .header .meta {
-    display: flex;
-    gap: 24px;
-    margin-top: 16px;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-  .header .meta .current-marker {
-    color: var(--current);
-    font-weight: 600;
-  }
+/* ---- LEGEND ---- */
+.legend { display:flex; gap:24px; padding:12px 40px; border-bottom:1px solid var(--border); background:var(--surface); font-size:12px; flex-wrap:wrap; align-items:center; }
+.legend-item { display:flex; align-items:center; gap:6px; }
+.legend-bar { width:20px; height:4px; border-radius:2px; }
+.legend-diamond { width:7px; height:7px; transform:rotate(45deg); border:2px solid var(--milestone); }
+.legend-line { width:0; height:14px; border-left:2px dashed var(--current); }
 
-  /* Legend */
-  .legend {
-    display: flex;
-    gap: 28px;
-    padding: 16px 48px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    font-size: 13px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-  .legend-bar {
-    width: 24px;
-    height: 4px;
-    border-radius: 2px;
-  }
-  .legend-diamond {
-    width: 8px;
-    height: 8px;
-    transform: rotate(45deg);
-    border: 2px solid var(--milestone);
-  }
-  .legend-line {
-    width: 0;
-    height: 16px;
-    border-left: 2px dashed var(--current);
-  }
+/* ---- GANTT ---- */
+.gantt-wrap { padding:28px 40px 0; }
+.section-title { font-size:16px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.section-title::before { content:''; width:3px; height:18px; background:var(--accent); border-radius:2px; }
 
-  /* Main Content */
-  .main {
-    padding: 32px 48px;
-    max-width: 1400px;
-  }
+.gantt { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:32px; position:relative; }
 
-  /* GANTT CHART */
-  .gantt-section {
-    margin-bottom: 48px;
-  }
-  .section-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-title::before {
-    content: '';
-    width: 3px;
-    height: 20px;
-    background: var(--accent);
-    border-radius: 2px;
-  }
+.gantt-header { display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid var(--border); background:var(--surface-2); position:sticky; top:0; z-index:20; }
+.gantt-header .col-label { padding:10px 16px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); border-right:1px solid var(--border); display:flex; align-items:center; }
+.week-cols { display:grid; grid-template-columns:repeat(16,1fr); }
+.week-col { padding:6px 0; text-align:center; font-size:10px; color:var(--text-muted); border-left:1px solid var(--border); line-height:1.3; }
+.week-col .wk { font-weight:600; color:var(--text-dim); }
+.week-col.current { background:rgba(255,68,136,0.06); }
+.week-col.current .wk { color:var(--current); }
+.week-col .mo { font-size:9px; }
 
-  .gantt-container {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
+.month-spans { display:grid; grid-template-columns:160px 1fr; background:var(--surface-3); border-bottom:1px solid var(--border); }
+.month-spans .spacer { border-right:1px solid var(--border); }
+.month-bar-row { display:grid; grid-template-columns:repeat(16,1fr); }
+.month-span { text-align:center; font-size:11px; font-weight:600; color:var(--text-dim); padding:4px 0; border-left:1px solid var(--border); }
+.month-span.highlight { color:var(--current); }
 
-  /* Timeline Header */
-  .timeline-header {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface-2);
-  }
-  .timeline-header .label {
-    padding: 12px 20px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    border-right: 1px solid var(--border);
-  }
-  .month-row {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-  }
-  .month-cell {
-    padding: 12px 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-align: center;
-    color: var(--text-dim);
-    border-left: 1px solid var(--border);
-    position: relative;
-  }
-  .month-cell.current {
-    color: var(--current);
-    background: rgba(255, 68, 136, 0.05);
-  }
-  .month-cell .week-label {
-    font-size: 10px;
-    color: var(--text-muted);
-    font-weight: 400;
-  }
+/* Track rows */
+.track { display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid var(--border); }
+.track:last-child { border-bottom:none; }
+.track-info { padding:12px 16px; border-right:1px solid var(--border); display:flex; flex-direction:column; justify-content:center; gap:2px; min-height:100px; }
+.track-info .name { font-size:13px; font-weight:600; }
+.track-info .name.a { color:var(--track-a); }
+.track-info .name.b { color:var(--track-b); }
+.track-info .name.c { color:var(--track-c); }
+.track-info .who { font-size:11px; color:var(--text-muted); }
+.track-info .add-bar-btn { margin-top:6px; font-size:10px; color:var(--text-muted); cursor:pointer; border:1px dashed var(--border); background:none; padding:2px 8px; border-radius:4px; font-family:inherit; }
+.track-info .add-bar-btn:hover { color:var(--accent); border-color:var(--accent); }
 
-  /* Track Rows */
-  .track-row {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    border-bottom: 1px solid var(--border);
-    min-height: 72px;
-    transition: background 0.2s;
-  }
-  .track-row:last-child { border-bottom: none; }
-  .track-row:hover { background: rgba(255,255,255,0.01); }
+.track-canvas { position:relative; min-height:100px; }
+.track-canvas .grid { position:absolute; inset:0; display:grid; grid-template-columns:repeat(16,1fr); pointer-events:none; }
+.track-canvas .grid .gl { border-left:1px solid var(--border); }
+.track-canvas .grid .gl.current { background:rgba(255,68,136,0.03); border-left-color:rgba(255,68,136,0.15); }
 
-  .track-label {
-    padding: 16px 20px;
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-  }
-  .track-name {
-    font-size: 14px;
-    font-weight: 600;
-  }
-  .track-name.a { color: var(--track-a); }
-  .track-name.b { color: var(--track-b); }
-  .track-name.c { color: var(--track-c); }
-  .track-person {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
+/* Bars */
+.bar { position:absolute; height:26px; border-radius:5px; display:flex; align-items:center; padding:0 8px; font-size:11px; font-weight:500; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:grab; user-select:none; z-index:5; transition:box-shadow 0.15s; }
+.bar:hover { box-shadow:0 2px 12px rgba(0,0,0,0.5); z-index:15; }
+.bar.dragging { cursor:grabbing; opacity:0.9; box-shadow:0 4px 20px rgba(0,0,0,0.6); z-index:30; }
+.bar.a { background:var(--track-a); }
+.bar.b { background:var(--track-b); }
+.bar.c { background:var(--track-c); }
+.bar.sub { opacity:0.55; height:20px; font-size:10px; border-radius:4px; }
+.bar .handle { position:absolute; top:0; bottom:0; width:8px; cursor:ew-resize; z-index:2; }
+.bar .handle.left { left:-2px; border-radius:5px 0 0 5px; }
+.bar .handle.right { right:-2px; border-radius:0 5px 5px 0; }
+.bar .handle:hover { background:rgba(255,255,255,0.15); }
+.bar .bar-del { position:absolute; right:-7px; top:-7px; width:16px; height:16px; border-radius:50%; background:var(--current); color:#fff; font-size:10px; line-height:16px; text-align:center; cursor:pointer; opacity:0; transition:opacity 0.15s; z-index:20; border:none; }
+.bar:hover .bar-del { opacity:1; }
 
-  .track-timeline {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-  }
+/* Tooltip */
+.bar-tooltip { position:fixed; background:var(--surface-3); border:1px solid var(--border-light); color:var(--text); padding:8px 12px; border-radius:8px; font-size:12px; line-height:1.5; pointer-events:none; z-index:100; display:none; max-width:300px; box-shadow:0 8px 24px rgba(0,0,0,0.5); }
+.bar-tooltip .tt-title { font-weight:600; margin-bottom:2px; }
+.bar-tooltip .tt-dates { color:var(--text-dim); font-size:11px; }
 
-  .grid-line {
-    border-left: 1px solid var(--border);
-    position: relative;
-  }
-  .grid-line.current::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    border-left: 2px dashed var(--current);
-    opacity: 0.4;
-  }
+/* Milestones — staggered */
+.milestone-row { display:grid; grid-template-columns:160px 1fr; background:var(--surface-2); min-height:90px; }
+.milestone-row .track-info { min-height:90px; }
+.milestone-row .track-canvas { min-height:90px; cursor:crosshair; }
+.ms-diamond { position:absolute; width:12px; height:12px; border:2px solid var(--milestone); background:var(--bg); transform:rotate(45deg); cursor:pointer; z-index:10; transition:border-color 0.15s; }
+.ms-diamond:hover { border-color:#fff; }
+.ms-label { position:absolute; font-size:10px; color:var(--milestone); white-space:nowrap; transform:translateX(-50%); z-index:10; pointer-events:none; }
 
-  /* Bars */
-  .bar-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-  }
-  .bar {
-    position: absolute;
-    height: 28px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 11px;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    pointer-events: auto;
-    cursor: default;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .bar:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    z-index: 10;
-  }
-  .bar.a {
-    background: linear-gradient(90deg, var(--track-a), var(--accent-dim));
-    color: #fff;
-  }
-  .bar.b {
-    background: linear-gradient(90deg, var(--track-b), #e04a2a);
-    color: #fff;
-  }
-  .bar.c {
-    background: linear-gradient(90deg, var(--track-c), #18a880);
-    color: #fff;
-  }
-  .bar.sub {
-    opacity: 0.5;
-    height: 20px;
-    border-radius: 4px;
-    font-size: 10px;
-  }
+/* ---- MODAL ---- */
+.modal-overlay { position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; }
+.modal-overlay.active { display:flex; }
+.modal { background:var(--surface-2); border:1px solid var(--border-light); border-radius:12px; padding:24px; width:440px; max-width:90vw; max-height:85vh; overflow-y:auto; }
+.modal h3 { font-size:16px; margin-bottom:16px; font-weight:600; }
+.modal label.field-label { font-size:11px; color:var(--text-dim); display:block; margin-bottom:4px; margin-top:12px; font-weight:500; }
+.modal label.field-label:first-of-type { margin-top:0; }
+.modal input[type="text"], .modal select, .modal textarea { width:100%; background:var(--surface-3); border:1px solid var(--border); color:var(--text); padding:8px 10px; border-radius:6px; font-size:13px; font-family:inherit; outline:none; }
+.modal input:focus, .modal select:focus, .modal textarea:focus { border-color:var(--accent); }
+.modal textarea { resize:vertical; min-height:40px; }
+.modal-row { display:flex; gap:12px; }
+.modal-row > div { flex:1; }
+.modal .check-row { display:flex; align-items:center; gap:8px; margin-top:12px; font-size:12px; color:var(--text-dim); }
+.modal .check-row input[type="checkbox"] { accent-color:var(--accent); }
+.modal-btns { display:flex; gap:8px; margin-top:20px; justify-content:flex-end; }
+.modal-btns button { padding:7px 16px; border-radius:6px; font-size:13px; cursor:pointer; border:1px solid var(--border); font-family:inherit; }
+.modal-btns .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+.modal-btns .btn-primary:hover { opacity:0.9; }
+.modal-btns .btn-danger { background:transparent; color:var(--current); border-color:rgba(255,68,136,0.3); margin-right:auto; }
+.modal-btns .btn-danger:hover { background:rgba(255,68,136,0.1); }
+.modal-btns .btn-cancel { background:transparent; color:var(--text-muted); }
+.modal-btns .btn-cancel:hover { color:var(--text); }
 
-  /* Milestones */
-  .milestone-marker {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    border: 2px solid var(--milestone);
-    background: var(--bg);
-    transform: rotate(45deg);
-    pointer-events: auto;
-    cursor: default;
-    z-index: 5;
-  }
-  .milestone-marker:hover + .milestone-tooltip,
-  .milestone-tooltip:hover {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .milestone-tooltip {
-    position: absolute;
-    background: var(--surface-2);
-    border: 1px solid var(--milestone);
-    color: var(--text);
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    z-index: 20;
-  }
+/* Owner row in milestone modal */
+.owner-row { display:flex; gap:6px; margin-bottom:4px; align-items:center; }
+.owner-row input { flex:1; }
+.owner-row select { width:90px; flex-shrink:0; }
+.owner-row .owner-del { background:none; border:none; color:var(--text-muted); font-size:14px; cursor:pointer; padding:0 4px; }
+.owner-row .owner-del:hover { color:var(--current); }
+.owner-add { font-size:11px; color:var(--text-muted); cursor:pointer; border:none; background:none; margin-top:4px; font-family:inherit; }
+.owner-add:hover { color:var(--accent); }
 
-  /* Current Marker */
-  .current-line {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--current);
-    opacity: 0.6;
-    z-index: 4;
-  }
-  .current-label {
-    position: absolute;
-    top: -26px;
-    transform: translateX(-50%);
-    background: var(--current);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 3px;
-    white-space: nowrap;
-  }
+/* ---- BELOW SECTIONS ---- */
+.main { padding:0 40px 40px; }
 
-  /* ACTION ITEMS SECTION */
-  .actions-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 48px;
-  }
-  @media (max-width: 1100px) {
-    .actions-grid { grid-template-columns: 1fr; }
-  }
+/* Milestone table */
+.ms-table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:32px; }
+.ms-table { width:100%; border-collapse:collapse; font-size:13px; }
+.ms-table th { text-align:left; padding:10px 16px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); border-bottom:1px solid var(--border); background:var(--surface-2); }
+.ms-table td { padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.03); vertical-align:top; }
+.ms-table tr:last-child td { border-bottom:none; }
+.ms-table tr.clickable { cursor:pointer; }
+.ms-table tr.clickable:hover { background:rgba(124,92,252,0.04); }
+.ms-table .dt { font-weight:600; white-space:nowrap; min-width:100px; }
+.ms-table .dt.now { color:var(--current); }
+.ms-table .ev { color:var(--text-dim); }
+.ms-table .ms-add-row { cursor:pointer; }
+.ms-table .ms-add-row td { color:var(--text-muted); font-size:12px; text-align:center; padding:8px; }
+.ms-table .ms-add-row:hover td { color:var(--accent); background:rgba(124,92,252,0.04); }
+.tag { display:inline-block; padding:2px 7px; border-radius:4px; font-size:11px; font-weight:500; }
+.tag.a { background:rgba(124,92,252,0.1); color:var(--track-a); border:1px solid rgba(124,92,252,0.2); }
+.tag.b { background:rgba(255,107,74,0.1); color:var(--track-b); border:1px solid rgba(255,107,74,0.2); }
+.tag.c { background:rgba(34,209,160,0.1); color:var(--track-c); border:1px solid rgba(34,209,160,0.2); }
+.tag.all { background:rgba(255,209,102,0.08); color:var(--milestone); border:1px solid rgba(255,209,102,0.2); }
 
-  .action-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .action-card-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .action-card-header .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-  .action-card-header h3 {
-    font-size: 15px;
-    font-weight: 600;
-  }
-  .action-card-header .role {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-left: auto;
-  }
+/* Action cards */
+.actions-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
+@media(max-width:1100px){ .actions-grid{grid-template-columns:1fr;} }
+.acard { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:border-color 0.2s; }
+.acard.highlight { border-color:var(--accent); }
+.acard-head { padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+.acard-head .dot { width:7px; height:7px; border-radius:50%; }
+.acard-head h3 { font-size:14px; font-weight:600; }
+.acard-head .role { font-size:11px; color:var(--text-muted); margin-left:auto; }
+.aphase { padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.03); }
+.aphase:last-child { border-bottom:none; }
+.aphase-title { font-size:11px; font-weight:600; color:var(--text-dim); margin-bottom:6px; display:flex; align-items:center; gap:5px; }
+.aphase-title .now-tag { font-size:9px; padding:1px 5px; border-radius:3px; background:rgba(255,68,136,0.15); color:var(--current); font-weight:500; }
+.aitem { display:flex; align-items:flex-start; gap:7px; padding:3px 0; font-size:12px; color:var(--text-dim); position:relative; }
+.aitem input[type="checkbox"] { margin-top:3px; accent-color:var(--accent); flex-shrink:0; cursor:pointer; }
+.aitem.done .aitem-text { color:var(--text-muted); text-decoration:line-through; }
+.aitem .aitem-text { cursor:pointer; flex:1; min-width:0; }
+.aitem .aitem-text:hover { color:var(--text); }
+.aitem .aitem-note { display:block; font-size:10px; color:var(--text-muted); margin-top:1px; cursor:pointer; }
+.aitem .aitem-note:hover { color:var(--text-dim); }
+.aitem .aitem-del { background:none; border:none; color:var(--text-muted); font-size:14px; cursor:pointer; padding:0 2px; line-height:1; opacity:0; transition:opacity 0.15s; flex-shrink:0; margin-top:1px; }
+.aitem:hover .aitem-del { opacity:1; }
+.aitem .aitem-del:hover { color:var(--current); }
+.aphase-add { display:flex; align-items:center; gap:5px; padding:4px 0 2px; font-size:11px; color:var(--text-muted); cursor:pointer; border:none; background:none; transition:color 0.15s; font-family:inherit; }
+.aphase-add:hover { color:var(--accent); }
+.aphase-add .plus { font-size:13px; font-weight:600; }
 
-  .action-phase {
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-  }
-  .action-phase:last-child { border-bottom: none; }
-  .action-phase-title {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .action-phase-title .tag {
-    font-size: 10px;
-    padding: 1px 6px;
-    border-radius: 3px;
-    font-weight: 500;
-  }
+/* Inline edit */
+.aitem-edit-row { padding:4px 0; }
+.aitem-input { width:100%; background:var(--surface-3); border:1px solid var(--border-light); color:var(--text); padding:5px 8px; border-radius:5px; font-size:12px; font-family:inherit; outline:none; }
+.aitem-input:focus { border-color:var(--accent); }
+.aitem-input.note-input { font-size:10px; margin-top:4px; color:var(--text-dim); }
+.aitem-edit-btns { display:flex; gap:6px; margin-top:4px; }
+.aitem-edit-btns button { padding:3px 10px; border-radius:4px; font-size:11px; cursor:pointer; border:1px solid var(--border); font-family:inherit; }
+.aitem-edit-btns .save-btn { background:var(--accent); color:#fff; border-color:var(--accent); }
+.aitem-edit-btns .cancel-btn { background:transparent; color:var(--text-muted); }
 
-  .action-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 4px 0;
-    font-size: 13px;
-    color: var(--text-dim);
-    line-height: 1.5;
-  }
-  .action-item input[type="checkbox"] {
-    margin-top: 4px;
-    accent-color: var(--accent);
-    flex-shrink: 0;
-  }
-  .action-item.checked {
-    color: var(--text-muted);
-    text-decoration: line-through;
-  }
-  .action-item .note {
-    display: block;
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
+/* Section header with action */
+.section-header { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+.section-header .section-title { margin-bottom:0; }
+.section-header .small-btn { background:none; border:1px solid var(--border); color:var(--text-muted); padding:3px 10px; border-radius:5px; font-size:11px; cursor:pointer; font-family:inherit; }
+.section-header .small-btn:hover { border-color:var(--text-muted); color:var(--text-dim); }
 
-  /* MILESTONE TABLE */
-  .milestone-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-  .milestone-table th {
-    text-align: left;
-    padding: 10px 16px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);
-    background: var(--surface-2);
-  }
-  .milestone-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-    vertical-align: top;
-  }
-  .milestone-table tr:hover td {
-    background: rgba(255,255,255,0.01);
-  }
-  .milestone-table .date {
-    font-weight: 600;
-    white-space: nowrap;
-    color: var(--text);
-    min-width: 100px;
-  }
-  .milestone-table .date.current {
-    color: var(--current);
-  }
-  .milestone-table .event {
-    color: var(--text-dim);
-  }
-  .milestone-table .owner {
-    white-space: nowrap;
-  }
-  .owner-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-  .owner-tag.a { background: var(--track-a-bg); color: var(--track-a); border: 1px solid rgba(124,92,252,0.2); }
-  .owner-tag.b { background: var(--track-b-bg); color: var(--track-b); border: 1px solid rgba(255,107,74,0.2); }
-  .owner-tag.c { background: var(--track-c-bg); color: var(--track-c); border: 1px solid rgba(34,209,160,0.2); }
-  .owner-tag.all { background: rgba(255,209,102,0.08); color: var(--milestone); border: 1px solid rgba(255,209,102,0.2); }
+/* Outreach */
+.ogrid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:32px; }
+@media(max-width:900px){ .ogrid{grid-template-columns:1fr;} }
+.ocard { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; }
+.ocard h4 { font-size:13px; font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.ocard ul { list-style:none; font-size:12px; color:var(--text-dim); }
+.ocard li { padding:3px 0 3px 14px; position:relative; }
+.ocard li::before { content:'>'; position:absolute; left:0; color:var(--text-muted); font-family:monospace; font-size:11px; }
 
-  /* OUTREACH SECTION */
-  .outreach-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 48px;
-  }
-  @media (max-width: 900px) {
-    .outreach-grid { grid-template-columns: 1fr; }
-  }
-  .outreach-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-  }
-  .outreach-card h4 {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .outreach-card ul {
-    list-style: none;
-    font-size: 13px;
-    color: var(--text-dim);
-  }
-  .outreach-card li {
-    padding: 4px 0;
-    padding-left: 16px;
-    position: relative;
-  }
-  .outreach-card li::before {
-    content: '>';
-    position: absolute;
-    left: 0;
-    color: var(--text-muted);
-    font-family: monospace;
-  }
-
-  /* Footer */
-  .footer {
-    padding: 24px 48px;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--text-muted);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  /* Print */
-  @media print {
-    body { background: #fff; color: #000; }
-    .gantt-container, .action-card, .outreach-card { border-color: #ddd; background: #fafafa; }
-    .bar { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-  }
+.footer { padding:20px 40px; border-top:1px solid var(--border); font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between; }
 </style>
 </head>
 <body>
 
 <div class="header">
   <h1><span>Zone X</span> — 액션플랜 타임라인</h1>
-  <div class="subtitle">Season 0 (컴바인) + 빌드업 콘텐츠 시리즈 — 병렬 트랙 운영</div>
+  <div class="sub">Season 0 (컴바인) + 빌드업 콘텐츠 시리즈 — 병렬 트랙 운영</div>
   <div class="meta">
     <span>목표: <strong>6월 중순</strong> Season 1 본 리그 시작</span>
-    <span class="current-marker">현재: 3월 중순 — 기획 확정 단계</span>
-    <span>업데이트: 2026.03.12</span>
+    <span class="now">현재: 3월 중순 — 기획 확정 단계</span>
+    <span>업데이트: 2026.03.13</span>
+    <span style="margin-left:auto; color:var(--text-dim)">더블클릭: 추가/수정 | 드래그: 일정 이동 | ×: 삭제</span>
   </div>
 </div>
 
@@ -547,432 +242,854 @@
   <div class="legend-item"><div class="legend-line"></div> 현재 시점</div>
 </div>
 
+<div class="gantt-wrap">
+  <div class="section-title">병렬 타임라인 — Gantt View</div>
+  <div class="gantt" id="gantt"></div>
+</div>
+
+<div class="bar-tooltip" id="tooltip"></div>
+
+<!-- Bar Modal -->
+<div class="modal-overlay" id="barModalOverlay">
+  <div class="modal">
+    <h3 id="barModalTitle">바 추가</h3>
+    <label class="field-label">제목</label>
+    <input type="text" id="bmLabel" placeholder="작업명">
+    <div class="modal-row">
+      <div><label class="field-label">트랙</label><select id="bmTrack"><option value="a">Track A (수현)</option><option value="b">Track B (세한·수민)</option><option value="c">Track C (에디터)</option></select></div>
+    </div>
+    <div class="modal-row">
+      <div><label class="field-label">시작</label><select id="bmStart"></select></div>
+      <div><label class="field-label">종료</label><select id="bmEnd"></select></div>
+    </div>
+    <label class="field-label">상세 설명</label>
+    <input type="text" id="bmDetail" placeholder="설명 (선택)">
+    <label class="check-row"><input type="checkbox" id="bmSub"> 보조 업무 (작게 표시)</label>
+    <div class="modal-btns">
+      <button class="btn-danger" id="bmDelete" style="display:none" onclick="deleteBar()">삭제</button>
+      <button class="btn-cancel" onclick="closeBarModal()">취소</button>
+      <button class="btn-primary" onclick="saveBar()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Milestone Modal -->
+<div class="modal-overlay" id="msModalOverlay">
+  <div class="modal">
+    <h3 id="msModalTitle">마일스톤 추가</h3>
+    <label class="field-label">제목</label>
+    <input type="text" id="mmLabel" placeholder="마일스톤 내용">
+    <div class="modal-row">
+      <div><label class="field-label">주차 (Gantt 위치)</label><select id="mmWeek"></select></div>
+      <div><label class="field-label">날짜 텍스트</label><input type="text" id="mmDate" placeholder="예: 5월 초"></div>
+    </div>
+    <label class="field-label">담당자</label>
+    <div id="mmOwners"></div>
+    <button class="owner-add" onclick="addOwnerRow()">+ 담당자 추가</button>
+    <label class="check-row"><input type="checkbox" id="mmGantt"> 간트차트에 다이아몬드 표시</label>
+    <label class="check-row"><input type="checkbox" id="mmCurrent"> 현재 진행 (NOW 표시)</label>
+    <div class="modal-row" style="margin-top:12px">
+      <div><label class="field-label">강조 스타일</label><select id="mmHighlight"><option value="">없음</option><option value="milestone">마일스톤 (금색)</option><option value="accent">액센트 (보라)</option></select></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-danger" id="mmDelete" style="display:none" onclick="deleteMilestone()">삭제</button>
+      <button class="btn-cancel" onclick="closeMsModal()">취소</button>
+      <button class="btn-primary" onclick="saveMilestone()">저장</button>
+    </div>
+  </div>
+</div>
+
 <div class="main">
-
-  <!-- GANTT CHART -->
-  <div class="gantt-section">
-    <div class="section-title">병렬 타임라인 — Gantt View</div>
-    <div class="gantt-container">
-      <!-- Month Headers -->
-      <div class="timeline-header">
-        <div class="label">트랙 / 담당</div>
-        <div class="month-row">
-          <div class="month-cell current">3월 중<br><span class="week-label">W11-12</span></div>
-          <div class="month-cell">3월 말<br><span class="week-label">W13-14</span></div>
-          <div class="month-cell">4월 초<br><span class="week-label">W14-15</span></div>
-          <div class="month-cell">4월<br><span class="week-label">W15-18</span></div>
-          <div class="month-cell">5월 초<br><span class="week-label">W18-19</span></div>
-          <div class="month-cell">5월 중<br><span class="week-label">W20-21</span></div>
-          <div class="month-cell">5월 말<br><span class="week-label">W22</span></div>
-          <div class="month-cell">6월~<br><span class="week-label">W23+</span></div>
-        </div>
-      </div>
-
-      <!-- Track A: 수현 -->
-      <div class="track-row">
-        <div class="track-label">
-          <div class="track-name a">Track A</div>
-          <div class="track-person">수현 — 기획/전략</div>
-        </div>
-        <div class="track-timeline">
-          <div class="grid-line current"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="bar-layer">
-            <!-- 기획 확정 -->
-            <div class="bar a" style="left:2%; top:8px; width:14%;" title="컴바인 기획 확정 + 6능력 측정 1차 확정">기획 확정</div>
-            <!-- 소개서 -->
-            <div class="bar a sub" style="left:14%; top:10px; width:10%;" title="브랜드 소개서 완성">소개서 완성</div>
-            <!-- 후킹 포스트 -->
-            <div class="bar a" style="left:26%; top:8px; width:36%;" title="개인IG + CH 계정 후킹 포스트 제작 (지속)">후킹 포스트 제작 (개인IG + CH)</div>
-            <!-- 리그 설계 -->
-            <div class="bar a sub" style="left:26%; top:40px; width:32%;" title="CYA 룰 확정 + 매치메이킹 기준 설계">리그 룰 설계 + 매치메이킹</div>
-            <!-- 컴바인 기획 심화 -->
-            <div class="bar a" style="left:30%; top:40px; width:42%;" title="컴바인 콘텐츠 기획 심화 (게임 디테일, 대본)">컴바인 기획 심화</div>
-            <!-- 자문 투어 -->
-            <div class="bar a sub" style="left:58%; top:8px; width:12%;" title="전문가 자문 투어 (콘텐츠 활용)">자문 투어</div>
-            <!-- 컴바인 촬영 -->
-            <div class="bar a" style="left:74%; top:8px; width:10%;" title="컴바인 촬영 총괄 (2박3일)">촬영 총괄</div>
-            <!-- 편집 감독 -->
-            <div class="bar a sub" style="left:84%; top:8px; width:14%;" title="편집 방향 가이드 + 리그 준비">편집감독 + 리그준비</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Track B: 세한·수민 -->
-      <div class="track-row">
-        <div class="track-label">
-          <div class="track-name b">Track B</div>
-          <div class="track-person">세한·수민 — 현장/콘텐츠</div>
-        </div>
-        <div class="track-timeline">
-          <div class="grid-line current"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="bar-layer">
-            <!-- 일정확정 + 섭외루트 -->
-            <div class="bar b" style="left:2%; top:8px; width:14%;" title="세부 일정 확정 + 섭외 루트 확보">일정·루트 확정</div>
-            <!-- 섭외 리스트 -->
-            <div class="bar b sub" style="left:14%; top:10px; width:10%;" title="섭외 리스트 1차 작성">섭외 리스트 1차</div>
-            <!-- 빌드업 촬영 -->
-            <div class="bar b" style="left:26%; top:8px; width:46%;" title="주 2~3회 섭외 방문 + 인터뷰 + 간단 측정 촬영">빌드업 촬영 (주 2~3회 섭외·촬영)</div>
-            <!-- 스폰서십 -->
-            <div class="bar b sub" style="left:14%; top:40px; width:56%;" title="스폰서십 소개서 준비 + 현장 파트너십 발굴">스폰서십 서포트 (병행)</div>
-            <!-- 컴바인 현장 -->
-            <div class="bar b" style="left:74%; top:8px; width:10%;" title="컴바인 촬영 현장 운영">촬영 현장 운영</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Track C: 에디터+디자이너 -->
-      <div class="track-row">
-        <div class="track-label">
-          <div class="track-name c">Track C</div>
-          <div class="track-person">에디터 + 훈택/우석 — SNS</div>
-        </div>
-        <div class="track-timeline">
-          <div class="grid-line current"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="bar-layer">
-            <!-- VI 세팅 -->
-            <div class="bar c" style="left:14%; top:8px; width:14%;" title="인스타 VI 세팅 (프로필, 템플릿, Hexagon 그래픽)">VI 디자인 세팅</div>
-            <!-- SNS 운영 -->
-            <div class="bar c" style="left:28%; top:8px; width:44%;" title="빌드업 숏폼 편집 + 선수카드 + 릴스 업로드">SNS 콘텐츠 운영 (숏폼·카드·릴스)</div>
-            <!-- 카운트다운 -->
-            <div class="bar c sub" style="left:62%; top:40px; width:12%;" title="컴바인이 온다 카운트다운 포스트">카운트다운</div>
-            <!-- 컴바인 시리즈 업로드 -->
-            <div class="bar c" style="left:84%; top:8px; width:14%;" title="컴바인 시리즈 편집 + 주 2회 업로드">시리즈 편집·업로드</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Milestones Row -->
-      <div class="track-row" style="min-height: 56px; background: var(--surface-2);">
-        <div class="track-label">
-          <div class="track-name" style="color: var(--milestone);">Milestones</div>
-        </div>
-        <div class="track-timeline">
-          <div class="grid-line current"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="grid-line"></div>
-          <div class="bar-layer">
-            <!-- M1: 기획 확정 -->
-            <div class="milestone-marker" style="left:14%; top:18px;"></div>
-            <div class="milestone-tooltip" style="left:14%; top:-8px;">기획 확정 + 소개서 완성</div>
-            <!-- M2: 채널 런칭 -->
-            <div class="milestone-marker" style="left:26%; top:18px;"></div>
-            <div class="milestone-tooltip" style="left:26%; top:-8px;">Zone X 채널 런칭</div>
-            <!-- M3: 참가자 확정 -->
-            <div class="milestone-marker" style="left:56%; top:18px;"></div>
-            <div class="milestone-tooltip" style="left:56%; top:-8px;">컴바인 참가자 확정 (10~16명)</div>
-            <!-- M4: 컴바인 촬영 -->
-            <div class="milestone-marker" style="left:76%; top:18px;"></div>
-            <div class="milestone-tooltip" style="left:76%; top:-8px;">컴바인 촬영 (2박3일)</div>
-            <!-- M5: 시리즈 론칭 -->
-            <div class="milestone-marker" style="left:86%; top:18px;"></div>
-            <div class="milestone-tooltip" style="left:86%; top:-8px;">컴바인 시리즈 업로드 시작</div>
-            <!-- M6: Season 1 -->
-            <div class="milestone-marker" style="left:94%; top:18px;"></div>
-            <div class="milestone-tooltip" style="left:94%; top:-8px;">Season 1 본 리그 시작</div>
-          </div>
-        </div>
-      </div>
+  <!-- Milestone Table — JS rendered -->
+  <div style="margin-top:4px;">
+    <div class="section-header">
+      <div class="section-title">역산 타임라인 — Milestones</div>
+      <button class="small-btn" onclick="openMsModal()">+ 추가</button>
+    </div>
+    <div class="ms-table-wrap">
+      <table class="ms-table" id="msTable"></table>
     </div>
   </div>
 
-  <!-- MILESTONES TABLE -->
-  <div class="gantt-section">
-    <div class="section-title">역산 타임라인 — Milestones</div>
-    <div class="gantt-container">
-      <table class="milestone-table">
-        <thead>
-          <tr>
-            <th>시점</th>
-            <th>마일스톤</th>
-            <th>담당</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="date current">3월 중순 ← NOW</td>
-            <td class="event">컴바인 기획 확정 + 6능력 측정 방식 1차 확정</td>
-            <td class="owner"><span class="owner-tag a">수현</span></td>
-          </tr>
-          <tr>
-            <td class="date">3월 말</td>
-            <td class="event">브랜드 소개서 완성 / 세한·수민 일정·섭외 루트 확정</td>
-            <td class="owner"><span class="owner-tag all">전원</span></td>
-          </tr>
-          <tr>
-            <td class="date">4월 초</td>
-            <td class="event">Zone X 채널 런칭 (유튜브 + 인스타) / 빌드업 촬영 시작</td>
-            <td class="owner">
-              <span class="owner-tag b">세한·수민</span>
-              <span class="owner-tag c">에디터</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="date">4월</td>
-            <td class="event">빌드업 숏폼 주 2~3회 업로드 + 섭외 병행<br>수현: 후킹 포스트 + 리그 룰 설계 + 컴바인 기획 심화</td>
-            <td class="owner">
-              <span class="owner-tag a">수현</span>
-              <span class="owner-tag b">세한·수민</span>
-              <span class="owner-tag c">Track C</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="date">5월 초</td>
-            <td class="event">컴바인 참가자 확정 (10~16명) / 장비·장소 확보</td>
-            <td class="owner">
-              <span class="owner-tag a">수현 주도</span>
-              <span class="owner-tag b">서포트</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="date">5월 중순</td>
-            <td class="event">자문 투어 (전문가 인터뷰 + 측정 방식 검증 → 콘텐츠화)</td>
-            <td class="owner"><span class="owner-tag a">수현</span></td>
-          </tr>
-          <tr>
-            <td class="date">5월 마지막주</td>
-            <td class="event" style="font-weight:600; color:var(--milestone)">컴바인 촬영 (2박 3일) — "The Proving Ground"</td>
-            <td class="owner"><span class="owner-tag all">전원 투입</span></td>
-          </tr>
-          <tr>
-            <td class="date">6월 초~</td>
-            <td class="event">컴바인 시리즈 업로드 시작 (주 2회, 총 11편)</td>
-            <td class="owner">
-              <span class="owner-tag c">에디터</span>
-              <span class="owner-tag a">수현 감독</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="date" style="color:var(--accent); font-weight:700">6월 중~</td>
-            <td class="event" style="font-weight:600; color:var(--accent)">Season 1 본 리그 시작 (매치메이킹 기반)</td>
-            <td class="owner"><span class="owner-tag a">수현 총괄</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ACTION ITEMS BY ROLE -->
-  <div class="gantt-section">
+  <!-- Action Items — JS rendered -->
+  <div class="section-header">
     <div class="section-title">역할별 액션아이템 — Checklist</div>
-    <div class="actions-grid">
-
-      <!-- Track A: 수현 -->
-      <div class="action-card">
-        <div class="action-card-header">
-          <div class="dot" style="background:var(--track-a)"></div>
-          <h3>Track A: 수현</h3>
-          <div class="role">기획 / 전략</div>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">즉시 — 3월 <span class="tag" style="background:rgba(255,68,136,0.15); color:var(--current)">NOW</span></div>
-          <label class="action-item"><input type="checkbox"> Zone X 채널 개설 (유튜브 + 인스타)</label>
-          <label class="action-item"><input type="checkbox"> 컴바인 기획 문서 얼라인 → 팀 공유</label>
-          <label class="action-item"><input type="checkbox"> 브랜드 소개서 최종 완성</label>
-          <label class="action-item"><input type="checkbox"> 섭외 1차 리스트 작성 (종목별 3~5명)</label>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">4~5월 (병행)</div>
-          <label class="action-item"><input type="checkbox"> 후킹 포스트 제작 (개인IG + CH계정)
-            <span class="note">"당신은 얼마나 완성형 운동인인가?" — 릴스, 카루셀, 스토리</span>
-          </label>
-          <label class="action-item"><input type="checkbox"> 컴바인 콘텐츠 기획 심화 (게임 디테일, 대본)</label>
-          <label class="action-item"><input type="checkbox"> Zone X 본 리그 CYA 룰 확정 + 매치메이킹 기준</label>
-          <label class="action-item"><input type="checkbox"> 컴바인 장소 물색 + 확보</label>
-          <label class="action-item"><input type="checkbox"> 측정 장비 리스트 확정 + 확보</label>
-          <label class="action-item"><input type="checkbox"> 자문 대상 리스트 → 투어 스케줄링</label>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">5월 말</div>
-          <label class="action-item"><input type="checkbox"> 컴바인 촬영 총괄 (현장 디렉팅)</label>
-          <label class="action-item"><input type="checkbox"> 편집 방향 + 에피소드 구성 가이드</label>
-        </div>
-      </div>
-
-      <!-- Track B: 세한·수민 -->
-      <div class="action-card">
-        <div class="action-card-header">
-          <div class="dot" style="background:var(--track-b)"></div>
-          <h3>Track B: 세한·수민</h3>
-          <div class="role">현장 / 콘텐츠</div>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">즉시 — 3월 <span class="tag" style="background:rgba(255,68,136,0.15); color:var(--current)">NOW</span></div>
-          <label class="action-item"><input type="checkbox"> 세부 일정 확정 (4~5월 촬영 가능 일정)</label>
-          <label class="action-item"><input type="checkbox"> 섭외 루트 확보
-            <span class="note">세한: 크로스핏/하이록스 · 수민: 러닝크루/구기종목</span>
-          </label>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">4~5월 (메인 업무)</div>
-          <label class="action-item"><input type="checkbox"> 주 2~3회 섭외 방문 + 인터뷰 + 간단 측정 촬영
-            <span class="note">확보 정보: 종목/배경, 소속, 강점, 약점 자가진단, 참가 의향</span>
-          </label>
-          <label class="action-item"><input type="checkbox"> 촬영 소스 → 에디터 전달 → 숏폼 편집 파이프라인</label>
-          <label class="action-item"><input type="checkbox"> 네트워킹 확장 ("이 사람 알아?")</label>
-          <label class="action-item"><input type="checkbox"> 공개 모집 폼 현장 홍보</label>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">병행: 스폰서십</div>
-          <label class="action-item"><input type="checkbox"> 브랜드 스폰서십 소개서 준비 (수현 협력)</label>
-          <label class="action-item"><input type="checkbox"> 현장에서 파트너십 가능 브랜드·장소 발굴</label>
-        </div>
-      </div>
-
-      <!-- Track C: 에디터+디자이너 -->
-      <div class="action-card">
-        <div class="action-card-header">
-          <div class="dot" style="background:var(--track-c)"></div>
-          <h3>Track C: 에디터 + 디자이너</h3>
-          <div class="role">SNS 운영</div>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">3월 말 ~ 4월 초</div>
-          <label class="action-item"><input type="checkbox"> Zone X 인스타 VI 세팅 (훈택/우석 리드)
-            <span class="note">프로필, 하이라이트 커버, 포스트/스토리 템플릿</span>
-          </label>
-          <label class="action-item"><input type="checkbox"> Hexagon 비주얼 (6능력 그래픽) 1차 디자인</label>
-          <label class="action-item"><input type="checkbox"> 선수 소개 카드 템플릿</label>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">4~5월 (메인 업무)</div>
-          <label class="action-item"><input type="checkbox"> 빌드업 숏폼 편집 + 업로드 (주 2~3회)</label>
-          <label class="action-item"><input type="checkbox"> 선수 소개 카드 포스트</label>
-          <label class="action-item"><input type="checkbox"> 티저/하이라이트 릴스</label>
-          <label class="action-item"><input type="checkbox"> "컴바인이 온다" 카운트다운 (5월)</label>
-        </div>
-        <div class="action-phase">
-          <div class="action-phase-title">6월</div>
-          <label class="action-item"><input type="checkbox"> 컴바인 시리즈 편집 (주 2회 업로드)</label>
-        </div>
-      </div>
-
-    </div>
+    <button class="small-btn" onclick="resetActions()">초기화</button>
   </div>
+  <div class="actions-grid" id="actions-grid"></div>
 
-  <!-- OUTREACH STRATEGY -->
-  <div class="gantt-section">
-    <div class="section-title">섭외 전략 — 4가지 루트</div>
-    <div class="outreach-grid">
-      <div class="outreach-card">
-        <h4><span style="color:var(--track-b)">1</span> 직접 섭외 (세한·수민 현장)</h4>
-        <ul>
-          <li>크로스핏 박스 방문 → 코치/선수 인터뷰 제안</li>
-          <li>러닝 크루/동아리 SNS 접촉 → 만남</li>
-          <li>MMA/주짓수 체육관 방문</li>
-          <li>하이록스 대회 현장 섭외</li>
-          <li>대학교 체육 동아리, 사회인 리그</li>
-        </ul>
-      </div>
-      <div class="outreach-card">
-        <h4><span style="color:var(--track-a)">2</span> 후킹 포스트 (수현 개인/CH 계정)</h4>
-        <ul>
-          <li>"6가지 능력 중 자신 있는 건?" — 투표/댓글 유도</li>
-          <li>"이 동작 몇 개 할 수 있어?" — 챌린지형 릴스</li>
-          <li>"당신의 몸은 얼마나 완벽한가요?" — 캠페인</li>
-          <li>포스트 반응자 → DM으로 자연스럽게 섭외</li>
-        </ul>
-      </div>
-      <div class="outreach-card">
-        <h4><span style="color:var(--track-c)">3</span> 공개 모집</h4>
-        <ul>
-          <li>Zone X 인스타/유튜브에 참가 신청 폼 게시</li>
-          <li>커뮤니티 (네이버 카페, 에브리타임 등) 홍보</li>
-        </ul>
-      </div>
-      <div class="outreach-card">
-        <h4><span style="color:var(--milestone)">4</span> 자문 루트 (전문가 = 콘텐츠 + 정당성)</h4>
-        <ul>
-          <li>체육학과 교수 (6능력 분류 검증)</li>
-          <li>스포츠의학 전문가 (측정 안전성 검증)</li>
-          <li>현직 트레이너/코치 (실무 피드백)</li>
-          <li>자문 인터뷰 자체를 빌드업 콘텐츠로 활용</li>
-        </ul>
-      </div>
-    </div>
+  <!-- Outreach -->
+  <div class="section-title">섭외 전략 — 4가지 루트</div>
+  <div class="ogrid">
+    <div class="ocard"><h4><span style="color:var(--track-b)">1</span> 직접 섭외 (세한·수민 현장)</h4><ul><li>크로스핏 박스 방문 → 코치/선수 인터뷰 제안</li><li>러닝 크루/동아리 SNS 접촉 → 만남</li><li>MMA/주짓수 체육관 방문</li><li>하이록스 대회 현장 섭외</li><li>대학교 체육 동아리, 사회인 리그</li></ul></div>
+    <div class="ocard"><h4><span style="color:var(--track-a)">2</span> 후킹 포스트 (수현 개인/CH 계정)</h4><ul><li>"6가지 능력 중 자신 있는 건?" — 투표/댓글 유도</li><li>"이 동작 몇 개 할 수 있어?" — 챌린지형 릴스</li><li>"당신의 몸은 얼마나 완벽한가요?" — 캠페인</li><li>포스트 반응자 → DM으로 자연스럽게 섭외</li></ul></div>
+    <div class="ocard"><h4><span style="color:var(--track-c)">3</span> 공개 모집</h4><ul><li>Zone X 인스타/유튜브에 참가 신청 폼 게시</li><li>커뮤니티 (네이버 카페, 에브리타임 등) 홍보</li></ul></div>
+    <div class="ocard"><h4><span style="color:var(--milestone)">4</span> 자문 루트 (전문가 = 콘텐츠 + 정당성)</h4><ul><li>체육학과 교수 (6능력 분류 검증)</li><li>스포츠의학 전문가 (측정 안전성 검증)</li><li>현직 트레이너/코치 (실무 피드백)</li><li>자문 인터뷰 자체를 빌드업 콘텐츠로 활용</li></ul></div>
   </div>
-
 </div>
 
 <div class="footer">
-  <span>Zone X — Season 0 액션플랜 v1</span>
+  <span>Zone X — Season 0 액션플랜 v4 (Full CRUD + Sync)</span>
   <span>Creatorhood 2026</span>
 </div>
 
 <script>
-  // Checkbox persistence (localStorage)
-  const STORAGE_KEY = 'zonex-action-plan-checks';
+// ============================================================
+// CONSTANTS
+// ============================================================
+const WEEK_START = 11, WEEK_END = 26, NUM_WEEKS = 16, CURRENT_WEEK = 12;
+const WEEK_LABELS = [
+  {wk:'W11',mo:'3월'},{wk:'W12',mo:''},{wk:'W13',mo:''},{wk:'W14',mo:'3월말'},
+  {wk:'W15',mo:'4월'},{wk:'W16',mo:''},{wk:'W17',mo:''},{wk:'W18',mo:'4월말'},
+  {wk:'W19',mo:'5월'},{wk:'W20',mo:''},{wk:'W21',mo:'5월중'},{wk:'W22',mo:'5월말'},
+  {wk:'W23',mo:'6월'},{wk:'W24',mo:''},{wk:'W25',mo:''},{wk:'W26',mo:'6월말'}
+];
+const MONTH_SPANS = [{label:'3월',cols:4,highlight:true},{label:'4월',cols:4},{label:'5월',cols:4},{label:'6월',cols:4}];
 
-  function loadChecks() {
+const WEEK_DATE_MAP = {11:'3월 초',12:'3월 중순',13:'3월 중순',14:'3월 말',15:'4월 초',16:'4월 초',17:'4월 중',18:'4월 말',19:'5월 초',20:'5월 초',21:'5월 중순',22:'5월 말',23:'6월 초',24:'6월 초',25:'6월 중',26:'6월 말'};
+
+// Storage keys
+const BARS_KEY = 'zonex-bars-v4';
+const MS_KEY = 'zonex-milestones-v4';
+const ACTIONS_KEY = 'zonex-actions-v4';
+
+// ============================================================
+// DEFAULT DATA
+// ============================================================
+const DEFAULT_BARS = [
+  {id:'a1',track:'a',label:'기획 확정',startWeek:11,endWeek:13,row:0,sub:false,detail:'컴바인 기획 확정 + 6능력 측정 1차 확정'},
+  {id:'a2',track:'a',label:'소개서 완성',startWeek:13,endWeek:14,row:1,sub:true,detail:'브랜드 소개서 완성'},
+  {id:'a3',track:'a',label:'후킹 포스트 제작 (개인IG + CH)',startWeek:15,endWeek:22,row:0,sub:false,detail:'개인IG + CH 계정 후킹 포스트 제작 (지속)'},
+  {id:'a4',track:'a',label:'리그 룰 설계 + 매치메이킹',startWeek:15,endWeek:20,row:1,sub:true,detail:'CYA 룰 확정 + 매치메이킹 기준 설계'},
+  {id:'a5',track:'a',label:'컴바인 기획 심화',startWeek:16,endWeek:22,row:2,sub:false,detail:'컴바인 콘텐츠 기획 심화 (게임 디테일, 대본)'},
+  {id:'a6',track:'a',label:'자문 투어',startWeek:20,endWeek:21,row:1,sub:true,detail:'전문가 자문 투어 (콘텐츠 활용)'},
+  {id:'a7',track:'a',label:'촬영 총괄',startWeek:22,endWeek:23,row:0,sub:false,detail:'컴바인 촬영 총괄 (2박3일)'},
+  {id:'a8',track:'a',label:'편집감독 + 리그준비',startWeek:23,endWeek:26,row:1,sub:true,detail:'편집 방향 가이드 + 리그 준비'},
+  {id:'b1',track:'b',label:'일정·루트 확정',startWeek:11,endWeek:13,row:0,sub:false,detail:'세부 일정 확정 + 섭외 루트 확보'},
+  {id:'b2',track:'b',label:'섭외 리스트 1차',startWeek:13,endWeek:14,row:1,sub:true,detail:'섭외 리스트 1차 작성'},
+  {id:'b3',track:'b',label:'빌드업 촬영 (주 2~3회 섭외·촬영)',startWeek:15,endWeek:22,row:0,sub:false,detail:'주 2~3회 섭외 방문 + 인터뷰 + 간단 측정 촬영'},
+  {id:'b4',track:'b',label:'스폰서십 서포트 (병행)',startWeek:13,endWeek:22,row:1,sub:true,detail:'스폰서십 소개서 준비 + 현장 파트너십 발굴'},
+  {id:'b5',track:'b',label:'촬영 현장 운영',startWeek:22,endWeek:23,row:0,sub:false,detail:'컴바인 촬영 현장 운영'},
+  {id:'c1',track:'c',label:'VI 디자인 세팅',startWeek:13,endWeek:15,row:0,sub:false,detail:'인스타 VI 세팅 (프로필, 템플릿, Hexagon 그래픽)'},
+  {id:'c2',track:'c',label:'SNS 콘텐츠 운영 (숏폼·카드·릴스)',startWeek:15,endWeek:22,row:0,sub:false,detail:'빌드업 숏폼 편집 + 선수카드 + 릴스 업로드'},
+  {id:'c3',track:'c',label:'카운트다운',startWeek:20,endWeek:22,row:1,sub:true,detail:'"컴바인이 온다" 카운트다운 포스트'},
+  {id:'c4',track:'c',label:'시리즈 편집·업로드',startWeek:23,endWeek:26,row:0,sub:false,detail:'컴바인 시리즈 편집 + 주 2회 업로드'},
+];
+
+const DEFAULT_MILESTONES = [
+  {id:'ms1',week:12,dateText:'3월 중순',label:'컴바인 기획 확정 + 6능력 측정 방식 1차 확정',showInGantt:false,isCurrent:true,highlight:'',owners:[{label:'수현',tag:'a'}]},
+  {id:'ms2',week:14,dateText:'3월 말',label:'브랜드 소개서 완성 / 세한·수민 일정·섭외 루트 확정',showInGantt:true,isCurrent:false,highlight:'',owners:[{label:'전원',tag:'all'}]},
+  {id:'ms3',week:15,dateText:'4월 초',label:'Zone X 채널 런칭 (유튜브 + 인스타) / 빌드업 촬영 시작',showInGantt:true,isCurrent:false,highlight:'',owners:[{label:'세한·수민',tag:'b'},{label:'에디터',tag:'c'}]},
+  {id:'ms4',week:17,dateText:'4월',label:'빌드업 숏폼 주 2~3회 업로드 + 섭외 병행',showInGantt:false,isCurrent:false,highlight:'',owners:[{label:'수현',tag:'a'},{label:'세한·수민',tag:'b'},{label:'Track C',tag:'c'}]},
+  {id:'ms5',week:19,dateText:'5월 초',label:'컴바인 참가자 확정 (10~16명) / 장비·장소 확보',showInGantt:true,isCurrent:false,highlight:'',owners:[{label:'수현 주도',tag:'a'},{label:'서포트',tag:'b'}]},
+  {id:'ms6',week:21,dateText:'5월 중순',label:'자문 투어 (전문가 인터뷰 + 측정 방식 검증 → 콘텐츠화)',showInGantt:false,isCurrent:false,highlight:'',owners:[{label:'수현',tag:'a'}]},
+  {id:'ms7',week:22,dateText:'5월 마지막주',label:'컴바인 촬영 (2박 3일) — "The Proving Ground"',showInGantt:true,isCurrent:false,highlight:'milestone',owners:[{label:'전원 투입',tag:'all'}]},
+  {id:'ms8',week:23,dateText:'6월 초~',label:'컴바인 시리즈 업로드 시작 (주 2회, 총 11편)',showInGantt:true,isCurrent:false,highlight:'',owners:[{label:'에디터',tag:'c'},{label:'수현 감독',tag:'a'}]},
+  {id:'ms9',week:26,dateText:'6월 중~',label:'Season 1 본 리그 시작 (매치메이킹 기반)',showInGantt:true,isCurrent:false,highlight:'accent',owners:[{label:'수현 총괄',tag:'a'}]},
+];
+
+const DEFAULT_ACTIONS = [
+  { trackId:'a', trackName:'Track A: 수현', trackRole:'기획/전략', phases:[
+    {id:'a-p1',title:'즉시 — 3월',isNow:true,items:[
+      {id:'a1-1',text:'Zone X 채널 개설 (유튜브 + 인스타)',note:'',checked:false},
+      {id:'a1-2',text:'컴바인 기획 문서 얼라인 → 팀 공유',note:'',checked:false},
+      {id:'a1-3',text:'브랜드 소개서 최종 완성',note:'',checked:false},
+      {id:'a1-4',text:'섭외 1차 리스트 작성 (종목별 3~5명)',note:'',checked:false},
+    ]},
+    {id:'a-p2',title:'4~5월 (병행)',isNow:false,items:[
+      {id:'a2-1',text:'후킹 포스트 제작 (개인IG + CH계정)',note:'"당신은 얼마나 완성형 운동인인가?" — 릴스, 카루셀',checked:false},
+      {id:'a2-2',text:'컴바인 콘텐츠 기획 심화 (게임 디테일, 대본)',note:'',checked:false},
+      {id:'a2-3',text:'Zone X 본 리그 CYA 룰 확정 + 매치메이킹 기준',note:'',checked:false},
+      {id:'a2-4',text:'컴바인 장소 물색 + 확보',note:'',checked:false},
+      {id:'a2-5',text:'측정 장비 리스트 확정 + 확보',note:'',checked:false},
+      {id:'a2-6',text:'자문 대상 리스트 → 투어 스케줄링',note:'',checked:false},
+    ]},
+    {id:'a-p3',title:'5월 말',isNow:false,items:[
+      {id:'a3-1',text:'컴바인 촬영 총괄 (현장 디렉팅)',note:'',checked:false},
+      {id:'a3-2',text:'편집 방향 + 에피소드 구성 가이드',note:'',checked:false},
+    ]},
+  ]},
+  { trackId:'b', trackName:'Track B: 세한·수민', trackRole:'현장/콘텐츠', phases:[
+    {id:'b-p1',title:'즉시 — 3월',isNow:true,items:[
+      {id:'b1-1',text:'세부 일정 확정 (4~5월 촬영 가능 일정)',note:'',checked:false},
+      {id:'b1-2',text:'섭외 루트 확보',note:'세한: 크로스핏/하이록스 · 수민: 러닝크루/구기종목',checked:false},
+    ]},
+    {id:'b-p2',title:'4~5월 (메인 업무)',isNow:false,items:[
+      {id:'b2-1',text:'주 2~3회 섭외 방문 + 인터뷰 + 간단 측정 촬영',note:'확보: 종목/배경, 소속, 강점, 약점 자가진단, 참가 의향',checked:false},
+      {id:'b2-2',text:'촬영 소스 → 에디터 전달 → 숏폼 편집 파이프라인',note:'',checked:false},
+      {id:'b2-3',text:'네트워킹 확장 ("이 사람 알아?")',note:'',checked:false},
+      {id:'b2-4',text:'공개 모집 폼 현장 홍보',note:'',checked:false},
+    ]},
+    {id:'b-p3',title:'병행: 스폰서십',isNow:false,items:[
+      {id:'b3-1',text:'브랜드 스폰서십 소개서 준비 (수현 협력)',note:'',checked:false},
+      {id:'b3-2',text:'현장에서 파트너십 가능 브랜드·장소 발굴',note:'',checked:false},
+    ]},
+  ]},
+  { trackId:'c', trackName:'Track C: 에디터 + 디자이너', trackRole:'SNS 운영', phases:[
+    {id:'c-p1',title:'3월 말 ~ 4월 초',isNow:false,items:[
+      {id:'c1-1',text:'Zone X 인스타 VI 세팅 (훈택/우석 리드)',note:'프로필, 하이라이트 커버, 포스트/스토리 템플릿',checked:false},
+      {id:'c1-2',text:'Hexagon 비주얼 (6능력 그래픽) 1차 디자인',note:'',checked:false},
+      {id:'c1-3',text:'선수 소개 카드 템플릿',note:'',checked:false},
+    ]},
+    {id:'c-p2',title:'4~5월 (메인 업무)',isNow:false,items:[
+      {id:'c2-1',text:'빌드업 숏폼 편집 + 업로드 (주 2~3회)',note:'',checked:false},
+      {id:'c2-2',text:'선수 소개 카드 포스트',note:'',checked:false},
+      {id:'c2-3',text:'티저/하이라이트 릴스',note:'',checked:false},
+      {id:'c2-4',text:'"컴바인이 온다" 카운트다운 (5월)',note:'',checked:false},
+    ]},
+    {id:'c-p3',title:'6월',isNow:false,items:[
+      {id:'c3-1',text:'컴바인 시리즈 편집 (주 2회 업로드)',note:'',checked:false},
+    ]},
+  ]}
+];
+
+const TRACKS = [
+  {id:'a', name:'Track A', nameClass:'a', who:'수현 — 기획/전략'},
+  {id:'b', name:'Track B', nameClass:'b', who:'세한·수민 — 현장/콘텐츠'},
+  {id:'c', name:'Track C', nameClass:'c', who:'에디터+디자이너 — SNS'},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let bars = loadData(BARS_KEY, DEFAULT_BARS, validateBars);
+let milestones = loadData(MS_KEY, DEFAULT_MILESTONES);
+let actions = loadData(ACTIONS_KEY, DEFAULT_ACTIONS);
+
+function loadData(key, defaults, validator) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(key));
+    if (saved && Array.isArray(saved) && saved.length > 0) {
+      if (validator && !validator(saved)) return clone(defaults);
+      return saved;
+    }
+  } catch(e) {}
+  // Migration: try old keys
+  if (key === BARS_KEY) {
     try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      document.querySelectorAll('.action-item input[type="checkbox"]').forEach((cb, i) => {
-        if (saved[i]) {
-          cb.checked = true;
-          cb.closest('.action-item').classList.add('checked');
-        }
-      });
+      const old = JSON.parse(localStorage.getItem('zonex-gantt-v3')) || JSON.parse(localStorage.getItem('zonex-gantt-v2'));
+      if (old && Array.isArray(old) && validateBars(old)) return old;
     } catch(e) {}
   }
-
-  function saveChecks() {
-    const state = {};
-    document.querySelectorAll('.action-item input[type="checkbox"]').forEach((cb, i) => {
-      if (cb.checked) state[i] = true;
-    });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  if (key === ACTIONS_KEY) {
+    const fresh = clone(DEFAULT_ACTIONS);
+    try {
+      const oldChecks = JSON.parse(localStorage.getItem('zonex-checks-v2') || localStorage.getItem('zonex-actions-v3') || '{}');
+      if (Array.isArray(oldChecks) && oldChecks.length > 0) return oldChecks;
+      if (typeof oldChecks === 'object' && !Array.isArray(oldChecks)) {
+        let idx = 0;
+        fresh.forEach(t => t.phases.forEach(p => p.items.forEach(item => { if (oldChecks[idx]) item.checked = true; idx++; })));
+      }
+    } catch(e) {}
+    return fresh;
   }
+  return clone(defaults);
+}
 
-  document.querySelectorAll('.action-item input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', function() {
-      this.closest('.action-item').classList.toggle('checked', this.checked);
-      saveChecks();
+function validateBars(saved) {
+  const defIds = new Set(DEFAULT_BARS.map(b => b.id));
+  const savedDefCount = saved.filter(b => defIds.has(b.id)).length;
+  return savedDefCount >= defIds.size * 0.5; // at least half match → valid
+}
+
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function save(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+function saveBars() { save(BARS_KEY, bars); }
+function saveMilestones() { save(MS_KEY, milestones); }
+function saveActions() { save(ACTIONS_KEY, actions); }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function getTrackRows(trackId) {
+  const tb = bars.filter(b => b.track === trackId);
+  return tb.length ? Math.max(...tb.map(b => b.row)) + 1 : 1;
+}
+
+function findAvailableRow(trackId, startW, endW, excludeId) {
+  const tb = bars.filter(b => b.track === trackId && b.id !== excludeId);
+  for (let r = 0; r < 20; r++) {
+    if (!tb.some(b => b.row === r && !(endW <= b.startWeek || startW >= b.endWeek))) return r;
+  }
+  return 0;
+}
+
+// ============================================================
+// GANTT RENDER
+// ============================================================
+const ganttEl = document.getElementById('gantt');
+const tooltip = document.getElementById('tooltip');
+const ROW_H = 34, BAR_H = 26, SUB_H = 20, PAD = 4, MS_H = 90;
+
+function renderGantt() {
+  let h = '';
+
+  // Header
+  h += '<div class="gantt-header"><div class="col-label">트랙 / 담당</div><div class="week-cols">';
+  WEEK_LABELS.forEach((l, i) => {
+    const w = WEEK_START + i;
+    h += `<div class="week-col${w===CURRENT_WEEK?' current':''}"><div class="wk">${l.wk}</div><div class="mo">${l.mo}</div></div>`;
+  });
+  h += '</div></div>';
+
+  // Month spans
+  h += '<div class="month-spans"><div class="spacer"></div><div class="month-bar-row">';
+  MONTH_SPANS.forEach(m => h += `<div class="month-span${m.highlight?' highlight':''}" style="grid-column:span ${m.cols}">${m.label}</div>`);
+  h += '</div></div>';
+
+  // Track rows
+  TRACKS.forEach(t => {
+    const rows = getTrackRows(t.id);
+    const canvasH = Math.max(rows, 1) * ROW_H + 8;
+    const trackBars = bars.filter(b => b.track === t.id);
+
+    h += `<div class="track"><div class="track-info" style="min-height:${canvasH}px"><div class="name ${t.nameClass}">${t.name}</div><div class="who">${t.who}</div>`;
+    h += `<button class="add-bar-btn" onclick="openBarModal(null,'${t.id}')">+ 바 추가</button></div>`;
+    h += `<div class="track-canvas" data-track="${t.id}" style="min-height:${canvasH}px">`;
+
+    // Grid
+    h += '<div class="grid">';
+    for (let i = 0; i < NUM_WEEKS; i++) { const w = WEEK_START+i; h += `<div class="gl${w===CURRENT_WEEK?' current':''}"></div>`; }
+    h += '</div>';
+
+    // Bars
+    trackBars.forEach(b => {
+      const left = ((b.startWeek - WEEK_START) / NUM_WEEKS * 100).toFixed(3);
+      const width = ((b.endWeek - b.startWeek) / NUM_WEEKS * 100).toFixed(3);
+      const top = b.row * ROW_H + PAD;
+      const bh = b.sub ? SUB_H : BAR_H;
+      h += `<div class="bar ${b.track}${b.sub?' sub':''}" data-id="${b.id}" style="left:${left}%;width:${width}%;top:${top}px;height:${bh}px">`;
+      h += '<div class="handle left"></div>';
+      h += `<span>${esc(b.label)}</span>`;
+      h += '<div class="handle right"></div>';
+      h += `<button class="bar-del" data-id="${b.id}">×</button>`;
+      h += '</div>';
     });
+
+    h += '</div></div>';
   });
 
-  loadChecks();
+  // Milestone row
+  const ganttMs = milestones.filter(m => m.showInGantt);
+  const diamondY = MS_H / 2 - 6;
+  h += `<div class="milestone-row"><div class="track-info" style="min-height:${MS_H}px"><div class="name" style="color:var(--milestone)">Milestones</div><div class="who">${ganttMs.length}개</div>`;
+  h += `<button class="add-bar-btn" onclick="openMsModal(null,null)">+ 추가</button></div>`;
+  h += `<div class="track-canvas ms-canvas" style="min-height:${MS_H}px">`;
+  h += '<div class="grid">';
+  for (let i = 0; i < NUM_WEEKS; i++) { const w = WEEK_START+i; h += `<div class="gl${w===CURRENT_WEEK?' current':''}"></div>`; }
+  h += '</div>';
 
-  // Milestone hover
-  document.querySelectorAll('.milestone-marker').forEach(m => {
-    m.addEventListener('mouseenter', () => {
-      const tooltip = m.nextElementSibling;
-      if (tooltip && tooltip.classList.contains('milestone-tooltip')) {
-        tooltip.style.opacity = '1';
-      }
-    });
-    m.addEventListener('mouseleave', () => {
-      const tooltip = m.nextElementSibling;
-      if (tooltip && tooltip.classList.contains('milestone-tooltip')) {
-        tooltip.style.opacity = '0';
-      }
+  ganttMs.forEach((m, idx) => {
+    const cx = ((m.week - WEEK_START + 0.5) / NUM_WEEKS * 100).toFixed(3);
+    h += `<div class="ms-diamond" data-ms="${m.id}" style="left:calc(${cx}% - 6px);top:${diamondY}px"></div>`;
+    const labelTop = idx % 2 === 0 ? (diamondY + 20) : 6;
+    h += `<div class="ms-label" style="left:${cx}%;top:${labelTop}px">${esc(m.label)}</div>`;
+  });
+  h += '</div></div>';
+
+  ganttEl.innerHTML = h;
+  initBarEvents();
+  initMsCanvasEvents();
+}
+
+// ============================================================
+// BAR EVENTS — drag, tooltip, dblclick, delete
+// ============================================================
+let dragState = null;
+
+function initBarEvents() {
+  ganttEl.querySelectorAll('.bar').forEach(el => {
+    el.addEventListener('mousedown', onBarMouseDown);
+    el.addEventListener('mouseenter', showTooltip);
+    el.addEventListener('mousemove', moveTooltip);
+    el.addEventListener('mouseleave', hideTooltip);
+    el.addEventListener('dblclick', e => { e.stopPropagation(); openBarModal(el.dataset.id); });
+  });
+  ganttEl.querySelectorAll('.bar-del').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); quickDeleteBar(btn.dataset.id); });
+  });
+  // Double-click on empty canvas → add bar
+  ganttEl.querySelectorAll('.track-canvas:not(.ms-canvas)').forEach(canvas => {
+    canvas.addEventListener('dblclick', e => {
+      if (e.target.closest('.bar')) return;
+      const rect = canvas.getBoundingClientRect();
+      const weekIdx = Math.floor((e.clientX - rect.left) / (rect.width / NUM_WEEKS));
+      const week = WEEK_START + weekIdx;
+      openBarModal(null, canvas.dataset.track, week);
     });
   });
+}
+
+function onBarMouseDown(e) {
+  if (e.target.classList.contains('bar-del')) return;
+  e.preventDefault();
+  const barEl = e.currentTarget;
+  const bar = bars.find(b => b.id === barEl.dataset.id);
+  if (!bar) return;
+  const canvas = barEl.parentElement;
+  const canvasRect = canvas.getBoundingClientRect();
+  const weekPx = canvasRect.width / NUM_WEEKS;
+  const isLeft = e.target.classList.contains('left');
+  const isRight = e.target.classList.contains('right');
+  const mode = isLeft ? 'resize-left' : isRight ? 'resize-right' : 'move';
+
+  dragState = { id:bar.id, bar, barEl, weekPx, mode, startX:e.clientX, origStart:bar.startWeek, origEnd:bar.endWeek, dragging:false };
+  barEl.classList.add('dragging');
+  hideTooltip();
+  document.addEventListener('mousemove', onDragMove);
+  document.addEventListener('mouseup', onDragEnd);
+}
+
+function onDragMove(e) {
+  if (!dragState) return;
+  const dx = e.clientX - dragState.startX;
+  if (!dragState.dragging && Math.abs(dx) < 5) return;
+  dragState.dragging = true;
+  const {bar, barEl, weekPx, mode, origStart, origEnd} = dragState;
+  const dWeeks = Math.round(dx / weekPx);
+
+  if (mode === 'move') {
+    const dur = origEnd - origStart;
+    let ns = origStart + dWeeks, ne = origEnd + dWeeks;
+    if (ns < WEEK_START) { ns = WEEK_START; ne = WEEK_START + dur; }
+    if (ne > WEEK_END + 1) { ne = WEEK_END + 1; ns = ne - dur; }
+    bar.startWeek = ns; bar.endWeek = ne;
+  } else if (mode === 'resize-left') {
+    let ns = origStart + dWeeks;
+    bar.startWeek = Math.max(WEEK_START, Math.min(ns, origEnd - 1));
+  } else {
+    let ne = origEnd + dWeeks;
+    bar.endWeek = Math.min(WEEK_END + 1, Math.max(ne, origStart + 1));
+  }
+  barEl.style.left = (bar.startWeek - WEEK_START) / NUM_WEEKS * 100 + '%';
+  barEl.style.width = (bar.endWeek - bar.startWeek) / NUM_WEEKS * 100 + '%';
+}
+
+function onDragEnd() {
+  if (dragState) {
+    dragState.barEl.classList.remove('dragging');
+    if (dragState.dragging) saveBars();
+    dragState = null;
+  }
+  document.removeEventListener('mousemove', onDragMove);
+  document.removeEventListener('mouseup', onDragEnd);
+}
+
+// Tooltip
+function showTooltip(e) {
+  if (dragState) return;
+  const bar = bars.find(b => b.id === e.currentTarget.dataset.id);
+  if (!bar) return;
+  tooltip.innerHTML = `<div class="tt-title">${esc(bar.label)}</div><div class="tt-dates">W${bar.startWeek} → W${bar.endWeek} (${bar.endWeek-bar.startWeek}주)<br>${esc(bar.detail)}</div>`;
+  tooltip.style.display = 'block';
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  if (dragState) { tooltip.style.display = 'none'; return; }
+  tooltip.style.left = (e.clientX + 12) + 'px';
+  tooltip.style.top = (e.clientY - 10) + 'px';
+}
+function hideTooltip() { tooltip.style.display = 'none'; }
+
+// ============================================================
+// BAR MODAL — CRUD
+// ============================================================
+let editingBarId = null;
+
+function populateWeekSelects() {
+  ['bmStart','bmEnd','mmWeek'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '';
+    for (let w = WEEK_START; w <= WEEK_END; w++) {
+      sel.innerHTML += `<option value="${w}">W${w} (${WEEK_DATE_MAP[w]})</option>`;
+    }
+  });
+}
+
+function openBarModal(barId, defaultTrack, defaultWeek) {
+  editingBarId = barId || null;
+  const isEdit = !!editingBarId;
+  document.getElementById('barModalTitle').textContent = isEdit ? '바 수정' : '바 추가';
+  document.getElementById('bmDelete').style.display = isEdit ? '' : 'none';
+
+  if (isEdit) {
+    const b = bars.find(x => x.id === editingBarId);
+    if (!b) return;
+    document.getElementById('bmLabel').value = b.label;
+    document.getElementById('bmTrack').value = b.track;
+    document.getElementById('bmStart').value = b.startWeek;
+    document.getElementById('bmEnd').value = b.endWeek;
+    document.getElementById('bmDetail').value = b.detail || '';
+    document.getElementById('bmSub').checked = !!b.sub;
+  } else {
+    document.getElementById('bmLabel').value = '';
+    document.getElementById('bmTrack').value = defaultTrack || 'a';
+    document.getElementById('bmStart').value = defaultWeek || CURRENT_WEEK;
+    document.getElementById('bmEnd').value = (defaultWeek || CURRENT_WEEK) + 2;
+    document.getElementById('bmDetail').value = '';
+    document.getElementById('bmSub').checked = false;
+  }
+  document.getElementById('barModalOverlay').classList.add('active');
+  document.getElementById('bmLabel').focus();
+}
+
+function closeBarModal() {
+  document.getElementById('barModalOverlay').classList.remove('active');
+  editingBarId = null;
+}
+
+function saveBar() {
+  const label = document.getElementById('bmLabel').value.trim();
+  if (!label) { document.getElementById('bmLabel').focus(); return; }
+  const track = document.getElementById('bmTrack').value;
+  const startWeek = parseInt(document.getElementById('bmStart').value);
+  let endWeek = parseInt(document.getElementById('bmEnd').value);
+  if (endWeek <= startWeek) endWeek = startWeek + 1;
+  const detail = document.getElementById('bmDetail').value.trim();
+  const sub = document.getElementById('bmSub').checked;
+
+  if (editingBarId) {
+    const b = bars.find(x => x.id === editingBarId);
+    if (b) {
+      const trackChanged = b.track !== track || b.startWeek !== startWeek || b.endWeek !== endWeek;
+      b.label = label; b.track = track; b.startWeek = startWeek; b.endWeek = endWeek;
+      b.detail = detail; b.sub = sub;
+      if (trackChanged) b.row = findAvailableRow(track, startWeek, endWeek, b.id);
+    }
+  } else {
+    const row = findAvailableRow(track, startWeek, endWeek, null);
+    bars.push({ id:uid(), track, label, startWeek, endWeek, row, sub, detail });
+  }
+  saveBars();
+  closeBarModal();
+  renderGantt();
+  highlightTrack(track);
+}
+
+function deleteBar() {
+  if (!editingBarId) return;
+  const b = bars.find(x => x.id === editingBarId);
+  if (b && !confirm(`"${b.label}" 바를 삭제할까요?`)) return;
+  bars = bars.filter(x => x.id !== editingBarId);
+  saveBars();
+  closeBarModal();
+  renderGantt();
+}
+
+function quickDeleteBar(id) {
+  const b = bars.find(x => x.id === id);
+  if (!b || !confirm(`"${b.label}" 바를 삭제할까요?`)) return;
+  bars = bars.filter(x => x.id !== id);
+  saveBars();
+  renderGantt();
+}
+
+// ============================================================
+// MILESTONE MODAL — CRUD (syncs Gantt + table)
+// ============================================================
+let editingMsId = null;
+let msOwnerRows = [];
+
+function initMsCanvasEvents() {
+  // Dblclick on empty milestone area → add
+  const msCanvas = ganttEl.querySelector('.ms-canvas');
+  if (msCanvas) {
+    msCanvas.addEventListener('dblclick', e => {
+      if (e.target.closest('.ms-diamond')) return;
+      const rect = msCanvas.getBoundingClientRect();
+      const weekIdx = Math.floor((e.clientX - rect.left) / (rect.width / NUM_WEEKS));
+      openMsModal(null, WEEK_START + weekIdx);
+    });
+  }
+  // Dblclick on diamond → edit
+  ganttEl.querySelectorAll('.ms-diamond').forEach(d => {
+    d.addEventListener('dblclick', e => { e.stopPropagation(); openMsModal(d.dataset.ms); });
+  });
+}
+
+function openMsModal(msId, defaultWeek) {
+  editingMsId = msId || null;
+  const isEdit = !!editingMsId;
+  document.getElementById('msModalTitle').textContent = isEdit ? '마일스톤 수정' : '마일스톤 추가';
+  document.getElementById('mmDelete').style.display = isEdit ? '' : 'none';
+
+  if (isEdit) {
+    const m = milestones.find(x => x.id === editingMsId);
+    if (!m) return;
+    document.getElementById('mmLabel').value = m.label;
+    document.getElementById('mmWeek').value = m.week;
+    document.getElementById('mmDate').value = m.dateText || '';
+    document.getElementById('mmGantt').checked = !!m.showInGantt;
+    document.getElementById('mmCurrent').checked = !!m.isCurrent;
+    document.getElementById('mmHighlight').value = m.highlight || '';
+    msOwnerRows = clone(m.owners || []);
+  } else {
+    const w = defaultWeek || CURRENT_WEEK;
+    document.getElementById('mmLabel').value = '';
+    document.getElementById('mmWeek').value = w;
+    document.getElementById('mmDate').value = WEEK_DATE_MAP[w] || '';
+    document.getElementById('mmGantt').checked = true;
+    document.getElementById('mmCurrent').checked = false;
+    document.getElementById('mmHighlight').value = '';
+    msOwnerRows = [{label:'', tag:'all'}];
+  }
+  renderOwnerRows();
+  document.getElementById('msModalOverlay').classList.add('active');
+  document.getElementById('mmLabel').focus();
+}
+
+function closeMsModal() {
+  document.getElementById('msModalOverlay').classList.remove('active');
+  editingMsId = null;
+}
+
+function renderOwnerRows() {
+  const c = document.getElementById('mmOwners');
+  c.innerHTML = msOwnerRows.map((o, i) => `
+    <div class="owner-row">
+      <input type="text" value="${esc(o.label)}" placeholder="이름" onchange="msOwnerRows[${i}].label=this.value">
+      <select onchange="msOwnerRows[${i}].tag=this.value">
+        <option value="a"${o.tag==='a'?' selected':''}>A</option>
+        <option value="b"${o.tag==='b'?' selected':''}>B</option>
+        <option value="c"${o.tag==='c'?' selected':''}>C</option>
+        <option value="all"${o.tag==='all'?' selected':''}>전원</option>
+      </select>
+      <button class="owner-del" onclick="msOwnerRows.splice(${i},1);renderOwnerRows()">×</button>
+    </div>
+  `).join('');
+}
+
+function addOwnerRow() {
+  msOwnerRows.push({label:'', tag:'all'});
+  renderOwnerRows();
+}
+
+function saveMilestone() {
+  const label = document.getElementById('mmLabel').value.trim();
+  if (!label) { document.getElementById('mmLabel').focus(); return; }
+  const week = parseInt(document.getElementById('mmWeek').value);
+  const dateText = document.getElementById('mmDate').value.trim() || WEEK_DATE_MAP[week] || '';
+  const showInGantt = document.getElementById('mmGantt').checked;
+  const isCurrent = document.getElementById('mmCurrent').checked;
+  const highlight = document.getElementById('mmHighlight').value;
+  const owners = msOwnerRows.filter(o => o.label.trim());
+
+  if (editingMsId) {
+    const m = milestones.find(x => x.id === editingMsId);
+    if (m) { Object.assign(m, {label, week, dateText, showInGantt, isCurrent, highlight, owners}); }
+  } else {
+    milestones.push({id:uid(), label, week, dateText, showInGantt, isCurrent, highlight, owners});
+    milestones.sort((a, b) => a.week - b.week);
+  }
+  saveMilestones();
+  closeMsModal();
+  renderGantt();
+  renderMsTable();
+}
+
+function deleteMilestone() {
+  if (!editingMsId) return;
+  const m = milestones.find(x => x.id === editingMsId);
+  if (m && !confirm(`"${m.label}" 마일스톤을 삭제할까요?`)) return;
+  milestones = milestones.filter(x => x.id !== editingMsId);
+  saveMilestones();
+  closeMsModal();
+  renderGantt();
+  renderMsTable();
+}
+
+// ============================================================
+// MILESTONE TABLE — rendered from milestones data
+// ============================================================
+function renderMsTable() {
+  const sorted = [...milestones].sort((a, b) => a.week - b.week);
+  let h = '<thead><tr><th>시점</th><th>마일스톤</th><th>담당</th></tr></thead><tbody>';
+
+  sorted.forEach(m => {
+    const dtClass = m.isCurrent ? ' now' : '';
+    const nowLabel = m.isCurrent ? ' ← NOW' : '';
+    let dtStyle = '', evStyle = '';
+    if (m.highlight === 'milestone') { dtStyle = 'color:var(--milestone);font-weight:700'; evStyle = 'font-weight:600;color:var(--milestone)'; }
+    else if (m.highlight === 'accent') { dtStyle = 'color:var(--accent);font-weight:700'; evStyle = 'font-weight:600;color:var(--accent)'; }
+
+    const ownersHtml = (m.owners || []).map(o => `<span class="tag ${o.tag}">${esc(o.label)}</span>`).join(' ');
+    const labelHtml = esc(m.label).replace(/\n/g, '<br>');
+
+    h += `<tr class="clickable" ondblclick="openMsModal('${m.id}')">`;
+    h += `<td class="dt${dtClass}" style="${dtStyle}">${esc(m.dateText)}${nowLabel}</td>`;
+    h += `<td class="ev" style="${evStyle}">${labelHtml}</td>`;
+    h += `<td>${ownersHtml}</td></tr>`;
+  });
+
+  h += `<tr class="ms-add-row" onclick="openMsModal()"><td colspan="3">+ 마일스톤 추가</td></tr>`;
+  h += '</tbody>';
+  document.getElementById('msTable').innerHTML = h;
+}
+
+// ============================================================
+// ACTION ITEMS — RENDER + CRUD
+// ============================================================
+const actionsGrid = document.getElementById('actions-grid');
+let editingItem = null;
+
+function renderActions() {
+  const trackColors = {a:'var(--track-a)',b:'var(--track-b)',c:'var(--track-c)'};
+  let h = '';
+
+  actions.forEach((track, tIdx) => {
+    h += `<div class="acard" data-track="${track.trackId}">`;
+    h += `<div class="acard-head"><div class="dot" style="background:${trackColors[track.trackId]}"></div><h3>${esc(track.trackName)}</h3><div class="role">${esc(track.trackRole)}</div></div>`;
+
+    track.phases.forEach((phase, pIdx) => {
+      h += '<div class="aphase">';
+      h += `<div class="aphase-title">${esc(phase.title)}`;
+      if (phase.isNow) h += ' <span class="now-tag">NOW</span>';
+      h += '</div>';
+
+      phase.items.forEach((item, iIdx) => {
+        const isEditing = editingItem && editingItem.t === tIdx && editingItem.p === pIdx && editingItem.i === iIdx;
+        if (isEditing) {
+          h += `<div class="aitem-edit-row">`;
+          h += `<input class="aitem-input" type="text" value="${esc(item.text)}" data-t="${tIdx}" data-p="${pIdx}" data-i="${iIdx}" data-field="text" autofocus>`;
+          h += `<input class="aitem-input note-input" type="text" value="${esc(item.note)}" placeholder="메모 (선택)" data-t="${tIdx}" data-p="${pIdx}" data-i="${iIdx}" data-field="note">`;
+          h += `<div class="aitem-edit-btns"><button class="save-btn" onclick="saveEdit(${tIdx},${pIdx},${iIdx})">저장</button><button class="cancel-btn" onclick="cancelEdit()">취소</button></div></div>`;
+        } else {
+          h += `<div class="aitem${item.checked?' done':''}">`;
+          h += `<input type="checkbox" ${item.checked?'checked':''} onchange="toggleItem(${tIdx},${pIdx},${iIdx},this.checked)">`;
+          h += '<div style="flex:1;min-width:0">';
+          h += `<span class="aitem-text" ondblclick="startEdit(${tIdx},${pIdx},${iIdx})">${esc(item.text)}</span>`;
+          if (item.note) h += `<span class="aitem-note" ondblclick="startEdit(${tIdx},${pIdx},${iIdx})">${esc(item.note)}</span>`;
+          h += '</div>';
+          h += `<button class="aitem-del" onclick="deleteItem(${tIdx},${pIdx},${iIdx})">×</button></div>`;
+        }
+      });
+
+      const isAdding = editingItem && editingItem.t === tIdx && editingItem.p === pIdx && editingItem.i === -1;
+      if (isAdding) {
+        h += `<div class="aitem-edit-row"><input class="aitem-input" type="text" placeholder="새 액션아이템 입력..." data-t="${tIdx}" data-p="${pIdx}" data-i="-1" data-field="text" autofocus>`;
+        h += `<input class="aitem-input note-input" type="text" placeholder="메모 (선택)" data-t="${tIdx}" data-p="${pIdx}" data-i="-1" data-field="note">`;
+        h += `<div class="aitem-edit-btns"><button class="save-btn" onclick="saveNewItem(${tIdx},${pIdx})">추가</button><button class="cancel-btn" onclick="cancelEdit()">취소</button></div></div>`;
+      } else {
+        h += `<button class="aphase-add" onclick="startAdd(${tIdx},${pIdx})"><span class="plus">+</span> 항목 추가</button>`;
+      }
+      h += '</div>';
+    });
+    h += '</div>';
+  });
+
+  actionsGrid.innerHTML = h;
+  if (editingItem) {
+    const inp = actionsGrid.querySelector('.aitem-input[autofocus]');
+    if (inp) { inp.focus(); if (editingItem.i >= 0) inp.select(); }
+  }
+  actionsGrid.querySelectorAll('.aitem-input').forEach(inp => inp.addEventListener('keydown', onEditKey));
+}
+
+function onEditKey(e) {
+  const t = +e.target.dataset.t, p = +e.target.dataset.p, i = +e.target.dataset.i;
+  if (e.key === 'Enter') { e.preventDefault(); i === -1 ? saveNewItem(t,p) : saveEdit(t,p,i); }
+  else if (e.key === 'Escape') cancelEdit();
+}
+
+function startEdit(t,p,i) { editingItem = {t,p,i}; renderActions(); }
+function startAdd(t,p) { editingItem = {t,p,i:-1}; renderActions(); }
+function cancelEdit() { editingItem = null; renderActions(); }
+
+function saveEdit(t,p,i) {
+  const txt = actionsGrid.querySelector(`.aitem-input[data-t="${t}"][data-p="${p}"][data-i="${i}"][data-field="text"]`);
+  const note = actionsGrid.querySelector(`.aitem-input[data-t="${t}"][data-p="${p}"][data-i="${i}"][data-field="note"]`);
+  if (!txt || !txt.value.trim()) { cancelEdit(); return; }
+  actions[t].phases[p].items[i].text = txt.value.trim();
+  actions[t].phases[p].items[i].note = note ? note.value.trim() : '';
+  saveActions(); editingItem = null; renderActions();
+}
+
+function saveNewItem(t,p) {
+  const txt = actionsGrid.querySelector(`.aitem-input[data-t="${t}"][data-p="${p}"][data-i="-1"][data-field="text"]`);
+  const note = actionsGrid.querySelector(`.aitem-input[data-t="${t}"][data-p="${p}"][data-i="-1"][data-field="note"]`);
+  if (!txt || !txt.value.trim()) { cancelEdit(); return; }
+  actions[t].phases[p].items.push({id:uid(), text:txt.value.trim(), note:note?note.value.trim():'', checked:false});
+  saveActions(); editingItem = null; renderActions();
+}
+
+function toggleItem(t,p,i,checked) {
+  actions[t].phases[p].items[i].checked = checked;
+  saveActions();
+  const items = actionsGrid.querySelectorAll('.aitem');
+  let c = 0;
+  actions.forEach((tr,ti) => tr.phases.forEach((ph,pi) => ph.items.forEach((it,ii) => {
+    if (ti===t && pi===p && ii===i && items[c]) items[c].classList.toggle('done', checked);
+    c++;
+  })));
+}
+
+function deleteItem(t,p,i) {
+  const item = actions[t].phases[p].items[i];
+  if (!confirm(`"${item.text}" 삭제?`)) return;
+  actions[t].phases[p].items.splice(i, 1);
+  saveActions(); renderActions();
+}
+
+function resetActions() {
+  if (!confirm('액션아이템을 초기 상태로 되돌릴까요?')) return;
+  localStorage.removeItem(ACTIONS_KEY);
+  actions = clone(DEFAULT_ACTIONS);
+  renderActions();
+}
+
+// ============================================================
+// VISUAL LINKING — click bar → highlight track's action items
+// ============================================================
+let highlightTimer = null;
+
+function highlightTrack(trackId) {
+  document.querySelectorAll('.acard').forEach(card => {
+    card.classList.remove('highlight');
+    if (card.dataset.track === trackId) {
+      card.classList.add('highlight');
+      card.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+  });
+  clearTimeout(highlightTimer);
+  highlightTimer = setTimeout(() => document.querySelectorAll('.acard.highlight').forEach(c => c.classList.remove('highlight')), 2500);
+}
+
+// Click on bar → highlight corresponding action items
+ganttEl.addEventListener('click', e => {
+  const barEl = e.target.closest('.bar');
+  if (barEl && !dragState) {
+    const bar = bars.find(b => b.id === barEl.dataset.id);
+    if (bar) highlightTrack(bar.track);
+  }
+});
+
+// ============================================================
+// KEYBOARD — close modals with Escape
+// ============================================================
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('barModalOverlay').classList.contains('active')) closeBarModal();
+    if (document.getElementById('msModalOverlay').classList.contains('active')) closeMsModal();
+  }
+});
+
+// Close modal on overlay click
+['barModalOverlay','msModalOverlay'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target === e.currentTarget) {
+      if (id === 'barModalOverlay') closeBarModal();
+      else closeMsModal();
+    }
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+populateWeekSelects();
+renderGantt();
+renderMsTable();
+renderActions();
 </script>
-
 </body>
 </html>
