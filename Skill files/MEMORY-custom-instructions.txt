@@ -1,0 +1,29 @@
+**Work context**
+
+Suhyun is CEO/Founder of Creatorhood, a Korean sports lifestyle media company and content marketing agency. The company operates CH MAG (a sports lifestyle magazine with 1.6K Instagram followers), provides brand channel management services, and is developing Zone X, a hybrid cardio sports entertainment league launching in 2026. Suhyun manages a team including designers, editors, and university student contributors, and works with clients like Kuksundang (traditional Korean alcohol), Pelicana (fried chicken), and various hotel and wellness brands.
+
+**Personal context**
+
+Suhyun is fluent in both Korean and English, demonstrating a warm, professional Korean business communication style that balances formality with personal authenticity. They show strong interests in sports content creation, magazine-style editorial work, and innovative content formats, with particular expertise in AI-generated content creation using tools like Higgsfield, Kling, and various video generation platforms.
+
+**Top of mind**
+
+Suhyun is actively developing a comprehensive 2026 business plan for Creatorhood across four key areas: content production, agency services, sub-channel magazines, and Zone X. They're working on migrating their Claude account setup while preserving all functionality and custom skills. Recent focus includes creating sales proposal systems, developing content strategies for various clients, and expanding from Instagram-focused content to multi-platform approaches including web and YouTube. They're also managing university student editor teams and planning content creation workflows that balance authenticity with professional output.
+
+**Brief history**
+
+*Recent months*
+
+Suhyun has been heavily focused on strategic business development and content creation systems. They developed comprehensive custom skills for business operations including sales-outreach, content-planner, quotation-builder, and brand-knowledge tools. Major client work included creating detailed content strategies for Kuksundang's makgeolli marketing, developing SNS management proposals for hotel brands and Pelicana, and managing collaborative events like "Makgeolli x Taco Week" with Pescaderia. They've been transitioning from fixed-fee content production to exploring revenue-sharing models and performance-based partnerships. Significant effort went into Zone X development, creating detailed league formats, team recruitment materials, and sponsorship proposals targeting brands like Red Bull Korea.
+
+*Earlier context*
+
+Suhyun established Creatorhood's core business model around "media-first thinking" with the philosophy "Content → Audience → Brand/Commerce" rather than traditional advertising approaches. They developed CH MAG as a sports lifestyle magazine and built expertise in brand storytelling, particularly for traditional Korean brands seeking modern positioning. Key projects included comprehensive content creation for various wellness and lifestyle brands, developing interview content series, and creating AI-generated advertising workflows. They demonstrated strong capabilities in cross-cultural content adaptation and strategic brand positioning.
+
+*Long-term background*
+
+Suhyun has extensive experience in content strategy and brand marketing, with a particular focus on sports lifestyle content that bridges traditional and contemporary approaches. They've built expertise in magazine-style content creation, social media strategy, and brand narrative development, consistently emphasizing authentic storytelling over promotional content. Their approach has always centered on creating sustainable content IP and building genuine audience relationships rather than pursuing short-term engagement metrics.
+
+**User Preferences**
+
+노션 페이지를 불러달라고 할 때는, 다른 커넥터들보다 Notion 커넥터를 먼저 사용해줘. 내가 링크도 넣을텐데, 바로 링크부터 읽기보다 Notion 커넥터 사용해서 Fetch하면 페이지가 불러와질거야. 그 내용을 읽고 진행해줘
