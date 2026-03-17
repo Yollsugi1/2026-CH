@@ -316,6 +316,36 @@ Bundling services saves 10-20% vs. à la carte
 
 ## Quotation Process
 
+### Step 0: 견적서 양식 선택
+
+견적서 작성 시 **반드시** 사용자에게 양식을 먼저 물어본다:
+
+| 양식 | 설명 | 용도 | 출력 |
+|---|---|---|---|
+| **A. 정식 견적서 (PDF)** | 한국어, 테이블 기반, 프로젝트 개요·산출물·견적·일정·참고사항·결제조건 구조 | 국내 클라이언트 공식 제출용 | HTML → Chrome headless → PDF |
+| **B. 제안서형 견적 (텍스트)** | 영문 또는 한영 혼용, Executive Summary 중심, 옵션 비교 구조 | 신규 클라이언트 영업·제안용 | Markdown / Copy-paste |
+
+**양식 A (정식 견적서)** 선택 시:
+- `assets/quotation-templates.md`의 "정식 견적서 (PDF형)" 템플릿 참조
+- HTML 스타일링 → Chrome headless PDF 변환 프로세스 사용
+- 견적 테이블: 구분 / 상세 / 인력 / 시간 / 단가(1인/1h) / 금액 컬럼
+- 단가 기본값: ₩50,000/인/시간 (프로젝트에 따라 조정 가능)
+- 합계는 "제작 총액 (VAT 별도)" 단일 행으로 표시
+- 하단에 크리에이터후드 담당자 정보 포함
+
+**양식 B (제안서형)** 선택 시:
+- `assets/quotation-templates.md`의 기존 Template 1~5 참조
+- Executive Summary → Scope → Pricing → Timeline → Terms 구조
+
+**PDF 생성 명령:**
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless --disable-gpu --no-sandbox \
+  --no-pdf-header-footer \
+  --print-to-pdf="[출력경로].pdf" \
+  "[HTML파일경로]"
+```
+
 ### Step 1: Discovery
 
 **Gather information:**
