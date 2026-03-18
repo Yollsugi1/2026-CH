@@ -114,7 +114,7 @@ git push --no-verify origin main
 
 ## 현재 상태 (세션 끝날 때 업데이트 후 push)
 
-- **마지막 작업**: 2026-03-16 (MacBook)
+- **마지막 작업**: 2026-03-18 (MacBook)
 - **완료한 것**:
   - Zone X 컴바인 (Season 0) 전체 기획 완료 — `claude-zonex/ZoneX_컴바인_기획_260312.md`
     - 6가지 능력 체계 v2 확정 (Hexagon: ENGINE/GRIT/FORCE/BLAST/REFLEX/CONTROL)
@@ -122,18 +122,24 @@ git push --no-verify origin main
     - 빌드업 숏폼 시리즈 (4~5월) 에피소드 설계
     - 액션플랜 병렬 타임라인 (Track A/B/C) 수립
   - Zone X Phase C 리그 설계 완료 — `claude-zonex/ZoneX_방향성_재검토_및_게임포맷설계_260309.md` (Section 3-6 추가)
-    - Section 3: 상성 시스템 (CYA 3공격 유형별 동작 풀 18종 + 아키타입별 상성 매트릭스 + 5레이어 전략적 심도)
-    - Section 4: 매치 구분 기준 & 매치메이킹 (Open Division + 3원칙 매치메이킹 + 랭킹 시스템 + Duo/Squad 확장안)
-    - Section 5: 리그 구조 (격주 이벤트 × 6-7회/시즌 + 타이틀전 Escalating Stakes + 분할 업로드 전략)
-    - Section 6: 콘텐츠 설계 (이벤트당 7가지 콘텐츠 패키지 + 본 매치 영상 구조 + 5가지 바이럴 자산 + 커뮤니티 참여형)
   - 프로덕션 미팅용 콘텐츠 소개서 — `claude-zonex/ZoneX_콘텐츠소개_프로덕션미팅용_260316.md`
   - 액션플랜 시각화 HTML (v4 CRUD) — `claude-team-zonex/ZoneX_액션플랜_타임라인.html`
-- **진행 중**: Zone X 기획 1차 완료 — 세부 설계 과제 남음
+  - Zone X 에이전트 팀 프레임워크 빌딩 완료 (2026-03-18):
+    - `claude-zonex/프레임워크_콘텐츠_검증.md` — 콘텐츠 PD 관점 (품질 기준, 프로덕션 실현가능성)
+    - `claude-zonex/프레임워크_이벤트_검증.md` — 현장 운영 관점 (측정 프로토콜, 안전, 20개 이슈)
+    - `claude-zonex/프레임워크_마케팅_검증.md` — 마케팅 관점 (KPI, 스폰서십 평가, 10개 이슈)
+    - `claude-zonex/프레임워크_브랜딩_검증.md` — 브랜드 일관성 관점 (톤 매트릭스, 그래픽 자산 요건)
+    - `claude-zonex/QA_크로스검증_리포트.md` — 4개 프레임워크 교차 분석 (합의점 8, 충돌점 5, 사각지대 6)
+  - 스킬 마이그레이션 완료 (.skill → Claude Code) + skill-installer 스킬 생성
+  - 2026 CH 루트 + claude-cowork-contents 폴더 정리 (etc/ 폴더 생성, 하위폴더 재구성)
+- **진행 중**: Zone X 검증 프레임워크 완료 → 수현 검토 후 기획 확정 단계
 - **다음 할 것**:
+  - QA 리포트 TOP 5 질문 검토 → 기획 방향 확정
+  - 에이전트 팀 재소집 → 프레임워크 적용하여 기획 산출물 검증/수정
+  - 콘텐츠 볼륨 현실화 (7종 → ?), 스케줄 재설계, 외부 프로덕션 확보
+  - 스폰서십 자료 post-pivot 업데이트
   - Zone X 스코어링 시스템 상세 설계 (0~100 점수 변환)
   - 빌드업 EP1 파일럿 스크립트 (세한/수민 촬영 가이드)
-  - Phase 1 시그니처 동작 + 공격 유형별 처방 기준 확정
-  - 챔피언십 Escalating Stakes 세부 룰
   - 웹매거진 Notion CMS 연동 고도화
   - Hoodies 브랜드 스폰서십 소개서 제작
 - **미결 사항**: 인턴 채용, 컴바인 촬영 장소 물색
