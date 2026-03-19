@@ -114,15 +114,15 @@ git push --no-verify origin main
 
 ## 현재 상태 (세션 끝날 때 업데이트 후 push)
 
-- **마지막 작업**: 2026-03-18 (MacBook)
+- **마지막 작업**: 2026-03-19 (MacBook)
 - **완료한 것**:
-  - Zone X 컴바인 (Season 0) 전체 기획 완료 — `claude-zonex/ZoneX_컴바인_기획_260312.md`
+  - Zone X 컴바인 (Season 0) 전체 기획 완료 — `claude-zonex/ZoneX_컴바인_기획_260318.md` (최신)
     - 6가지 능력 체계 v2 확정 (Hexagon: ENGINE/GRIT/FORCE/BLAST/REFLEX/CONTROL)
-    - 컴바인 시리즈 "The Proving Ground" 11부작 엔터테인먼트 구조
+    - 컴바인 시리즈 "The Proving Ground" 11부작 → 10+1부작 재구조화
     - 빌드업 숏폼 시리즈 (4~5월) 에피소드 설계
     - 액션플랜 병렬 타임라인 (Track A/B/C) 수립
-  - Zone X Phase C 리그 설계 완료 — `claude-zonex/ZoneX_방향성_재검토_및_게임포맷설계_260309.md` (Section 3-6 추가)
-  - 프로덕션 미팅용 콘텐츠 소개서 — `claude-zonex/ZoneX_콘텐츠소개_프로덕션미팅용_260316.md`
+  - Zone X Phase C 리그 설계 완료 — `claude-zonex/ZoneX_방향성_재검토_및_게임포맷설계_260318.md` (최신)
+  - 프로덕션 미팅용 콘텐츠 소개서 — `claude-zonex/ZoneX_콘텐츠소개_프로덕션미팅용_260318.md`
   - 액션플랜 시각화 HTML (v4 CRUD) — `claude-team-zonex/ZoneX_액션플랜_타임라인.html`
   - Zone X 에이전트 팀 프레임워크 빌딩 완료 (2026-03-18):
     - `claude-zonex/프레임워크_콘텐츠_검증.md` — 콘텐츠 PD 관점 (품질 기준, 프로덕션 실현가능성)
@@ -130,18 +130,22 @@ git push --no-verify origin main
     - `claude-zonex/프레임워크_마케팅_검증.md` — 마케팅 관점 (KPI, 스폰서십 평가, 10개 이슈)
     - `claude-zonex/프레임워크_브랜딩_검증.md` — 브랜드 일관성 관점 (톤 매트릭스, 그래픽 자산 요건)
     - `claude-zonex/QA_크로스검증_리포트.md` — 4개 프레임워크 교차 분석 (합의점 8, 충돌점 5, 사각지대 6)
+  - **Zone X 프레임워크 적용 개선안 완료 (2026-03-19)**:
+    - `claude-zonex/개선안_콘텐츠_260319.md` — 빌드업 3-Phase 18편, 7종→4종 축소, 리그 7월 3주 시작
+    - `claude-zonex/개선안_이벤트_260319.md` — Day별 타임테이블, 스코어링 시스템, CYA 선택 보드
+    - `claude-zonex/개선안_마케팅_260319.md` — 메시지 아키텍처, 하이브리드 전략, KPI 현실화
+    - `claude-zonex/개선안_브랜딩_260319.md` — 언어 위계, CYA 컬러(시안/앰버/라임), 자산 11종
+    - `claude-zonex/통합_개선안_마스터_260319.md` — 4팀 교차검증 통합 (의사결정 5건, 액션 37건)
   - 스킬 마이그레이션 완료 (.skill → Claude Code) + skill-installer 스킬 생성
   - 2026 CH 루트 + claude-cowork-contents 폴더 정리 (etc/ 폴더 생성, 하위폴더 재구성)
-- **진행 중**: Zone X 검증 프레임워크 완료 → 수현 검토 후 기획 확정 단계
+- **진행 중**: 통합 개선안 완료 → **수현 의사결정 대기** (통합 마스터 Section 0 참조)
 - **다음 할 것**:
-  - QA 리포트 TOP 5 질문 검토 → 기획 방향 확정
-  - 에이전트 팀 재소집 → 프레임워크 적용하여 기획 산출물 검증/수정
-  - 콘텐츠 볼륨 현실화 (7종 → ?), 스케줄 재설계, 외부 프로덕션 확보
+  - 수현 의사결정 5건 (D-1~D-5): 볼륨 축소, 리그 시작 시점, 분류 방식, CYA 방식, 언어 위계
+  - 의사결정 후 즉시 실행: 파일럿 촬영, 장소 리스트업, 채널 세팅, 측정 프로토콜 v1
   - 스폰서십 자료 post-pivot 업데이트
-  - Zone X 스코어링 시스템 상세 설계 (0~100 점수 변환)
   - 빌드업 EP1 파일럿 스크립트 (세한/수민 촬영 가이드)
   - 웹매거진 Notion CMS 연동 고도화
   - Hoodies 브랜드 스폰서십 소개서 제작
-- **미결 사항**: 인턴 채용, 컴바인 촬영 장소 물색
+- **미결 사항**: 인턴 채용, 컴바인 촬영 장소 물색, 외부 프로덕션 계약
 
 > 업데이트 형식: YYYY-MM-DD HH:MM (MacBook / Mac mini)
