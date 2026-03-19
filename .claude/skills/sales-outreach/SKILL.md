@@ -1,172 +1,187 @@
 ---
 name: sales-outreach
 description: |
-  Analyze client marketing partnership inquiries and create customized sales proposals for Creatorhood. Use when user says "대행영업 스킬 사용해서" or when analyzing marketing agency RFPs, client inquiries, or partnership requests to create tailored outbound sales emails. Integrates with quotation-builder for pricing proposals.
+  크리에이터후드 통합 세일즈 시스템. 6개 전문 에이전트로 라우팅하거나, 빠른 실행 모드로 즉시 메일 초안을 작성한다.
+  MUST BE USED when: "대행영업", "세일즈", "콜드메일", "아웃바운드", "인바운드", "문의 왔어", "섭외", "스폰서십", "브랜디드", "PPL", "협찬", "Upwork", "업워크", "Meta 광고", "인스타 광고", "빠르게 메일만"
+  USE PROACTIVELY when: 사용자가 아이보스 의뢰, 클라이언트 문의, 브랜드 공략, 출연자 섭외, 스폰서십 제안 등을 언급할 때
 ---
 
-# Creatorhood Sales Outreach Skill
+# 크리에이터후드 통합 세일즈 시스템
 
-Generate customized sales proposal emails in response to client marketing partnership inquiries. Analyzes client needs and creates tailored proposals based on Creatorhood's capabilities and proven frameworks.
+사용자의 요청을 분석하여 **6개 전문 에이전트** 중 최적의 에이전트로 라우팅하거나, **빠른 실행 모드**로 즉시 초안을 작성한다.
 
-## Process
+## 라우팅 매트릭스
 
-Follow these steps in order:
+사용자의 입력에서 키워드/맥락을 감지하여 분기:
 
-### Step 1: Analyze the Inquiry
+```
+├── 대행 세일즈
+│   ├── inbound-sales-agent   ← "문의 왔어", "인바운드", "의뢰 응대", "답장 작성", "클라이언트가 연락했어"
+│   ├── outbound-sales-agent  ← "콜드메일", "아웃바운드", "브랜드 공략", "새 클라이언트 발굴", "아이보스 리드"
+│   ├── upwork-agent          ← "Upwork", "업워크", "해외 영업", "해외 클라이언트"
+│   └── meta-ads-agent        ← "Meta 광고", "인스타 광고", "페이스북 광고", "광고 카피", "리드 생성"
+│
+├── 파트너십/섭외
+│   ├── sponsorship-agent     ← "스폰서십", "브랜디드", "PPL", "협찬", "광고주 붙이기", "스폰서 찾기"
+│   └── talent-outreach-agent ← "섭외", "게스트", "출연자", "출연 요청", "콜라보 제안"
+│
+└── 빠른 실행 모드
+    └── 직접 처리               ← "빠르게 메일만", "간단하게", "템플릿으로"
+```
 
-When user provides a client inquiry or RFP, analyze:
+## 라우팅 프로세스
 
-**Extract Key Information:**
-- Client type (hotel, F&B, sports, e-commerce, etc.)
-- Requested channels (Instagram, YouTube, etc.)
-- Budget constraints (if provided)
-- Scope requirements (content creation, management, ads, etc.)
-- Timeline expectations
-- Special requirements (portfolio, experience in specific industry, etc.)
+### Step 1. 입력 분류
 
-**Identify Client Needs:**
-- What problem are they trying to solve?
-- What business outcomes do they want?
-- What's their level of maturity (new to social vs. scaling)?
-- Are they budget-driven or quality-driven?
+사용자 입력을 받으면:
 
-### Step 2: Present Strategic Analysis
+1. **키워드 매칭**: 위 라우팅 매트릭스의 키워드와 대조
+2. **맥락 분석**: 키워드가 명확하지 않으면 아래 기준으로 판단:
+   - 클라이언트 문의 원문이 붙여넣기됨 → `inbound-sales-agent`
+   - 특정 브랜드명 + "공략/접근/메일" → `outbound-sales-agent`
+   - 영문 공고 URL 또는 Upwork 언급 → `upwork-agent`
+   - 광고 소재/카피/타게팅 관련 → `meta-ads-agent`
+   - CH MAG 시리즈 + 브랜드 연결 → `sponsorship-agent`
+   - 인물명 + 시리즈 출연 관련 → `talent-outreach-agent`
+3. **모호한 경우**: 사용자에게 확인 질문
 
-Present the analysis in this format:
+### Step 2. 에이전트 호출 또는 빠른 실행
 
-**[Client Name] 의뢰 분석**
+**에이전트 호출 시:**
+- 해당 에이전트의 `.claude/agents/[agent-name].md` 참조
+- 사용자 입력 + 필요한 컨텍스트를 에이전트에 전달
+- 에이전트가 Phase별로 사용자 컨펌 받으며 진행
 
-**요구사항 요약:**
-- [Bullet point 1]
-- [Bullet point 2]
-- [Bullet point 3]
+**빠른 실행 모드 시:**
+- `assets/outbound-template.md` 기반으로 즉시 메일 초안 작성
+- 프레임워크 적용 없이 빠른 아웃풋 우선
+- 사용자가 "이걸 더 다듬어줘" 하면 해당 에이전트로 전환
 
-**우리의 대응 전략:**
-[One paragraph explaining how Creatorhood can uniquely address their needs, referencing relevant frameworks from brand-knowledge skill (e.g., scene-based strategy for F&B, heritage repositioning for legacy brands, performance model for e-commerce, etc.). Be specific about which of our proven capabilities are relevant.]
+## 6개 에이전트 요약
 
-### Step 3: Draft Customized Proposal Email
+### 1. inbound-sales-agent (국내 인바운드)
 
-Use the outbound email template from `assets/outbound-template.md` as base structure, but customize heavily:
+- **프레임워크**: 팔레트혜인 3-Step ("질문의 수준이 단가를 결정한다")
+- **입력**: 클라이언트 문의 원문 (아이보스 / Meta 광고 DM / 인스타 DM)
+- **출력**: 문의 해부 → 커버리지 매핑 → 3-Step 응답 초안
+- **연동**: `quotation-builder` (견적), `proposal-docx` (제안서)
+- **참조**: `.claude/knowledge/sales/inquiry-frameworks.md`
 
-**Customization Guidelines:**
+### 2. outbound-sales-agent (국내 아웃바운드)
 
-1. **Opening Hook** - Reference their specific inquiry/post
-   - Mention where you saw their request (e.g., "아이보스에서 SNS대행 의뢰 포스트 확인 후 연락드립니다")
-   - Show you understand their specific situation
+- **프레임워크**: 옥성아 6-Step B2B 변형 ("세계관 연결 → 브랜드 포지셔닝 연결")
+- **입력**: 타겟 브랜드명, 아이보스 의뢰 URL, 또는 타겟 산업
+- **출력**: 타겟 리서치 → 전략 분석 → 콜드메일 (이메일 + DM 동시)
+- **연동**: `brand-knowledge` (케이스 스터디), `quotation-builder`
+- **참조**: `.claude/knowledge/sales/outreach-frameworks.md` (B2B 변형)
 
-2. **Brand Context Section** - Keep standard intro brief, then pivot to relevance
-   - Standard: "저희는 CH MAG이라는 스포츠/라이프스타일 매거진과..."
-   - Customization: Add 1-2 sentences connecting to their industry/needs
+### 3. upwork-agent (해외 Upwork)
 
-3. **Differentiation Points** - Select most relevant 2-3 from template
-   - For strategic clients: Emphasize "전략 기반의 콘텐츠 설계"
-   - For lifestyle brands: Emphasize "매거진의 시각"
-   - For all: Keep "체계적 프로세스"
+- **프레임워크**: Baehaus A-to-Z (프로필 세팅 ~ 성장 로드맵)
+- **4가지 모드**:
+  - Mode A: 공고 분석 (7기준 체크리스트 자동 채점)
+  - Mode B: Cover Letter 작성 (5-Paragraph + 3단계 앵커링)
+  - Mode C: 프로필 & 전략 가이드 (성장 로드맵 현재 단계 진단)
+  - Mode D: 견적 설계 (시간당 요율 기반 테이블)
+- **참조**: `.claude/knowledge/sales/upwork-playbook.md`
 
-4. **Portfolio/Case Studies** - Match to their industry
-   - Hotel/lifestyle: Reference Inhaze, 라이프스타일 approach
-   - F&B: Reference 국순당 (Kuksundang)
-   - Sports: Reference CH MAG, Zone X
-   - Heritage brands: Reference cultural/lifestyle branding approach
+### 4. meta-ads-agent (Meta 광고)
 
-5. **Scope Response** - Address their specific requirements
-   - If they listed specific deliverables → Confirm capability for each
-   - If budget is provided → Use quotation-builder skill to propose scope
-   - If asking for quote → Explain next steps: "구체적 견적은 [이유] 파악 후 제안드리겠습니다"
+- **입력**: 타겟 서비스/오디언스, 예산, 목표
+- **출력**: 키워드 분석 → 카피 3방향 (문제인식/결과증명/차별화) → 소재 기획 → A/B 테스트 구조
+- **연동**: 광고 통한 인바운드 문의 발생 시 → `inbound-sales-agent` 가이드
 
-6. **Call to Action** - Match their request stage
-   - For RFP comparison stage: "견적 및 제안서 전달드리겠습니다"
-   - For partner search: "미팅 통해 구체적 제안 드리고 싶습니다"
-   - For inquiries: "추가로 필요하신 자료나 궁금하신 점 있으시면 편하게 말씀해주세요"
+### 5. sponsorship-agent (스폰서십/브랜디드)
 
-**Standard Elements to Always Include:**
-- Creatorhood portfolio link (구글드라이브 링크)
-- Professional sign-off: "정수현 드림"
-- Maintain warm, professional Korean business tone
+- **핵심**: 시리즈×브랜드 매칭 → 스폰서십 패키지 설계 → 제안
+- **입력**: 타겟 브랜드 또는 타겟 시리즈
+- **출력**: 매칭 결과 → 티어별 패키지 → 제안 메일/데크
+- **Zone X 모드**: Zone X 문서 참조하여 이벤트/리그 스폰서십 별도 구성
+- **참조**: `.claude/knowledge/sales/sponsorship-playbook.md`
 
-### Step 4: Quotation Integration (When Needed)
+### 6. talent-outreach-agent (출연자/게스트 섭외)
 
-If client provides budget or requests specific quote:
+- **프레임워크**: 옥성아 6-Step 원본 ("콜드 메일을 제안이 아닌 공명으로")
+- **입력**: 섭외 대상 이름, 인스타 핸들, 또는 "이런 사람 찾아줘"
+- **출력**: 세계관 리서치 → 6-Step 메일 → DM 축약본
+- **시리즈별 맥락**: Playbook(토크쇼) / Hoodies(브이로그) / False 9(시네마틱)
+- **참조**: `.claude/knowledge/sales/outreach-frameworks.md` (원본)
 
-1. **Ask user if quote is needed:** "견적 제안이 필요하신가요? quotation-builder 스킬을 사용해 구체적인 견적을 작성할 수 있습니다."
+## 빠른 실행 모드
 
-2. **If yes, use quotation-builder skill:**
-   - Provide analyzed requirements to quotation-builder
-   - Get structured quote
-   - Integrate into email naturally (as attachment reference or summary)
+에이전트 없이 즉시 초안을 작성하는 모드. 사용자가 시간이 급하거나 간단한 메일만 필요할 때.
 
-3. **If budget is too constrained:**
-   - Be honest about feasibility
-   - Suggest phased approach or reduced scope
-   - Or gracefully decline: "현재 예산으로는 저희가 제공하는 퀄리티를 보장하기 어려울 것 같습니다"
+### 프로세스:
+1. `assets/outbound-template.md` 템플릿 로드
+2. 사용자 입력에서 핵심 정보 추출 (대상, 목적, 채널)
+3. 템플릿에 맞춰 즉시 초안 작성 (300자 이내)
+4. "더 다듬어줘" → 적절한 에이전트로 자동 전환
 
-## Email Tone Guidelines
+## 이메일 톤 가이드라인 (전체 공통)
 
-**Maintain Creatorhood's voice:**
-- Professional but warm (not stiff corporate)
-- Confident but not arrogant
-- Strategic partner, not vendor
-- Show expertise through examples, not claims
+**크리에이터후드 보이스:**
+- 전문적이되 따뜻한 톤 (딱딱한 기업체 느낌 X)
+- 자신감 있되 오만하지 않게
+- 전략적 파트너로 포지셔닝 (벤더/하청 X)
+- 주장이 아닌 사례로 전문성을 보여줄 것
 
-**Korean business communication:**
-- Use 존댓말 consistently
-- Balance formality with approachability
-- Clear structure with proper spacing
-- Professional but not overly formal
+**한국어 비즈니스 커뮤니케이션:**
+- 존댓말 일관 유지
+- 공식적이되 접근 가능한 균형
+- 명확한 구조와 적절한 여백
+- 과도한 이모지/감탄부호 자제
 
-**Avoid:**
-- Over-promising or generic claims
-- Listing every capability (be selective)
-- Being defensive about pricing
-- Apologetic tone
+**영문 커뮤니케이션 (Upwork):**
+- Professional but personable
+- Lead with results, not claims
+- K-brand identity = 차별화 자산
 
-## Integration with Other Skills
+**공통 금지:**
+- 과도한 약속이나 추상적 주장
+- 모든 역량 나열 (선택적으로)
+- 가격에 대한 방어적 톤
+- 사과 투의 어조
 
-**Must use together:**
-- **brand-knowledge**: Reference relevant case studies, frameworks, and value propositions
-- **quotation-builder**: Generate detailed quotes when budget/scope is clear
+## 통합 연동 맵
 
-**May reference:**
-- **content-frameworks**: If discussing specific content approach
-- User memory: Past conversations about pricing, positioning, or similar clients
+```
+[에이전트 출력] → 사용자 컨펌
+    │
+    ├── 견적 필요 → quotation-builder 스킬 호출
+    ├── 제안서 필요 → proposal-docx 스킬 호출
+    ├── 케이스 참조 → brand-knowledge 스킬 참조
+    └── 콘텐츠 기획 → content-frameworks 참조
+```
 
-## Common Scenarios
+## Knowledge Base
 
-### Scenario A: Budget-Driven RFP (Example 2 from user)
-**Client provides:** Fixed budget (e.g., 월 66만원 vs 133만원)
+모든 에이전트가 참조하는 프레임워크 파일:
 
-**Response approach:**
-1. Analyze what's realistic at each budget level
-2. Use quotation-builder to structure options
-3. Be honest about trade-offs
-4. Propose A vs B plan clearly
+| 파일 | 내용 | 주 사용 에이전트 |
+|---|---|---|
+| `knowledge/sales/outreach-frameworks.md` | 옥성아 6-Step (원본 + B2B 변형) | talent-outreach, outbound-sales |
+| `knowledge/sales/inquiry-frameworks.md` | 팔레트혜인 3-Step | inbound-sales |
+| `knowledge/sales/upwork-playbook.md` | Baehaus A-to-Z | upwork |
+| `knowledge/sales/sponsorship-playbook.md` | 시리즈별 매칭 + 티어 체계 | sponsorship |
 
-### Scenario B: Exploratory Inquiry (Example 1 from user)
-**Client asks:** General quote for comparison
+## 세일즈 파이프라인 전체 플로우
 
-**Response approach:**
-1. Show understanding of their space (e.g., "호텔 브랜드의 SNS는...")
-2. Explain our strategic approach briefly
-3. Suggest meeting/call to understand needs before quote
-4. Provide portfolio and ballpark ranges if helpful
+```
+[기회 발견]
+  │
+  ├─ 국내 인바운드 ──→ inbound-sales-agent (3-Step) ──→ 응답 + 견적
+  ├─ 국내 아웃바운드 ─→ outbound-sales-agent (6-Step B2B) → 콜드메일 + 팔로업
+  ├─ 해외 Upwork ────→ upwork-agent (5-Paragraph) ──→ Cover Letter + 견적
+  ├─ Meta 광고 ──────→ meta-ads-agent ──→ 광고 → 인바운드 문의 생성
+  ├─ 스폰서십 ───────→ sponsorship-agent (매칭+패키지) → 제안
+  └─ 출연자 섭외 ────→ talent-outreach-agent (6-Step 원본) → 공명 메일
+        │
+        └── 공통 하류: [관심 확인] → [미팅] → quotation-builder → proposal-docx → [계약]
+```
 
-### Scenario C: Execution Partner Request
-**Client is agency:** Looking for execution partner
+## 템플릿 & 에셋
 
-**Response approach:**
-1. Clarify our positioning (strategic partner, not just execution)
-2. Explain what we do differently
-3. If scope is purely tactical → Consider fit
-4. If budget allows strategic input → Emphasize that value
-
-## Portfolio Links
-
-**Always include:**
-- Google Drive portfolio link: (사용자가 제공할 링크)
-- Mention: "상세한 포트폴리오 및 콘텐츠 샘플은 첨부된 링크를 통해 확인 부탁드립니다"
-
-## Templates and Assets
-
-- `assets/outbound-template.md` - Base outbound email template structure
-- Use brand-knowledge skill for case studies and frameworks
-- Use quotation-builder skill for detailed pricing proposals
+- `assets/outbound-template.md` — 빠른 실행 모드 기본 템플릿
+- `brand-knowledge` 스킬 — 케이스 스터디 + 가치 제안
+- `quotation-builder` 스킬 — 견적 생성
+- `proposal-docx` 스킬 — Word 제안서 생성

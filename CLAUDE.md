@@ -114,8 +114,14 @@ git push --no-verify origin main
 
 ## 현재 상태 (세션 끝날 때 업데이트 후 push)
 
-- **마지막 작업**: 2026-03-19 (MacBook)
+- **마지막 작업**: 2026-03-20 (MacBook)
 - **완료한 것**:
+  - **통합 세일즈 시스템 구축 완료 (2026-03-20)**:
+    - 6개 세일즈 에이전트: inbound/outbound/upwork/meta-ads/sponsorship/talent-outreach
+    - 6개 Knowledge Base: outreach-frameworks, inquiry-frameworks, upwork-playbook, sponsorship-playbook, trend-intelligence, sales-lessons
+    - sales-outreach SKILL.md → 마스터 라우터로 업그레이드 (6채널 라우팅 + 빠른 실행)
+    - 시각화: `claude-cowork-contents/세일즈_시스템_아키텍처.html`
+    - 세션 백업: `claude-cowork-contents/SESSION_BACKUP_세일즈시스템구축_260320.md`
   - Zone X 컴바인 (Season 0) 전체 기획 완료 — `claude-zonex/ZoneX_컴바인_기획_260318.md` (최신)
     - 6가지 능력 체계 v2 확정 (Hexagon: ENGINE/GRIT/FORCE/BLAST/REFLEX/CONTROL)
     - 컴바인 시리즈 "The Proving Ground" 11부작 → 10+1부작 재구조화
@@ -138,8 +144,10 @@ git push --no-verify origin main
     - `claude-zonex/통합_개선안_마스터_260319.md` — 4팀 교차검증 통합 (의사결정 5건, 액션 37건)
   - 스킬 마이그레이션 완료 (.skill → Claude Code) + skill-installer 스킬 생성
   - 2026 CH 루트 + claude-cowork-contents 폴더 정리 (etc/ 폴더 생성, 하위폴더 재구성)
-- **진행 중**: 통합 개선안 완료 → **수현 의사결정 대기** (통합 마스터 Section 0 참조)
+- **진행 중**: Zone X 통합 개선안 완료 → **수현 의사결정 대기** (통합 마스터 Section 0 참조)
 - **다음 할 것**:
+  - trend-intelligence.md에 수현님 참조 소스 추가 (인스타 계정, 뉴스레터)
+  - 세일즈 시스템 실전 테스트 (첫 케이스로 sales-lessons.md 기록 시작)
   - 수현 의사결정 5건 (D-1~D-5): 볼륨 축소, 리그 시작 시점, 분류 방식, CYA 방식, 언어 위계
   - 의사결정 후 즉시 실행: 파일럿 촬영, 장소 리스트업, 채널 세팅, 측정 프로토콜 v1
   - 스폰서십 자료 post-pivot 업데이트

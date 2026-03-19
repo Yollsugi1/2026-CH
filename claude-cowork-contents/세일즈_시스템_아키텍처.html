@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creatorhood Sales System Architecture</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0a; color: #e0e0e0; padding: 40px 20px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+
+  h1 {
+    font-size: 28px; font-weight: 700; margin-bottom: 8px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .subtitle { color: #888; font-size: 14px; margin-bottom: 40px; }
+
+  /* Section Headers */
+  .section-header {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 2px; color: #666; margin: 40px 0 16px;
+    padding-bottom: 8px; border-bottom: 1px solid #222;
+  }
+
+  /* Flow Diagram */
+  .flow-section { margin-bottom: 48px; }
+  .flow-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .flow-box {
+    padding: 10px 16px; border-radius: 8px; font-size: 13px;
+    font-weight: 500; white-space: nowrap;
+  }
+  .flow-trigger { background: #1a1a2e; border: 1px solid #333; color: #aaa; }
+  .flow-arrow { color: #555; font-size: 18px; }
+  .flow-agent { border: 1px solid; border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 13px; }
+  .flow-output { background: #111; border: 1px dashed #333; color: #777; font-size: 12px; }
+
+  /* Agent Colors */
+  .agent-inbound { border-color: #22d3ee; color: #22d3ee; background: rgba(34,211,238,0.08); }
+  .agent-outbound { border-color: #60a5fa; color: #60a5fa; background: rgba(96,165,250,0.08); }
+  .agent-upwork { border-color: #34d399; color: #34d399; background: rgba(52,211,153,0.08); }
+  .agent-meta { border-color: #f472b6; color: #f472b6; background: rgba(244,114,182,0.08); }
+  .agent-sponsor { border-color: #fbbf24; color: #fbbf24; background: rgba(251,191,36,0.08); }
+  .agent-talent { border-color: #a78bfa; color: #a78bfa; background: rgba(167,139,250,0.08); }
+
+  /* Grid Layouts */
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+
+  /* Agent Cards */
+  .agent-card {
+    background: #111; border: 1px solid #222; border-radius: 12px;
+    padding: 20px; transition: border-color 0.2s;
+  }
+  .agent-card:hover { border-color: #444; }
+  .agent-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .agent-card .tag {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px; margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .tag-agent { background: rgba(96,165,250,0.15); color: #60a5fa; }
+  .tag-skill { background: rgba(52,211,153,0.15); color: #34d399; }
+  .tag-knowledge { background: rgba(251,191,36,0.15); color: #fbbf24; }
+
+  .agent-card .framework { font-size: 12px; color: #888; margin-bottom: 10px; font-style: italic; }
+  .agent-card .keywords { font-size: 11px; color: #666; margin-bottom: 12px; }
+  .agent-card .keywords code {
+    background: #1a1a1a; padding: 1px 6px; border-radius: 3px;
+    font-size: 11px; color: #999; margin-right: 4px;
+  }
+  .agent-card .phases { list-style: none; }
+  .agent-card .phases li {
+    font-size: 12px; color: #aaa; padding: 3px 0;
+    border-left: 2px solid #333; padding-left: 10px; margin-left: 4px;
+  }
+  .agent-card .phases li.highlight { border-left-color: #60a5fa; color: #ccc; }
+
+  /* Knowledge Cards */
+  .kb-card {
+    background: #111; border: 1px solid #222; border-radius: 12px;
+    padding: 16px;
+  }
+  .kb-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .kb-card p { font-size: 12px; color: #888; line-height: 1.5; }
+  .kb-card .used-by {
+    font-size: 11px; color: #666; margin-top: 8px;
+    padding-top: 8px; border-top: 1px solid #1a1a1a;
+  }
+
+  /* Downstream */
+  .downstream {
+    background: #0d1117; border: 1px solid #1a2332; border-radius: 12px;
+    padding: 24px; margin-top: 16px;
+  }
+  .downstream h3 { font-size: 14px; color: #58a6ff; margin-bottom: 12px; }
+  .downstream-flow {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .downstream-box {
+    padding: 8px 14px; border-radius: 8px; font-size: 12px;
+    background: #161b22; border: 1px solid #30363d; color: #8b949e;
+  }
+  .downstream-box.active { border-color: #58a6ff; color: #58a6ff; }
+
+  /* New Features Badge */
+  .new-badge {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    padding: 1px 6px; border-radius: 3px; margin-left: 6px;
+    background: rgba(52,211,153,0.2); color: #34d399;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    padding: 12px 16px; background: #111; border-radius: 8px;
+    margin-bottom: 32px; font-size: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .flow-row { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Creatorhood Sales System</h1>
+<p class="subtitle">6 Agents + 6 Knowledge + 1 Master Router + 3 Downstream Skills &mdash; 2026.03.20</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#22d3ee"></div> Inbound</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div> Outbound</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Upwork</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div> Meta Ads</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div> Sponsorship</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Talent</div>
+</div>
+
+<!-- ============ FLOW DIAGRAM ============ -->
+<div class="section-header">Pipeline Flow</div>
+<div class="flow-section">
+
+  <div class="flow-row">
+    <div class="flow-box flow-trigger">"문의 왔어" / 의뢰 원문</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-agent agent-inbound">inbound-sales-agent</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-output">3-Step 응답 + 브랜드 딥다이브</div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-box flow-trigger">"콜드메일" / 브랜드 공략</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-agent agent-outbound">outbound-sales-agent</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-output">6-Step B2B 메일 + DM</div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-box flow-trigger">"Upwork" / 해외 영업</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-agent agent-upwork">upwork-agent</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-output">Cover Letter + 견적 테이블</div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-box flow-trigger">"Meta 광고" / 인스타 광고</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-agent agent-meta">meta-ads-agent</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-output">카피 3방향 + A/B 테스트</div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-box flow-trigger">"스폰서십" / "PPL"</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-agent agent-sponsor">sponsorship-agent</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-output">시리즈 매칭 + 티어 패키지</div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-box flow-trigger">"섭외" / "게스트"</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-agent agent-talent">talent-outreach-agent</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-box flow-output">6-Step 공명 메일 + DM</div>
+  </div>
+
+</div>
+
+<!-- ============ AGENTS ============ -->
+<div class="section-header">Agents (6)</div>
+<div class="grid-3">
+
+  <!-- Inbound -->
+  <div class="agent-card" style="border-left: 3px solid #22d3ee;">
+    <h3 style="color:#22d3ee">inbound-sales-agent</h3>
+    <span class="tag tag-agent">Agent</span>
+    <div class="framework">팔레트혜인 3-Step &mdash; "질문의 수준이 단가를 결정한다"</div>
+    <div class="keywords">
+      <code>문의 왔어</code><code>인바운드</code><code>의뢰 응대</code><code>답장 작성</code>
+    </div>
+    <ul class="phases">
+      <li>Phase 0. 레슨런 + 트렌드 사전 참조 <span class="new-badge">new</span></li>
+      <li class="highlight">Phase 1. 문의 해부 (표면 vs 진짜 목적)</li>
+      <li>Phase 1.5. 브랜드 딥다이브 리서치 <span class="new-badge">new</span></li>
+      <li>Phase 1.7. 미팅 인사이트 통합 <span class="new-badge">new</span></li>
+      <li class="highlight">Phase 2. 커버리지 매핑 (5개 서비스 모델)</li>
+      <li class="highlight">Phase 3. 3-Step 응답 (Q3 단가 상승 장치)</li>
+      <li>Phase 4. 채널별 포맷 변환</li>
+      <li>Phase 5. 견적/제안서 연동</li>
+      <li>Phase 6. 레슨런 기록 <span class="new-badge">new</span></li>
+    </ul>
+  </div>
+
+  <!-- Outbound -->
+  <div class="agent-card" style="border-left: 3px solid #60a5fa;">
+    <h3 style="color:#60a5fa">outbound-sales-agent</h3>
+    <span class="tag tag-agent">Agent</span>
+    <div class="framework">옥성아 6-Step B2B 변형 &mdash; "세계관 연결 → 브랜드 포지셔닝"</div>
+    <div class="keywords">
+      <code>콜드메일</code><code>아웃바운드</code><code>브랜드 공략</code><code>아이보스 리드</code>
+    </div>
+    <ul class="phases">
+      <li>Phase 0. 레슨런 + 트렌드 사전 참조 <span class="new-badge">new</span></li>
+      <li class="highlight">Phase 1. 타겟 리서치 (SNS 스캔 + 페인포인트)</li>
+      <li class="highlight">Phase 2. 전략 분석 (케이스 매칭 + 트렌드)</li>
+      <li class="highlight">Phase 3. 콜드메일 6-Step B2B</li>
+      <li>Phase 4. 멀티 채널 출력</li>
+      <li>Phase 5. 부가 출력 (팔로업 타이밍)</li>
+      <li>Phase 6. 레슨런 기록 <span class="new-badge">new</span></li>
+    </ul>
+  </div>
+
+  <!-- Upwork -->
+  <div class="agent-card" style="border-left: 3px solid #34d399;">
+    <h3 style="color:#34d399">upwork-agent</h3>
+    <span class="tag tag-agent">Agent</span>
+    <div class="framework">Baehaus A-to-Z &mdash; 프로필 ~ 성장 로드맵</div>
+    <div class="keywords">
+      <code>Upwork</code><code>업워크</code><code>해외 영업</code><code>cover letter</code>
+    </div>
+    <ul class="phases">
+      <li class="highlight">Mode A. 공고 분석 (7기준 체크리스트)</li>
+      <li class="highlight">Mode B. Cover Letter (5-Paragraph)</li>
+      <li>Mode C. 프로필 & 전략 가이드</li>
+      <li>Mode D. 견적 설계 (앵커링 3단계)</li>
+    </ul>
+  </div>
+
+  <!-- Meta Ads -->
+  <div class="agent-card" style="border-left: 3px solid #f472b6;">
+    <h3 style="color:#f472b6">meta-ads-agent</h3>
+    <span class="tag tag-agent">Agent</span>
+    <div class="framework">B2B 리드 제너레이션 &mdash; 카피 3방향 + A/B 테스트</div>
+    <div class="keywords">
+      <code>Meta 광고</code><code>인스타 광고</code><code>광고 카피</code><code>리드 생성</code>
+    </div>
+    <ul class="phases">
+      <li class="highlight">Phase 1. 키워드 & 타겟 분석</li>
+      <li class="highlight">Phase 2. 카피 & 크리에이티브 (3방향)</li>
+      <li>Phase 3. 포맷 기획 (릴스/이미지/카루셀)</li>
+      <li>Phase 4. A/B 테스트 구조</li>
+      <li>Phase 5. 랜딩 & 전환 설계</li>
+    </ul>
+  </div>
+
+  <!-- Sponsorship -->
+  <div class="agent-card" style="border-left: 3px solid #fbbf24;">
+    <h3 style="color:#fbbf24">sponsorship-agent</h3>
+    <span class="tag tag-agent">Agent</span>
+    <div class="framework">시리즈 × 브랜드 매칭 &mdash; 4티어 스폰서십</div>
+    <div class="keywords">
+      <code>스폰서십</code><code>브랜디드</code><code>PPL</code><code>협찬</code>
+    </div>
+    <ul class="phases">
+      <li>Phase 0. 레슨런 + 트렌드 사전 참조 <span class="new-badge">new</span></li>
+      <li class="highlight">Phase 1. 시리즈 × 브랜드 매칭</li>
+      <li class="highlight">Phase 2. 스폰서십 패키지 설계</li>
+      <li>Phase 3. 제안 작성</li>
+      <li>Zone X 모드 (이벤트/리그 스폰서십)</li>
+    </ul>
+  </div>
+
+  <!-- Talent -->
+  <div class="agent-card" style="border-left: 3px solid #a78bfa;">
+    <h3 style="color:#a78bfa">talent-outreach-agent</h3>
+    <span class="tag tag-agent">Agent</span>
+    <div class="framework">옥성아 6-Step 원본 &mdash; "콜드 메일을 공명으로"</div>
+    <div class="keywords">
+      <code>섭외</code><code>게스트</code><code>출연자</code><code>콜라보 제안</code>
+    </div>
+    <ul class="phases">
+      <li class="highlight">Phase 1. 세계관 리서치 (SNS 30개 + 키워드 3개)</li>
+      <li class="highlight">Phase 2. 6-Step 메일 (Step 3 세계관 연결 핵심)</li>
+      <li>Phase 3. DM 버전 축약</li>
+      <li>Phase 4. 팔로업 계획 (3일/7일/14일)</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ============ KNOWLEDGE BASE ============ -->
+<div class="section-header">Knowledge Base (6)</div>
+<div class="grid-3">
+
+  <div class="kb-card" style="border-left: 3px solid #fbbf24;">
+    <h4 style="color:#fbbf24">outreach-frameworks.md</h4>
+    <p>옥성아 PD 6-Step 프레임워크 (원본 + B2B 변형). 세계관 연결, 제목 공식, 클로징 선택지.</p>
+    <div class="used-by">Used by: talent-outreach, outbound-sales, sponsorship</div>
+  </div>
+
+  <div class="kb-card" style="border-left: 3px solid #fbbf24;">
+    <h4 style="color:#fbbf24">inquiry-frameworks.md</h4>
+    <p>팔레트혜인 3-Step. 업종별 첫 문단, Q3 단가 상승 장치, 시스템처럼 보이기.</p>
+    <div class="used-by">Used by: inbound-sales</div>
+  </div>
+
+  <div class="kb-card" style="border-left: 3px solid #fbbf24;">
+    <h4 style="color:#fbbf24">upwork-playbook.md</h4>
+    <p>Baehaus A-to-Z. 프로필 4원칙, 공고 7기준, Cover Letter 5P, 성장 로드맵 4단계.</p>
+    <div class="used-by">Used by: upwork</div>
+  </div>
+
+  <div class="kb-card" style="border-left: 3px solid #fbbf24;">
+    <h4 style="color:#fbbf24">sponsorship-playbook.md</h4>
+    <p>7시리즈+Zone X 매칭 매트릭스. 4티어 체계, 브랜디드 전환 프로세스.</p>
+    <div class="used-by">Used by: sponsorship</div>
+  </div>
+
+  <div class="kb-card" style="border-left: 3px solid #34d399;">
+    <h4 style="color:#34d399">trend-intelligence.md <span class="new-badge">new</span></h4>
+    <p>콘텐츠/SNS 트렌드 소스 + 축적 인사이트. 세일즈 시 전문성 부각 근거.</p>
+    <div class="used-by">Used by: outbound-sales, inbound-sales, sponsorship</div>
+  </div>
+
+  <div class="kb-card" style="border-left: 3px solid #34d399;">
+    <h4 style="color:#34d399">sales-lessons.md <span class="new-badge">new</span></h4>
+    <p>레슨런 리빙 도큐먼트. 매 케이스 성공/실패 기록 + 패턴 발견 + 분기별 리뷰.</p>
+    <div class="used-by">Used by: ALL agents (Phase 0 + 종료 시)</div>
+  </div>
+
+</div>
+
+<!-- ============ MASTER ROUTER ============ -->
+<div class="section-header">Master Router</div>
+<div class="agent-card" style="border-left: 3px solid #888; margin-bottom: 16px;">
+  <h3 style="color:#ccc">sales-outreach <span class="tag tag-skill">Skill</span></h3>
+  <div class="framework">키워드 기반 6채널 라우팅 + 빠른 실행 모드</div>
+  <p style="font-size:12px; color:#888; margin-top:8px; line-height:1.6;">
+    사용자 입력의 키워드/맥락을 분석하여 6개 에이전트 중 최적의 에이전트로 자동 라우팅.<br>
+    "빠르게 메일만" → outbound-template.md 기반 즉시 초안 (에이전트 없이).
+  </p>
+</div>
+
+<!-- ============ DOWNSTREAM ============ -->
+<div class="section-header">Downstream Skills (공통 하류)</div>
+<div class="downstream">
+  <h3>관심 확인 &rarr; 미팅 &rarr; 계약</h3>
+  <div class="downstream-flow">
+    <div class="downstream-box active">quotation-builder</div>
+    <div class="flow-arrow" style="color:#30363d">&rarr;</div>
+    <div class="downstream-box active">proposal-docx</div>
+    <div class="flow-arrow" style="color:#30363d">&rarr;</div>
+    <div class="downstream-box">계약 체결</div>
+    <div class="flow-arrow" style="color:#30363d">&rarr;</div>
+    <div class="downstream-box" style="border-color:#34d399; color:#34d399;">sales-lessons.md 기록</div>
+  </div>
+  <p style="font-size:11px; color:#555; margin-top:12px;">
+    brand-knowledge (케이스/가치제안) &bull; content-frameworks (기획 참조) &mdash; 모든 에이전트에서 참조 가능
+  </p>
+</div>
+
+<!-- ============ FILE MAP ============ -->
+<div class="section-header">File Map</div>
+<div style="background:#111; border:1px solid #222; border-radius:12px; padding:20px; font-family:monospace; font-size:12px; line-height:1.8; color:#888;">
+  <span style="color:#666">.claude/</span><br>
+  <span style="color:#666">├── agents/</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#22d3ee">inbound-sales-agent.md</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#60a5fa">outbound-sales-agent.md</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#34d399">upwork-agent.md</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#f472b6">meta-ads-agent.md</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#fbbf24">sponsorship-agent.md</span><br>
+  <span style="color:#666">│   └──</span> <span style="color:#a78bfa">talent-outreach-agent.md</span><br>
+  <span style="color:#666">│</span><br>
+  <span style="color:#666">├── knowledge/sales/</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#ccc">outreach-frameworks.md</span> <span style="color:#555">&larr; 옥성아 6-Step</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#ccc">inquiry-frameworks.md</span> <span style="color:#555">&larr; 팔레트혜인 3-Step</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#ccc">upwork-playbook.md</span> <span style="color:#555">&larr; Baehaus A-to-Z</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#ccc">sponsorship-playbook.md</span> <span style="color:#555">&larr; 시리즈 매칭</span><br>
+  <span style="color:#666">│   ├──</span> <span style="color:#34d399">trend-intelligence.md</span> <span style="color:#34d399">NEW</span><br>
+  <span style="color:#666">│   └──</span> <span style="color:#34d399">sales-lessons.md</span> <span style="color:#34d399">NEW</span><br>
+  <span style="color:#666">│</span><br>
+  <span style="color:#666">└── skills/sales-outreach/</span><br>
+  <span style="color:#666">    ├──</span> <span style="color:#ccc">SKILL.md</span> <span style="color:#555">&larr; Master Router</span><br>
+  <span style="color:#666">    └──</span> <span style="color:#666">assets/outbound-template.md</span><br>
+</div>
+
+<p style="text-align:center; color:#444; font-size:11px; margin-top:32px;">
+  Creatorhood Sales System v1.0 &mdash; Built 2026.03.20
+</p>
+
+</div>
+</body>
+</html>
